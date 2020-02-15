@@ -10,10 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 56a9de7913a2d1e46b3bece5a6e8fbd4, type: 3}
-  m_Name: PlaceableTile
+  m_Name: PathTile
   m_EditorClassIdentifier: 
-  m_Sprite: {fileID: -6614373457484812694, guid: 85a527b5a85760f469b7139ccd71fae3,
-    type: 3}
+  m_Sprite: {fileID: 57701541896607731, guid: 85a527b5a85760f469b7139ccd71fae3, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Transform:
     e00: 1
@@ -36,4 +35,4 @@ MonoBehaviour:
     type: 3}
   m_Flags: 1
   m_ColliderType: 0
-  m_tileType: 0
+  m_tileType: 1

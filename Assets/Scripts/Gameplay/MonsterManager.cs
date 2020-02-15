@@ -12,7 +12,8 @@ public class MonsterManager : MonoBehaviourPunCallbacks
     // as we want to find monsters but not through collision
     public static MonsterManager manager;
 
-    private List<MonsterBase> m_monsters = new List<MonsterBase>();     // All monsters that currently exist
+    private List<MonsterBase> m_monsters = new List<MonsterBase>();             // All monsters that currently exist
+    private List<MonsterBase> m_destroyedMonsters = new List<MonsterBase>();    // All monsters that have been destroyed
 
     void Awake()
     {
@@ -24,10 +25,22 @@ public class MonsterManager : MonoBehaviourPunCallbacks
     {
         // TODO: Tick only on server
 
+        // Cycle through each monster, updating them
         foreach (MonsterBase monster in m_monsters)
         {
             monster.tick(Time.deltaTime);
         }
+
+        // Now destroy the monsters that were called to be destroyed though destroyMonster,
+        // we wait till after since we cannot modify the array while we are cycling through it,
+        // and some monsters might be calling destroy on themselves
+        foreach (MonsterBase monster in m_destroyedMonsters)
+        {
+            m_monsters.Remove(monster);
+            Destroy(monster.gameObject);
+        }
+
+        m_destroyedMonsters.Clear();
     }
 
     public MonsterBase spawnMonster(MonsterBase prefab, BoardManager board)
@@ -46,13 +59,17 @@ public class MonsterManager : MonoBehaviourPunCallbacks
 
     }
 
-    // Testing Func
-    public MonsterBase spawnMonster(MonsterBase prefab, Vector2 spawnPos)
+    // Testing Function
+    public MonsterBase spawnMonster_Test(MonsterBase prefab, BoardManager board)
     {
-        MonsterBase newMonster = Instantiate(prefab, spawnPos, Quaternion.identity);
+        if (!board)
+            return null;
+
+        MonsterBase newMonster = Instantiate(prefab, Vector3.zero, Quaternion.identity);
         if (newMonster)
             m_monsters.Add(newMonster);
 
+        newMonster.initMoster(board);
         return newMonster;
     }
 
@@ -65,10 +82,7 @@ public class MonsterManager : MonoBehaviourPunCallbacks
     private void destroyMonsterImpl(MonsterBase monster)
     {
         if (monster)
-        {
-            m_monsters.Remove(monster);
-            Destroy(monster.gameObject);
-        }
+            m_destroyedMonsters.Add(monster);
     }
 
     /// <summary>
