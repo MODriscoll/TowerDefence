@@ -288,7 +288,7 @@ public class BoardManager : MonoBehaviour
                     moveDir.Scale(offset);
 
                     Gizmos.color = Color.red;
-                    Gizmos.DrawCube(entryPos + offset + moveDir, m_tileMap.cellSize * 0.1f);
+                    Gizmos.DrawCube(entryPos + moveDir, m_tileMap.cellSize * 0.1f);
                 }
             }
         }
