@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public enum ETDTileType
+public enum TDTileType
 {
     Placeable,      // Towers can be placed on this tile
     Path,           // Monsters can travel to this tile
@@ -14,7 +14,7 @@ public enum ETDTileType
 [CreateAssetMenu(fileName = "TDTileBase", menuName = "Tower Defence Tile")]
 public class TDTileBase : Tile
 {
-    [SerializeField] private ETDTileType m_tileType;    // This tiles type
+    [SerializeField] private TDTileType m_tileType;    // This tiles type
 
-    public ETDTileType TileType { get { return m_tileType; } }
+    public TDTileType TileType { get { return m_tileType; } }
 }

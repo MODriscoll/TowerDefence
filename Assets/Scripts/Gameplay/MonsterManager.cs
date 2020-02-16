@@ -143,4 +143,36 @@ public class MonsterManager : MonoBehaviourPunCallbacks
 
         return closest;
     }
+
+    /// <summary>
+    /// Get the monster that is closest to reaching the goal in given radius of position
+    /// </summary>
+    /// <param name="position">Position to check</param>
+    /// <param name="radius">Radius monster must be in</param>
+    /// <returns>Monster with highest priority or null</returns>
+    public MonsterBase getHighestPriorityMonster(Vector2 position, float radius = 1000f)
+    {
+        float radSqr = radius * radius;
+
+        // The monster currently closest to reaching the goal. This just works off how
+        // many tiles the monster has travelled as opposed to how close they are too the goal
+        MonsterBase priorityMonster = null;
+        float tilesTravelled = 0f;
+
+        // Iterate each monster and find the closest one
+        foreach (MonsterBase monster in m_monsters)
+        {
+            Vector2 dis = (Vector2)monster.transform.position - position;
+
+            // Monster needs to be in radius for it to be considered
+            float magSqr = dis.sqrMagnitude;
+            if (magSqr <= radSqr && monster.TilesTravelled > tilesTravelled)
+            {
+                priorityMonster = monster;
+                tilesTravelled = monster.TilesTravelled;
+            }
+        }
+
+        return priorityMonster;
+    }
 }

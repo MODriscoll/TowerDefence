@@ -97,7 +97,7 @@ public struct BoardFlowfield
             if (!tile)
                 continue;
 
-            if (tile.TileType == ETDTileType.Goal)
+            if (tile.TileType == TDTileType.Goal)
                 return tileIndex;
         }
 
@@ -143,8 +143,8 @@ public struct BoardFlowfield
         if (tile)
         {
             // We can travel to spawn and path tiles
-            ETDTileType tileType = tile.TileType;
-            return tileType == ETDTileType.Path || tileType == ETDTileType.Spawn;
+            TDTileType tileType = tile.TileType;
+            return tileType == TDTileType.Path || tileType == TDTileType.Spawn;
         }
 
         return false;
@@ -164,13 +164,7 @@ public class BoardManager : MonoBehaviour
     [SerializeField] private BoardFlowfield m_flowField = new BoardFlowfield();     // Flow field used for path following
     [SerializeField] private Vector3Int[] m_spawnTiles = new Vector3Int[0];         // Spawn tiles used for faster spawning of monsters
 
-    public Vector3 centerOffset
-    {
-        get
-        {
-            return m_tileMap.cellSize * 0.5f;
-        }
-    }
+    private Dictionary<Vector3Int, TowerBase> m_placedTowers = new Dictionary<Vector3Int, TowerBase>();     // All towers that have been placed on the map
 
     void Awake()
     {
@@ -191,10 +185,31 @@ public class BoardManager : MonoBehaviour
             return Vector3.zero;
     }
 
+    public Vector3Int positionToIndex(Vector3 position)
+    {
+        if (m_tileMap)
+            return m_tileMap.WorldToCell(position);
+        else
+            return Vector3Int.zero;
+    }
+
     public bool isGoalTile(Vector3Int tileIndex)
     {
         return m_flowField.m_goal == tileIndex;
     }
+
+    public bool isPlaceableTile(Vector3Int tileIndex)
+    {
+        if (m_tileMap)
+        {
+            TDTileBase tile = m_tileMap.GetTile<TDTileBase>(tileIndex);
+            if (tile)
+                return tile.TileType == TDTileType.Placeable;
+        }
+
+        return false;
+
+}
 
     public Vector3Int getRandomSpawnTile()
     {
@@ -227,6 +242,37 @@ public class BoardManager : MonoBehaviour
         return m_flowField.m_flowMap[tileIndex];
     }
 
+    public void placeTower(TowerBase tower, Vector3Int tileIndex)
+    {
+#if UNITY_EDITOR
+        if (isOccupied(tileIndex))
+        {
+            Debug.LogWarning("Trying to place tower on tile that already has a tower!");
+            return;
+        }
+#endif
+
+        m_placedTowers.Add(tileIndex, tower);
+    }
+
+    public void removeTower(TowerBase tower)
+    {
+        var it = m_placedTowers.GetEnumerator();
+        while (it.MoveNext())
+        {
+            if (it.Current.Value == tower)
+            {
+                m_placedTowers.Remove(it.Current.Key);
+                return;
+            }
+        }
+    }
+
+    public bool isOccupied(Vector3Int tileIndex)
+    {
+        return m_placedTowers.ContainsKey(tileIndex);
+    }
+
 #if UNITY_EDITOR
     public void refreshProperties()
     {
@@ -249,7 +295,7 @@ public class BoardManager : MonoBehaviour
             if (!tile)
                 continue;
 
-            if (tile.TileType == ETDTileType.Spawn)
+            if (tile.TileType == TDTileType.Spawn)
                 spawnTiles.Add(tileIndex);
         }
 

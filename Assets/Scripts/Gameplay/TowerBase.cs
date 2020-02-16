@@ -6,9 +6,11 @@ using Photon.Pun;
 [RequireComponent(typeof(PhotonView))]
 public class TowerBase : MonoBehaviourPunCallbacks
 {
-    public float m_targetRadius = 10f;     // Radius the tower can see
+    public float m_targetRadius = 10f;              // Radius the tower can see
+    [Min(0.01f)] public float m_fireRate = 1f;      // Fire rate of towers turret
 
     private PhotonView m_networkView;
+    private float m_lastFireTime = -float.MaxValue;         // The last time the turret fired
 
     void Awake()
     {
@@ -29,12 +31,20 @@ public class TowerBase : MonoBehaviourPunCallbacks
 
         // Instantly rotate to face target
         transform.eulerAngles = new Vector3(0f, 0f, rot);
+
+        // Check if we can fire at this monster
+        if (Time.time >= m_lastFireTime + m_fireRate)
+        {
+            // 'Shoot'
+            MonsterManager.destroyMonster(monster);
+            m_lastFireTime = Time.time;
+        }
     }
 
     protected MonsterBase findTarget(float radius)
     {
         if (MonsterManager.manager != null)
-            return MonsterManager.manager.getClosestMonsterTo(transform.position, radius);
+            return MonsterManager.manager.getHighestPriorityMonster(transform.position, radius);
         else
             return null;
     }
