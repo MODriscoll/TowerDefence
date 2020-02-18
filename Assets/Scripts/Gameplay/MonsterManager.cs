@@ -45,16 +45,8 @@ public class MonsterManager : MonoBehaviourPunCallbacks
 
     public MonsterBase spawnMonster(MonsterBase prefab, BoardManager board)
     {
-
-
-        //GameObject newObject = PhotonNetwork.Instantiate(prefab.ToString(), spawnPos, spawnRot);
-        //if (!newObject)
-        //{
-        //    return null;
-        //}
-
-        //MonsterBase monster = newObject.GetComponent<MonsterBase>();
-        //return monster;
+        // TODO:
+        spawnMonster_Test(prefab, board);
         return null;
 
     }

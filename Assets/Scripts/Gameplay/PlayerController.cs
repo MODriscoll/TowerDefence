@@ -4,20 +4,33 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public BoardManager m_board;                    // The board this player interacts with
-    [SerializeField] private Camera m_camera;       // Players viewport of the scene
-
-    // Testing
-    public TowerBase m_towerPrefab;
+    public BoardManager m_board;                                    // The board this player interacts with
+    [SerializeField] private Camera m_camera;                       // Players viewport of the scene
+    [SerializeField] private PlayerTowersList m_towersList;         // List of all the towers the player can place
 
     void Awake()
     {
         if (!m_camera)
             m_camera = GetComponentInChildren<Camera>();
+
+        if (!m_towersList)
+            m_towersList = GetComponent<PlayerTowersList>();
     }
 
     void Update()
     {
+#if UNITY_EDITOR
+        if (m_towersList)
+        {
+            for (int i = (int)KeyCode.Alpha1; i <= (int)KeyCode.Alpha9; ++i)
+                if (Input.GetKeyDown((KeyCode)i))
+                    m_towersList.selectTower(i - (int)KeyCode.Alpha1);
+
+            if (Input.GetKeyDown(KeyCode.Alpha0))
+                m_towersList.unselectTower();
+        }
+#endif
+
         Vector3 selectedPos;
         if (tryGetBoardInput(out selectedPos))
         {
@@ -35,8 +48,12 @@ public class PlayerController : MonoBehaviour
                 Vector3 spawnPos = m_board.indexToPosition(tileIndex);
 
                 // Testing
-                TowerBase tower = Instantiate(m_towerPrefab, spawnPos, Quaternion.identity);
-                m_board.placeTower(tower, tileIndex);
+                TowerBase towerPrefab = m_towersList.getSelectedTower();
+                if (towerPrefab)
+                {
+                    TowerBase tower = Instantiate(towerPrefab, spawnPos, Quaternion.identity);
+                    m_board.placeTower(tower, tileIndex);
+                }
             }
             else
             {
