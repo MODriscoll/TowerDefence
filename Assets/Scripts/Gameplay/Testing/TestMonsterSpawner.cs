@@ -12,8 +12,8 @@ public class TestMonsterSpawner : MonoBehaviour
 
     void Awake()
     {
-        if (m_spawner)
-            m_spawner.initWave(new List<MonsterSpawnInfo>(m_testWave));
+        //if (m_spawner)
+        //    m_spawner.initWave(new List<MonsterSpawnInfo>(m_testWave));
     }
 
     void Start()
@@ -27,7 +27,7 @@ public class TestMonsterSpawner : MonoBehaviour
 
     public void spawnMonster()
     {
-        m_spawner.spawnMonster(m_board);
+        //m_spawner.spawnMonster(m_board);
         //if (m_board)
         //    MonsterManager.manager.spawnMonster_Test(m_prefab, m_board);
     }

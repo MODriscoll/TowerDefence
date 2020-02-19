@@ -1,85 +1,75 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
-// Responsible for spawning a wave of monsters
+[SerializeField]
+public struct WaveSpawnInfo
+{
+    public int m_count;             // Amount of common monsters to spawn
+    public int m_spawnInterval;     // Interval for spawning a new monster
+}
+
+
+// Responsible for spawning a wave of monsters for both players. This component
+// is not networked, and is controlled by the master client
 public class WaveSpawner : MonoBehaviour
 {
-    // Better name
-    protected class RuntimeSpawnInfo
+    public WaveSpawnInfo[] m_waves = new WaveSpawnInfo[0];      // Waves to spawn in the game
+
+    public delegate int OnWaveFinished();       // Delegate for finishing a wave
+    public OnWaveFinished onWaveFinished;       // Event for when a wave has finished (only called on server)
+
+    private Coroutine m_spawnRoutine;
+
+    public bool initWave(int waveId)
     {
-        public int m_count;
-        public int m_maxSpawn;
-    }
+        if (!PhotonNetwork.IsMasterClient)
+            return false;
 
-    public List<MonsterSpawnInfo> m_spawnInfos;
+        if (!isValidWaveId(waveId))
+            return false;
 
-    private LinkedList<MonsterSpawnInfo> m_spawnQueue;  // Using linked list as we are no expecting to have many nodes
-    private Dictionary<MonsterSpawnInfo, RuntimeSpawnInfo> m_runtimeData;
-
-    public void initWave(List<MonsterSpawnInfo> spawnInfos)
-    {
-        m_spawnInfos = spawnInfos;
-        m_spawnInfos.Sort(delegate (MonsterSpawnInfo lhs, MonsterSpawnInfo rhs)
+        if (m_spawnRoutine != null)
         {
-            return Mathf.Clamp(lhs.SpawnRate - rhs.SpawnRate, -1, 1);
-        });
-
-        m_spawnQueue = new LinkedList<MonsterSpawnInfo>();
-        m_runtimeData = new Dictionary<MonsterSpawnInfo, RuntimeSpawnInfo>();
-
-        foreach (MonsterSpawnInfo spawnInfo in m_spawnInfos)
-        {
-            m_spawnQueue.AddLast(spawnInfo);
-
-            RuntimeSpawnInfo runtimeInfo = new RuntimeSpawnInfo();
-            runtimeInfo.m_count = spawnInfo.SpawnRate;
-
-            m_runtimeData.Add(spawnInfo, runtimeInfo);
+            Debug.LogWarning("Initializing wave when current wave is still active!");
+            StopCoroutine(m_spawnRoutine);
+            m_spawnRoutine = null;
         }
+
+        m_spawnRoutine = StartCoroutine(spawnRoutine(m_waves[waveId]));
+        return m_spawnRoutine != null;
     }
 
-    public void spawnMonster(BoardManager board)
+    private IEnumerator spawnRoutine(WaveSpawnInfo info)
     {
-        if (m_spawnQueue == null ||
-            m_spawnQueue.Count == 0)
+        int remainingSpawns = info.m_count;
+        while (remainingSpawns > 0)
         {
+            spawnMonsterFor(GameManager.manager.m_p1Info);
+            spawnMonsterFor(GameManager.manager.m_p2Info);
+
+            yield return new WaitForSeconds(info.m_spawnInterval);
+
+            --remainingSpawns;
+        }
+
+        if (onWaveFinished != null)
+            onWaveFinished.Invoke();
+    }
+
+    private void spawnMonsterFor(PlayerInfo info)
+    {
+        if (!info || !info.isValid)
             return;
-        }
 
-        foreach (var entry in m_runtimeData)
-        {
-            entry.Value.m_count--;
-        }
-
-        MonsterSpawnInfo monsterToSpawn = m_spawnQueue.First.Value;
-        RuntimeSpawnInfo runtimeInfo = m_runtimeData[monsterToSpawn];
-        if (runtimeInfo.m_count <= 0)
-        {
-            spawnMonsterImpl(monsterToSpawn.Monster, board);
-
-            runtimeInfo.m_count = monsterToSpawn.SpawnRate;
-            
-            // TODO: Find entry with lowest m_count, put that at front of queue
-            foreach (var entry in m_runtimeData)
-            {
-                if (entry.Key == monsterToSpawn)
-                    continue;
-
-                if (runtimeInfo.m_count > entry.Value.m_count)
-                {
-                    var node = m_spawnQueue.Find(entry.Key);
-                    m_spawnQueue.RemoveFirst();
-                    m_spawnQueue.AddAfter(node, monsterToSpawn);
-                    break;
-                }
-            }
-        }
+        PlayerController controller = info.controller;
+        if (controller.commomMonster)
+            info.m_monsterManager.spawnMonster(controller.commomMonster, info.boardManager);
     }
 
-    private void spawnMonsterImpl(MonsterBase prefab, BoardManager board)
+    public bool isValidWaveId(int id)
     {
-        if (board)
-            MonsterManager.manager.spawnMonster(prefab, board);
+        return id >= 0 && id < m_waves.Length;
     }
 }

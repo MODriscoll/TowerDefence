@@ -1,12 +1,21 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviourPun
 {
+    static public PlayerController localPlayer;
+
+    public int m_id;                                                // Id of player (either 1 or 2)
     public BoardManager m_board;                                    // The board this player interacts with
     [SerializeField] private Camera m_camera;                       // Players viewport of the scene
     [SerializeField] private PlayerTowersList m_towersList;         // List of all the towers the player can place
+
+    // temp serialize (for testing)
+    [SerializeField] private MonsterBase m_commonMonster;           // The common monster that this player passively 'spawns'
+
+    public MonsterBase commomMonster { get { return m_commonMonster; } }
 
     void Awake()
     {
@@ -17,8 +26,19 @@ public class PlayerController : MonoBehaviour
             m_towersList = GetComponent<PlayerTowersList>();
     }
 
+    void Start()
+    {
+        if (photonView.IsMine)
+            localPlayer = this;
+    }
+
     void Update()
     {
+        if (!photonView.IsMine && PhotonNetwork.IsConnected)
+        {
+            return;
+        }
+
 #if UNITY_EDITOR
         if (m_towersList)
         {
@@ -61,6 +81,12 @@ public class PlayerController : MonoBehaviour
                 Debug.Log("Tile already occupied");
             }
         }
+    }
+
+    // Photon event
+    void OnPhotonInstantiate(PhotonMessageInfo info)
+    {
+        m_id = (int)info.photonView.InstantiationData[0];
     }
 
     protected bool tryGetBoardInput(out Vector3 selectedPos)
