@@ -12,6 +12,8 @@ public class TowerBase : MonoBehaviourPunCallbacks
     private PhotonView m_networkView;
     private float m_lastFireTime = -float.MaxValue;         // The last time the turret fired
 
+    public int m_ownerId = -1;
+
     void Awake()
     {
         m_networkView = GetComponent<PhotonView>();
@@ -35,9 +37,14 @@ public class TowerBase : MonoBehaviourPunCallbacks
         // Check if we can fire at this monster
         if (Time.time >= m_lastFireTime + m_fireRate)
         {
+            // 'Give gold'
+            PlayerInfo playerInfo = GameManager.manager.getPlayerInfo(m_ownerId);
+            if (playerInfo != null && playerInfo.controller)
+                playerInfo.controller.giveGold(monster.m_reward);
+
             // 'Shoot'
             MonsterManager.destroyMonster(monster);
-            m_lastFireTime = Time.time;
+            m_lastFireTime = Time.time;     
         }
     }
 

@@ -26,12 +26,16 @@ public class GameManager : MonoBehaviourPunCallbacks
         // PlayerController will set this reference upon start
         if (!PlayerController.localPlayer)
         {
-            int playerId = PhotonNetwork.IsMasterClient ? 0 : 1;
+            int playerId = 0;
+
+            // If not connected, we are probably playing in editor
+            if (PhotonNetwork.IsConnected)
+                playerId = PhotonNetwork.IsMasterClient ? 0 : 1;
 
             // If player is player 1 or two
             object[] instantData = new object[1];
             instantData[0] = playerId;
-            GameObject newController = PhotonNetwork.Instantiate(m_playerPrefab.gameObject.name, Vector3.zero, Quaternion.identity, 0, instantData);
+            GameObject newController = PhotonNetwork.Instantiate(m_playerPrefab.gameObject.name, transform.position, Quaternion.identity, 0, instantData);
             getPlayerInfo(playerId).m_controller = newController.GetComponent<PlayerController>();
         }
     }

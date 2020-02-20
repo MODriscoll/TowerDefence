@@ -18,8 +18,8 @@ public class PlayerInfo : MonoBehaviour
     private bool isValidImpl()
     {
         return
-            m_controller != null &&
+            true && //m_controller != null &&
             m_boardManager != null &&
-            m_monsterManager != null;
+            true;// m_monsterManager != null;
     }
 }

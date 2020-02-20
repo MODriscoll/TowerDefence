@@ -7,6 +7,7 @@ using Photon.Pun;
 public class MonsterBase : MonoBehaviourPunCallbacks
 {
     [Min(0.01f)] public float m_travelDuration = 2f;
+    [Min(0)] public int m_reward = 10;
 
     protected BoardManager m_board;                 // The board we are active on
     protected PhotonTransformView m_photon;         // Photon component for networking

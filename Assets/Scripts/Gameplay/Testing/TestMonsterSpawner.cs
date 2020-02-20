@@ -4,31 +4,32 @@ using UnityEngine;
 
 public class TestMonsterSpawner : MonoBehaviour
 {
-    //public MonsterBase m_prefab;            // The prefab to spawn
-    public WaveSpawner m_spawner;                                                  // Spawner to test with
-    public MonsterSpawnInfo[] m_testWave;                          // Test wave to use for the spawn
-    public BoardManager m_board;                                                   // The board to have monster follow
-    public float m_spawnInterval = 1f;                                             // Interval for spawning monsters
+    public WaveSpawner m_spawner;             // Spawner to test with
+    public float m_waveDelay = 1f;            // Interval between waves
 
-    void Awake()
-    {
-        //if (m_spawner)
-        //    m_spawner.initWave(new List<MonsterSpawnInfo>(m_testWave));
-    }
+    private int m_waveNum = -1;
 
     void Start()
-    {    
+    {
         if (m_spawner)
-            InvokeRepeating("spawnMonster", m_spawnInterval, m_spawnInterval);
+        {
+            m_spawner.onWaveFinished += onWaveFinished;
 
-        if (!m_board)
-            Debug.LogWarning("TestMonsterSpawner: No Board Set");
+            // Calling this as it provides the initial delay
+            onWaveFinished();
+        }
     }
 
-    public void spawnMonster()
+    private void startNextWave()
     {
-        //m_spawner.spawnMonster(m_board);
-        //if (m_board)
-        //    MonsterManager.manager.spawnMonster_Test(m_prefab, m_board);
+        ++m_waveNum;
+
+        if (m_spawner)
+            m_spawner.initWave(m_waveNum);
+    }
+
+    private void onWaveFinished()
+    {
+        Invoke("startNextWave", m_waveDelay);
     }
 }
