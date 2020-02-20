@@ -755,8 +755,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_tileMap: {fileID: 222423888}
   m_spawnTiles:
-  - {x: 0, y: -5, z: 0}
-  - {x: 4, y: -5, z: 0}
+  - {x: 0, y: 0, z: 0}
+  - {x: 4, y: 0, z: 0}
 --- !u!156049354 &800230787
 Grid:
   m_ObjectHideFlags: 0
