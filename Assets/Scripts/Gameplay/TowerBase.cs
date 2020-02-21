@@ -9,15 +9,9 @@ public class TowerBase : MonoBehaviourPunCallbacks
     public float m_targetRadius = 10f;              // Radius the tower can see
     [Min(0.01f)] public float m_fireRate = 1f;      // Fire rate of towers turret
 
-    private PhotonView m_networkView;
     private float m_lastFireTime = -float.MaxValue;         // The last time the turret fired
 
     public int m_ownerId = -1;
-
-    void Awake()
-    {
-        m_networkView = GetComponent<PhotonView>();
-    }
 
     void Update()
     {

@@ -12,7 +12,8 @@ public class MonsterManager : MonoBehaviourPunCallbacks
     // as we want to find monsters but not through collision
     public static MonsterManager manager;
 
-    private List<MonsterBase> m_monsters = new List<MonsterBase>();             // All monsters that currently exist
+    // temp public
+    public List<MonsterBase> m_monsters = new List<MonsterBase>();             // All monsters that currently exist
     private List<MonsterBase> m_destroyedMonsters = new List<MonsterBase>();    // All monsters that have been destroyed
 
     void Awake()
@@ -24,6 +25,8 @@ public class MonsterManager : MonoBehaviourPunCallbacks
     void Update()
     {
         // TODO: Tick only on server
+        if (PhotonNetwork.IsConnected && !PhotonNetwork.IsMasterClient)
+            return;
 
         // Cycle through each monster, updating them
         foreach (MonsterBase monster in m_monsters)
@@ -37,7 +40,7 @@ public class MonsterManager : MonoBehaviourPunCallbacks
         foreach (MonsterBase monster in m_destroyedMonsters)
         {
             m_monsters.Remove(monster);
-            Destroy(monster.gameObject);
+            PhotonNetwork.Destroy(monster.gameObject);
         }
 
         m_destroyedMonsters.Clear();
@@ -45,9 +48,24 @@ public class MonsterManager : MonoBehaviourPunCallbacks
 
     public MonsterBase spawnMonster(MonsterBase prefab, BoardManager board)
     {
-        // TODO:
-        spawnMonster_Test(prefab, board);
-        return null;
+        if (!board)
+            return null;
+
+        GameObject newMonster = PhotonNetwork.Instantiate(prefab.name, Vector3.zero, Quaternion.identity);
+        if (!newMonster)
+            return null;
+
+        MonsterBase monster = newMonster.GetComponent<MonsterBase>();
+        if (!monster)
+        {
+            PhotonNetwork.Destroy(newMonster);
+            return null;
+        }
+
+        m_monsters.Add(monster);
+
+        monster.initMoster(board);
+        return monster;
 
     }
 
@@ -58,8 +76,10 @@ public class MonsterManager : MonoBehaviourPunCallbacks
             return null;
 
         MonsterBase newMonster = Instantiate(prefab, Vector3.zero, Quaternion.identity);
-        if (newMonster)
-            m_monsters.Add(newMonster);
+        if (!newMonster)
+            return null;
+
+        m_monsters.Add(newMonster);
 
         newMonster.initMoster(board);
         return newMonster;
@@ -73,6 +93,9 @@ public class MonsterManager : MonoBehaviourPunCallbacks
 
     private void destroyMonsterImpl(MonsterBase monster)
     {
+        if (PhotonNetwork.IsConnected && !PhotonNetwork.IsMasterClient)
+            return;
+
         if (monster)
             m_destroyedMonsters.Add(monster);
     }

@@ -3,14 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 
-[RequireComponent(typeof(PhotonTransformView))]
-public class MonsterBase : MonoBehaviourPunCallbacks
+public class MonsterBase : MonoBehaviourPunCallbacks, IUpgradeable
 {
     [Min(0.01f)] public float m_travelDuration = 2f;
     [Min(0)] public int m_reward = 10;
 
     protected BoardManager m_board;                 // The board we are active on
-    protected PhotonTransformView m_photon;         // Photon component for networking
 
     private Vector3Int m_targetTileIndex;   // Index of board we are moving to
     private Vector3 m_segmentStart;         // Start of current path segment in world space
@@ -22,11 +20,16 @@ public class MonsterBase : MonoBehaviourPunCallbacks
 
     private void Awake()
     {
-        //if (!m_photon)
-        //{
-        //    m_photon = GetComponent<PhotonTransformView>();
-        //    m_photon.m_SynchronizeRotation = true;
-        //}
+        PhotonTransformView transformView = GetComponent<PhotonTransformView>();
+        if (transformView)
+        {
+            transformView.m_SynchronizeRotation = true;
+        }
+
+        if (!GetComponent<PhotonView>().IsMine)
+        {
+            MonsterManager.manager.m_monsters.Add(this);
+        }
     }
 
     public virtual void initMoster(BoardManager boardManager)
@@ -46,6 +49,12 @@ public class MonsterBase : MonoBehaviourPunCallbacks
 
     public virtual void tick(float deltaTime)
     {
+        // Only update monsters client owns
+        if (PhotonNetwork.IsConnected && !photonView.IsMine)
+        {
+            return;
+        }
+
         float delta = deltaTime / m_travelDuration;
 
         // Have we reached the end of the segment
@@ -67,5 +76,39 @@ public class MonsterBase : MonoBehaviourPunCallbacks
 
         transform.position = Vector3.Lerp(m_segmentStart, m_segmentEnd, m_progress);
         m_tilesTravelled += delta;
+    }
+
+    //public virtual void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    //{
+    //    if (stream.IsWriting)
+    //    {
+    //        stream.SendNext((Vector2)transform.position);
+    //        stream.SendNext(transform.eulerAngles.z);
+    //    }
+    //    else
+    //    {
+    //        Vector2 position = (Vector2)stream.ReceiveNext();
+    //        float rotation = (float)stream.ReceiveNext();
+
+    //        transform.position = position;
+    //        transform.eulerAngles = new Vector3(0f, 0f, rotation);
+    //    }
+    //}
+
+
+    // IUpgradeable
+    public bool canUpgrade()
+    {
+        return false;
+    }
+
+    public int getUpgradeCost()
+    {
+        return 0;
+    }
+
+    public void upgrade()
+    {
+        
     }
 }

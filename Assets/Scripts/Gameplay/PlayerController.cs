@@ -18,6 +18,7 @@ public class PlayerController : MonoBehaviourPun
 
     // temp
     [SerializeField] private UnityEngine.UI.Text m_debugText;
+    [SerializeField] private UnityEngine.UI.Text m_newText;
 
     public BoardManager Board
     {
@@ -39,6 +40,8 @@ public class PlayerController : MonoBehaviourPun
 
     public MonsterBase commomMonster { get { return m_commonMonster; } }
 
+    static int count = 0;
+
     void Awake()
     {
         if (!m_camera)
@@ -46,12 +49,20 @@ public class PlayerController : MonoBehaviourPun
 
         if (!m_towersList)
             m_towersList = GetComponent<PlayerTowersList>();
+
+        ++count;
     }
 
     void Start()
     {
         if (photonView.IsMine)
             localPlayer = this;
+
+        // Cheap way
+        if (PhotonNetwork.IsMasterClient)
+            m_id = 0;
+        else
+            m_id = 1;
     }
 
     void Update()
@@ -63,6 +74,9 @@ public class PlayerController : MonoBehaviourPun
 
         if (m_debugText)
             m_debugText.text = string.Format("Gold: {0}", m_gold);
+
+        if (m_newText)
+            m_newText.text = string.Format("Num Players: {0}", count);
 
 #if UNITY_EDITOR || UNITY_STANDALONE
         if (m_towersList)
@@ -96,7 +110,8 @@ public class PlayerController : MonoBehaviourPun
                 TowerBase towerPrefab = m_towersList.getSelectedTower();
                 if (towerPrefab)
                 {
-                    TowerBase tower = Instantiate(towerPrefab, spawnPos, Quaternion.identity);
+                    GameObject towerObj = PhotonNetwork.Instantiate(towerPrefab.name, spawnPos, Quaternion.identity);
+                    TowerBase tower = towerObj.GetComponent<TowerBase>();
                     tower.m_ownerId = m_id;
                     Board.placeTower(tower, tileIndex);
                 }

@@ -17,25 +17,21 @@ public class Launcher : MonoBehaviourPunCallbacks
         PhotonNetwork.AutomaticallySyncScene = true;
     }
 
-    void Start()
-    {
-        Connect();
-    }
-
     public override void OnConnectedToMaster()
     {
         Debug.Log("OnConnectedToMaster() was called by PUN");
 
         if (m_bIsConnecting)
         {
+            // Try joining a random room, if this fails, OnJoinRandomRoom is called
             PhotonNetwork.JoinRandomRoom();
-            m_bIsConnecting = false;
         }
     }
 
     public override void OnDisconnected(DisconnectCause cause)
     {
         Debug.LogWarningFormat("OnDisconnected() was called by PUN with reason {0}", cause);
+        m_bIsConnecting = false;
     }
 
     public override void OnJoinedRoom()
@@ -52,15 +48,25 @@ public class Launcher : MonoBehaviourPunCallbacks
     {
         Debug.Log("OnJoinRandomFailed() was called by PUN. No random room available, so we create one.\nCalling: PhotonNetwork.CreateRoom");
 
+        // Failed to connect to a random room, create our own one instead
         PhotonNetwork.CreateRoom(null, new RoomOptions { MaxPlayers = maxPlayers });
     }
 
     /// <summary>
     /// Connects to a random room
     /// </summary>
-    protected void Connect()
+    public void Connect()
     {
-        PhotonNetwork.GameVersion = gameVersion;
-        m_bIsConnecting = PhotonNetwork.ConnectUsingSettings();   
+        m_bIsConnecting = true;   
+
+        if (PhotonNetwork.IsConnected)
+        {
+            PhotonNetwork.JoinRandomRoom();
+        }
+        else
+        {
+            PhotonNetwork.ConnectUsingSettings();
+            PhotonNetwork.GameVersion = gameVersion;
+        }
     }
 }
