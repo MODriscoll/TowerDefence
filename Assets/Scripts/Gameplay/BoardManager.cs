@@ -6,6 +6,7 @@ using UnityEngine.Tilemaps;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
+using Photon.Pun;
 
 /// <summary>
 /// Wraps the flow field used by the board manager to establish a path. Would like this
@@ -154,17 +155,20 @@ public struct BoardFlowfield
 /// <summary>
 /// Manager for a single board in the world
 /// </summary>
-public class BoardManager : MonoBehaviour
+public class BoardManager : MonoBehaviourPun
 {
     public Tilemap m_tileMap;       // Tilemap of board
     private Grid m_grid;            // Grid of board
 
-    // TODO: Only showing m_flowField for debugging (making sure generation is correct)
+    [SerializeField] private MonsterManager m_monsterManager;       // This boards monster manager
+
     [Header("Board Details")]
     [SerializeField] private BoardFlowfield m_flowField = new BoardFlowfield();     // Flow field used for path following
     [SerializeField] private Vector3Int[] m_spawnTiles = new Vector3Int[0];         // Spawn tiles used for faster spawning of monsters
 
     private Dictionary<Vector3Int, TowerBase> m_placedTowers = new Dictionary<Vector3Int, TowerBase>();     // All towers that have been placed on the map
+
+    public MonsterManager monsterManager { get { return m_monsterManager; } }
 
     void Awake()
     {
@@ -208,8 +212,7 @@ public class BoardManager : MonoBehaviour
         }
 
         return false;
-
-}
+    }
 
     public Vector3Int getRandomSpawnTile()
     {
@@ -273,6 +276,25 @@ public class BoardManager : MonoBehaviour
         return m_placedTowers.ContainsKey(tileIndex);
     }
 
+    /// <summary>
+    /// Helper for spawning a monster selected by passed in player. This
+    /// is used by the PlayerController
+    /// </summary>
+    /// <param name="prefabName">Name of prefab</param>
+    /// <param name="spawningPlayer">Player that is spawning in the monster</param>
+    public void spawnMonster(string prefabName, Photon.Realtime.Player spawningPlayer)
+    {
+        photonView.RPC("spawnMonsterRPC", PhotonHelpers.getFirstPlayer(spawningPlayer), prefabName);
+    }
+
+    // Spawns a user selected monster
+    [PunRPC]
+    private void spawnMonsterRPC(string prefabName)
+    {
+        if (monsterManager)
+            monsterManager.spawnMonster(prefabName, this);
+    }
+
 #if UNITY_EDITOR
     public void refreshProperties()
     {
@@ -328,6 +350,7 @@ public class BoardManager : MonoBehaviour
 
                     // Offset for placing the 'arrow' at the edge of the tile
                     Vector3 offset = m_tileMap.cellSize * 0.5f;
+                    offset = m_tileMap.orientationMatrix.MultiplyVector(offset);
 
                     // The direction we move in, we use this to act as arrows basically
                     Vector3 moveDir = entry.Value - entry.Key;

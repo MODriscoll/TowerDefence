@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 
-public class MonsterBase : MonoBehaviourPunCallbacks, IUpgradeable
+public class MonsterBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallback, IPunObservable
 {
     [Min(0.01f)] public float m_travelDuration = 2f;
     [Min(0)] public int m_reward = 10;
@@ -16,19 +16,26 @@ public class MonsterBase : MonoBehaviourPunCallbacks, IUpgradeable
     private float m_progress;               // Progress along current segment
     private float m_tilesTravelled;         // Total amount of tiles this monster has travelled by
 
+    public BoardManager Board { get { return m_board; } }
     public float TilesTravelled { get { return m_tilesTravelled; } }
 
-    private void Awake()
+    void Start()
     {
-        PhotonTransformView transformView = GetComponent<PhotonTransformView>();
-        if (transformView)
+        if (PhotonNetwork.IsConnected && !photonView.IsMine)
         {
-            transformView.m_SynchronizeRotation = true;
+            MonsterManager monsterManager = m_board.monsterManager;
+            if (monsterManager)
+                monsterManager.addExternalMonster(this);
         }
+    }
 
-        if (!GetComponent<PhotonView>().IsMine)
+    void OnDestroy()
+    {
+        if (PhotonNetwork.IsConnected && !photonView.IsMine)
         {
-            MonsterManager.manager.m_monsters.Add(this);
+            MonsterManager monsterManager = m_board.monsterManager;
+            if (monsterManager)
+                monsterManager.removeExternalMonster(this);
         }
     }
 
@@ -47,14 +54,13 @@ public class MonsterBase : MonoBehaviourPunCallbacks, IUpgradeable
         m_tilesTravelled = 0f;
     }
 
+    public virtual void destroySelf()
+    {
+        m_board.monsterManager.destroyMonsterImpl(this);
+    }
+
     public virtual void tick(float deltaTime)
     {
-        // Only update monsters client owns
-        if (PhotonNetwork.IsConnected && !photonView.IsMine)
-        {
-            return;
-        }
-
         float delta = deltaTime / m_travelDuration;
 
         // Have we reached the end of the segment
@@ -78,37 +84,30 @@ public class MonsterBase : MonoBehaviourPunCallbacks, IUpgradeable
         m_tilesTravelled += delta;
     }
 
-    //public virtual void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
-    //{
-    //    if (stream.IsWriting)
-    //    {
-    //        stream.SendNext((Vector2)transform.position);
-    //        stream.SendNext(transform.eulerAngles.z);
-    //    }
-    //    else
-    //    {
-    //        Vector2 position = (Vector2)stream.ReceiveNext();
-    //        float rotation = (float)stream.ReceiveNext();
-
-    //        transform.position = position;
-    //        transform.eulerAngles = new Vector3(0f, 0f, rotation);
-    //    }
-    //}
-
-
-    // IUpgradeable
-    public bool canUpgrade()
+    private MonsterManager getOpponenetsMonsterManager()
     {
-        return false;
+        BoardManager board = GameManager.manager.OpponentsBoard;
+        if (board)
+            return board.monsterManager;
+
+        return null;
     }
 
-    public int getUpgradeCost()
+    void IPunInstantiateMagicCallback.OnPhotonInstantiate(PhotonMessageInfo info)
     {
-        return 0;
+        int boardId = (int)info.photonView.InstantiationData[0];
+        m_board = GameManager.manager.getBoardManager(boardId);
     }
 
-    public void upgrade()
+    void IPunObservable.OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
-        
+        if (stream.IsWriting)
+        {
+            stream.SendNext(m_tilesTravelled);
+        }
+        else
+        {
+            m_tilesTravelled = (float)stream.ReceiveNext();
+        }
     }
 }

@@ -14,6 +14,9 @@ public class Launcher : MonoBehaviourPunCallbacks
 
     void Awake()
     {
+        // Register helpers used throughout application
+        PhotonHelpers.register();
+
         PhotonNetwork.AutomaticallySyncScene = true;
     }
 

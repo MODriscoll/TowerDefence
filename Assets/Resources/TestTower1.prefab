@@ -93,7 +93,7 @@ GameObject:
   - component: {fileID: 9196093534682404417}
   - component: {fileID: 9196093534682404416}
   - component: {fileID: 7581699381181694968}
-  - component: {fileID: -5101137712937394666}
+  - component: {fileID: -8749751031708628852}
   m_Layer: 8
   m_Name: TestTower1
   m_TagString: Untagged
@@ -130,7 +130,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_targetRadius: 5
   m_fireRate: 3
-  m_ownerId: -1
 --- !u!114 &7581699381181694968
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -146,14 +145,14 @@ MonoBehaviour:
   ObservedComponentsFoldoutOpen: 1
   Group: 0
   prefixField: -1
-  Synchronization: 3
+  Synchronization: 1
   OwnershipTransfer: 0
   ObservedComponents:
-  - {fileID: -5101137712937394666}
+  - {fileID: -8749751031708628852}
   viewIdField: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
---- !u!114 &-5101137712937394666
+--- !u!114 &-8749751031708628852
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

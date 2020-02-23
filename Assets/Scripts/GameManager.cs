@@ -12,9 +12,15 @@ public class GameManager : MonoBehaviourPunCallbacks
     public PlayerInfo m_p1Info;
     public PlayerInfo m_p2Info;
 
-    [SerializeField] private PlayerController m_playerPrefab;
+    public BoardManager m_p1Board;      // Board for player 1
+    public BoardManager m_p2Board;      // Board for player 2
+
+    [SerializeField] private PlayerController m_playerPrefab;   // Player controller to spawn for a new player
     private PlayerController m_p1Controller;
     private PlayerController m_p2Controller;
+
+    public BoardManager PlayersBoard { get { return getPlayersBoard(); } }
+    public BoardManager OpponentsBoard { get { return getOpponentsBoard(); } }
 
     void Awake()
     {
@@ -25,19 +31,12 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         // PlayerController will set this reference upon start
         if (!PlayerController.localPlayer)
-        {
-            int playerId = 0;
+            PhotonNetwork.Instantiate(m_playerPrefab.gameObject.name, transform.position, Quaternion.identity);
 
-            // If not connected, we are probably playing in editor
-            if (PhotonNetwork.IsConnected)
-                playerId = PhotonNetwork.IsMasterClient ? 0 : 1;
-
-            // If player is player 1 or two
-            object[] instantData = new object[1];
-            instantData[0] = playerId;
-            GameObject newController = PhotonNetwork.Instantiate(m_playerPrefab.gameObject.name, transform.position, Quaternion.identity, 0, instantData);
-            getPlayerInfo(playerId).m_controller = newController.GetComponent<PlayerController>();
-        }
+#if UNITY_EDITOR
+        // Spawn second player
+        //PhotonNetwork.Instantiate(m_playerPrefab.gameObject.name, transform.position, Quaternion.identity);
+#endif
     }
 
     void OnDestroy()
@@ -49,6 +48,58 @@ public class GameManager : MonoBehaviourPunCallbacks
             else
                 Debug.LogWarning("Manager destroyed but manager was not set as static instance");
         }
+    }
+
+    void Update()
+    {
+        BoardManager board = getPlayersBoard();
+        if (board && board.monsterManager)
+            board.monsterManager.tick(Time.deltaTime);
+
+#if UNITY_EDITOR
+        board = getBoardManager(1);
+        if (board && board.monsterManager)
+            board.monsterManager.tick(Time.deltaTime);
+#endif
+    }
+
+    private BoardManager getPlayersBoard()
+    {
+#if UNITY_EDITOR
+        //return m_p1Board;
+#endif
+
+        if (PlayerController.localPlayer)
+            return getBoardManager(PlayerController.localPlayer.playerId);
+
+        return null;
+    }
+
+    private BoardManager getOpponentsBoard()
+    {
+#if UNITY_EDITOR
+        //return m_p2Board;
+#endif
+
+        if (PlayerController.localPlayer)
+        {
+            if (PlayerController.localPlayer.playerId == 0)
+                return m_p2Board;
+            else
+                return m_p1Board;
+        }
+ 
+        return null;
+    }
+
+    public BoardManager getBoardManager(int playerId)
+    {
+        if (playerId == 0)
+            return m_p1Board;
+        else if (playerId == 1)
+            return m_p2Board;
+
+        return null;
     }
 
     public override void OnPlayerLeftRoom(Player other)

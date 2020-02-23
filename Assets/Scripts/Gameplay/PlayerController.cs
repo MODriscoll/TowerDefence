@@ -7,7 +7,7 @@ public class PlayerController : MonoBehaviourPun
 {
     static public PlayerController localPlayer;
 
-    public int m_id;                                                // Id of player (either 1 or 2)
+    private int m_id = -1;                                          // Id of player
     [SerializeField] private Camera m_camera;                       // Players viewport of the scene
     [SerializeField] private PlayerTowersList m_towersList;         // List of all the towers the player can place
 
@@ -16,31 +16,21 @@ public class PlayerController : MonoBehaviourPun
 
     private BoardManager m_board = null;        // Cached board we use
 
-    // temp
-    [SerializeField] private UnityEngine.UI.Text m_debugText;
-    [SerializeField] private UnityEngine.UI.Text m_newText;
+    // The id of this player, is set in start
+    public int playerId { get { return m_id; } }
 
-    public BoardManager Board
-    {
-        get
-        {
-            if (!m_board)
-            {
-                // Try to get our board, cache it if possible
-                PlayerInfo playerInfo = GameManager.manager.getPlayerInfo(m_id);
-                m_board = playerInfo != null ? playerInfo.boardManager : null;
-            }
+    // The players tower list
+    public PlayerTowersList towersList { get { return m_towersList; } }
 
-            return m_board;
-        }
-    }
+    public BoardManager Board { get { return m_board; } }
 
     // temp serialize (for testing)
     [SerializeField] private MonsterBase m_commonMonster;           // The common monster that this player passively 'spawns'
 
-    public MonsterBase commomMonster { get { return m_commonMonster; } }
+    public PlayerUI m_playerUIPrefab;       // UI to spawn for local player
+    private PlayerUI m_playerUI = null;     // Instance of players UI
 
-    static int count = 0;
+    public MonsterBase m_testMonster;
 
     void Awake()
     {
@@ -49,34 +39,64 @@ public class PlayerController : MonoBehaviourPun
 
         if (!m_towersList)
             m_towersList = GetComponent<PlayerTowersList>();
-
-        ++count;
     }
 
     void Start()
     {
-        if (photonView.IsMine)
-            localPlayer = this;
+        if (PhotonNetwork.IsConnected)
+        {      
+            if (photonView.IsMine)
+            {
+                if (PhotonNetwork.IsMasterClient)
+                    m_id = 0;
+                else
+                    m_id = 1;
 
-        // Cheap way
-        if (PhotonNetwork.IsMasterClient)
-            m_id = 0;
+                localPlayer = this;
+                m_playerUI = Instantiate(m_playerUIPrefab, transform, false);
+                if (m_playerUI)
+                {
+                    m_playerUI.m_owner = this;
+                }
+            }
+            else
+            {
+                if (PhotonNetwork.IsMasterClient)
+                    m_id = 1;
+                else
+                    m_id = 0;
+            }
+
+            m_board = GameManager.manager.getBoardManager(m_id);
+        }
+#if UNITY_EDITOR
         else
-            m_id = 1;
+        {
+            if (localPlayer)
+            {
+                m_id = 1;
+            }
+            else
+            {
+                m_id = 0;
+
+                localPlayer = this;
+                m_playerUI = Instantiate(m_playerUIPrefab, transform, false);
+                if (m_playerUI)
+                {
+                    m_playerUI.m_owner = this;
+                }
+            }
+
+            m_board = GameManager.manager.getBoardManager(m_id);
+        }
+#endif
     }
 
     void Update()
     {
-        if (!photonView.IsMine && PhotonNetwork.IsConnected)
-        {
+        if (PhotonNetwork.IsConnected && !photonView.IsMine)
             return;
-        }
-
-        if (m_debugText)
-            m_debugText.text = string.Format("Gold: {0}", m_gold);
-
-        if (m_newText)
-            m_newText.text = string.Format("Num Players: {0}", count);
 
 #if UNITY_EDITOR || UNITY_STANDALONE
         if (m_towersList)
@@ -88,6 +108,13 @@ public class PlayerController : MonoBehaviourPun
             if (Input.GetKeyDown(KeyCode.Alpha0))
                 m_towersList.unselectTower();
         }
+
+        // Quick testing
+        if (Input.GetMouseButtonDown(1))
+        {
+            if (m_testMonster)
+                    GameManager.manager.OpponentsBoard.spawnMonster(m_testMonster.name, PhotonNetwork.LocalPlayer);
+        }
 #endif
 
         Vector3 selectedPos;
@@ -97,24 +124,19 @@ public class PlayerController : MonoBehaviourPun
             selectedPos = m_camera.ScreenToWorldPoint(selectedPos);
 
             Vector3Int tileIndex = Board.positionToIndex(selectedPos);
-            if (!Board.isPlaceableTile(tileIndex))
+            if (!m_board.isPlaceableTile(tileIndex))
                 return;
 
-            if (!Board.isOccupied(tileIndex))
+            if (!m_board.isOccupied(tileIndex))
             {
                 // We call this as selectedPos is highly likely not to be
                 // the center of the tile, while this 100% will be
-                Vector3 spawnPos = Board.indexToPosition(tileIndex);
+                Vector3 spawnPos = m_board.indexToPosition(tileIndex);
 
-                // Testing
+                // Spawn tower on the server (replicates back to us if not master client)
                 TowerBase towerPrefab = m_towersList.getSelectedTower();
                 if (towerPrefab)
-                {
-                    GameObject towerObj = PhotonNetwork.Instantiate(towerPrefab.name, spawnPos, Quaternion.identity);
-                    TowerBase tower = towerObj.GetComponent<TowerBase>();
-                    tower.m_ownerId = m_id;
-                    Board.placeTower(tower, tileIndex);
-                }
+                    placeTowerAt(towerPrefab, tileIndex, spawnPos);
             }
             else
             {
@@ -124,16 +146,18 @@ public class PlayerController : MonoBehaviourPun
         }
     }
 
-    // Photon event
-    void OnPhotonInstantiate(PhotonMessageInfo info)
-    {
-        m_id = (int)info.photonView.InstantiationData[0];
-
-        m_board = GameManager.manager.getPlayerInfo(m_id).boardManager;
-    }
-
     protected bool tryGetBoardInput(out Vector3 selectedPos)
     {
+#if UNITY_EDITOR
+        // If playing in editor, only accept input for first player
+        if (Application.isEditor)
+            if (m_id != 0)
+            {
+                selectedPos = Vector3.zero;
+                return false;
+            }
+#endif
+
         // Consider touch input
         if (Input.touchSupported)
         {
@@ -147,18 +171,10 @@ public class PlayerController : MonoBehaviourPun
                 }
             }
         }
-#if !UNITY_IOS && !UNITY_ANDROID
+#if UNITY_STANDALONE
         // Revert to normal PC bindings
         else
         {
-            // If playing in editor, only accept input for first player
-            if (!PhotonNetwork.IsConnected)
-                if (m_id != 0)
-                {
-                    selectedPos = Vector3.zero;
-                    return false;
-                }
-
             if (Input.GetMouseButtonDown(0))
             {
                 selectedPos = Input.mousePosition;
@@ -169,6 +185,11 @@ public class PlayerController : MonoBehaviourPun
 
         selectedPos = Vector3.zero;
         return false;
+    }
+
+    public void placeTowerAt(TowerBase towerPrefab, Vector3Int tileIndex, Vector3 spawnPos)
+    {
+        TowerBase.spawnTower(towerPrefab, m_id, tileIndex, spawnPos);
     }
 
     public void giveGold(int amount)

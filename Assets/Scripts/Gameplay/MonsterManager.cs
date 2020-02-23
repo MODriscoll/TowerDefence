@@ -4,35 +4,22 @@ using UnityEngine;
 using UnityEngine.Assertions;
 using Photon.Pun;
 
-
-
-public class MonsterManager : MonoBehaviourPunCallbacks
+public class MonsterManager : MonoBehaviour
 { 
-    // Pointer to manager currently in use, we use this
-    // as we want to find monsters but not through collision
-    public static MonsterManager manager;
+    private List<MonsterBase> m_monsters = new List<MonsterBase>();                 // All monsters that currently exist
+    private List<MonsterBase> m_destroyedMonsters = new List<MonsterBase>();        // All monsters that have been destroyed
 
-    // temp public
-    public List<MonsterBase> m_monsters = new List<MonsterBase>();             // All monsters that currently exist
-    private List<MonsterBase> m_destroyedMonsters = new List<MonsterBase>();    // All monsters that have been destroyed
+    private bool m_tickingMonsters = false;     // If we are currently ticking all monsters
 
-    void Awake()
+    public void tick(float deltaTime)
     {
-        Assert.IsNull(manager, "Only one Monster Manager should exist at a Time!");
-        manager = this;
-    }
-
-    void Update()
-    {
-        // TODO: Tick only on server
-        if (PhotonNetwork.IsConnected && !PhotonNetwork.IsMasterClient)
-            return;
-
         // Cycle through each monster, updating them
+        m_tickingMonsters = true;
         foreach (MonsterBase monster in m_monsters)
         {
-            monster.tick(Time.deltaTime);
+            monster.tick(deltaTime);
         }
+        m_tickingMonsters = false;
 
         // Now destroy the monsters that were called to be destroyed though destroyMonster,
         // we wait till after since we cannot modify the array while we are cycling through it,
@@ -46,58 +33,72 @@ public class MonsterManager : MonoBehaviourPunCallbacks
         m_destroyedMonsters.Clear();
     }
 
+    /// <summary>
+    /// Spawns a monster that this manager is responsible for updating
+    /// </summary>
+    /// <param name="prefab">Prefab of monster to spawn</param>
+    /// <param name="board">Board to place it on</param>
+    /// <returns>New monster prefab or null</returns>
     public MonsterBase spawnMonster(MonsterBase prefab, BoardManager board)
     {
-        if (!board)
-            return null;
+        return spawnMonster(prefab.name, board);
+    }
 
-        GameObject newMonster = PhotonNetwork.Instantiate(prefab.name, Vector3.zero, Quaternion.identity);
+    public MonsterBase spawnMonster(string prefabName, BoardManager board)
+    {
+        object[] spawnData = new object[1];
+        spawnData[0] = PlayerController.localPlayer.playerId;
+        GameObject newMonster = PhotonNetwork.Instantiate(prefabName, Vector3.zero, Quaternion.identity, 0, spawnData);
         if (!newMonster)
             return null;
 
         MonsterBase monster = newMonster.GetComponent<MonsterBase>();
-        if (!monster)
-        {
-            PhotonNetwork.Destroy(newMonster);
-            return null;
-        }
+        Assert.IsNotNull(monster);
 
         m_monsters.Add(monster);
 
         monster.initMoster(board);
         return monster;
-
-    }
-
-    // Testing Function
-    public MonsterBase spawnMonster_Test(MonsterBase prefab, BoardManager board)
-    {
-        if (!board)
-            return null;
-
-        MonsterBase newMonster = Instantiate(prefab, Vector3.zero, Quaternion.identity);
-        if (!newMonster)
-            return null;
-
-        m_monsters.Add(newMonster);
-
-        newMonster.initMoster(board);
-        return newMonster;
     }
 
     public static void destroyMonster(MonsterBase monster)
     {
-        if (manager)
-            manager.destroyMonsterImpl(monster);
+        monster.destroySelf();
     }
 
-    private void destroyMonsterImpl(MonsterBase monster)
+    public void destroyMonsterImpl(MonsterBase monster)
     {
-        if (PhotonNetwork.IsConnected && !PhotonNetwork.IsMasterClient)
+        if (PhotonNetwork.IsConnected && !monster.photonView.IsMine)
             return;
 
         if (monster)
             m_destroyedMonsters.Add(monster);
+    }
+
+    public void addExternalMonster(MonsterBase monster)
+    {
+#if UNITY_EDITOR
+        if (m_tickingMonsters)
+        {
+            Debug.LogError("Adding external monster while ticking monsters. This shouldn't happen");
+            return;
+        }
+#endif
+
+        m_monsters.Add(monster);
+    }
+
+    public void removeExternalMonster(MonsterBase monster)
+    {
+#if UNITY_EDITOR
+        if (m_tickingMonsters)
+        {
+            Debug.LogError("Removing external monster while ticking monsters. This shouldn't happen");
+            return;
+        }
+#endif
+
+        m_monsters.Remove(monster);
     }
 
     /// <summary>
