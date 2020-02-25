@@ -5,8 +5,9 @@ using Photon.Pun;
 
 public class MonsterBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallback, IPunObservable
 {
-    [Min(0.01f)] public float m_travelDuration = 2f;
-    [Min(0)] public int m_reward = 10;
+    [Min(0.01f)] public float m_travelDuration = 2f;        // Amount of time (in seconds) it takes to traverse 1 tile
+    [Min(0)] public int m_reward = 10;                      // Reward to give player when we are killed
+    [Min(1)] public int m_damage = 5;                       // The amount of damage this monster
 
     protected BoardManager m_board;                 // The board we are active on
 
@@ -21,6 +22,7 @@ public class MonsterBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallba
 
     void Start()
     {
+        // Add ourselves to our board on the instigators side (since monsters are spawned on player who owns the board)
         if (PhotonNetwork.IsConnected && !photonView.IsMine)
         {
             MonsterManager monsterManager = m_board.monsterManager;
@@ -31,6 +33,7 @@ public class MonsterBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallba
 
     void OnDestroy()
     {
+        // Like in start, we need to remove ourselves on the instigators side
         if (PhotonNetwork.IsConnected && !photonView.IsMine)
         {
             MonsterManager monsterManager = m_board.monsterManager;
@@ -54,11 +57,6 @@ public class MonsterBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallba
         m_tilesTravelled = 0f;
     }
 
-    public virtual void destroySelf()
-    {
-        m_board.monsterManager.destroyMonsterImpl(this);
-    }
-
     public virtual void tick(float deltaTime)
     {
         float delta = deltaTime / m_travelDuration;
@@ -69,7 +67,11 @@ public class MonsterBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallba
         {
             if (m_board.isGoalTile(m_targetTileIndex))
             {
-                MonsterManager.destroyMonster(this);
+                // Damage the player
+                PlayerController.localPlayer.applyDamage(m_damage);
+
+                // We destroy ourselves after tick has concluded
+                MonsterManager.destroyMonster(this, false);
                 return;
             }
 
@@ -82,15 +84,6 @@ public class MonsterBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallba
 
         transform.position = Vector3.Lerp(m_segmentStart, m_segmentEnd, m_progress);
         m_tilesTravelled += delta;
-    }
-
-    private MonsterManager getOpponenetsMonsterManager()
-    {
-        BoardManager board = GameManager.manager.OpponentsBoard;
-        if (board)
-            return board.monsterManager;
-
-        return null;
     }
 
     void IPunInstantiateMagicCallback.OnPhotonInstantiate(PhotonMessageInfo info)

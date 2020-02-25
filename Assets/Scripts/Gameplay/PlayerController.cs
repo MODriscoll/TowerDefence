@@ -3,21 +3,26 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 
-public class PlayerController : MonoBehaviourPun
+public class PlayerController : MonoBehaviourPun, IPunObservable
 {
-    static public PlayerController localPlayer;
+    static public PlayerController localPlayer;         // Singleton access to local player controller
+    static public PlayerController remotePlayer;        // Singleton access to remote player controller
 
     private int m_id = -1;                                          // Id of player
     [SerializeField] private Camera m_camera;                       // Players viewport of the scene
     [SerializeField] private PlayerTowersList m_towersList;         // List of all the towers the player can place
 
-    // Only public for temp, we have game manager init this on start
-    public int m_gold = 100;             // How much gold we have
+    [SerializeField] private int m_health = 100;            // How much health this player has
+    [SerializeField] private int m_gold = 100;              // How much spending money this player has
+    [SerializeField] private int m_maxGold = 1000;          // Max amount of gold a player can have
 
     private BoardManager m_board = null;        // Cached board we use
 
     // The id of this player, is set in start
     public int playerId { get { return m_id; } }
+
+    public int Health { get { return m_health; } }
+    public int Gold { get { return m_gold; } }
 
     // The players tower list
     public PlayerTowersList towersList { get { return m_towersList; } }
@@ -53,6 +58,8 @@ public class PlayerController : MonoBehaviourPun
                     m_id = 1;
 
                 localPlayer = this;
+
+                // Only create UI for local player
                 m_playerUI = Instantiate(m_playerUIPrefab, transform, false);
                 if (m_playerUI)
                 {
@@ -65,6 +72,8 @@ public class PlayerController : MonoBehaviourPun
                     m_id = 1;
                 else
                     m_id = 0;
+
+                remotePlayer = this;
             }
 
             m_board = GameManager.manager.getBoardManager(m_id);
@@ -135,7 +144,7 @@ public class PlayerController : MonoBehaviourPun
 
                 // Spawn tower on the server (replicates back to us if not master client)
                 TowerBase towerPrefab = m_towersList.getSelectedTower();
-                if (towerPrefab)
+                if (towerPrefab && canAfford(towerPrefab.m_cost))
                     placeTowerAt(towerPrefab, tileIndex, spawnPos);
             }
             else
@@ -187,21 +196,98 @@ public class PlayerController : MonoBehaviourPun
         return false;
     }
 
+    /// <summary>
+    /// Places a tower that this player owns at tile
+    /// </summary>
+    /// <param name="towerPrefab">Prefab of tower to spawn</param>
+    /// <param name="tileIndex">Index of tile to place tower on</param>
+    /// <param name="spawnPos">Spawn position (in world space) for the tower</param>
     public void placeTowerAt(TowerBase towerPrefab, Vector3Int tileIndex, Vector3 spawnPos)
     {
+        consumeGold(towerPrefab.m_cost);
+        
+        // Finally spawn the tower
         TowerBase.spawnTower(towerPrefab, m_id, tileIndex, spawnPos);
     }
 
-    public void giveGold(int amount)
+    /// <summary>
+    /// Applies damage to the player. Will finish the game if health has depleted
+    /// </summary>
+    /// <param name="damage">Damage to apply. Needs to be a positive value</param>
+    public void applyDamage(int damage)
     {
-#if UNITY_EDITOR
-        if (amount < 0)
+        if (PhotonNetwork.IsConnected && !photonView.IsMine)
+            return;
+
+        if (damage <= 0)
         {
-            Debug.LogWarning("Gold value less than zero given to player. Discarding");
+            Debug.LogWarning(string.Format("Unable to apply negative damage! (Value = {0})", damage));
             return;
         }
-#endif
 
-        m_gold += amount;
+        m_health = Mathf.Max(m_health - damage, 0);
+        if (m_health <= 0)
+        {
+            // We lost all our health. The opponent wins!
+            GameManager.manager.notifyGameFinished(remotePlayer.m_id);
+        }
+    }
+
+    /// <summary>
+    /// Gives gold to the player. Maxing it out at max gold value
+    /// </summary>
+    /// <param name="amount">Gold to give. Needs to be a positive value</param>
+    public void giveGold(int amount)
+    {
+        if (PhotonNetwork.IsConnected && !photonView.IsMine)
+            return;
+
+        if (amount <= 0)
+        {
+            Debug.LogWarning(string.Format("Unable to give negative gold! (Value = {0})", amount));
+            return;
+        }
+
+        m_gold = Mathf.Min(m_gold + amount, m_maxGold);
+    }
+
+    /// <summary>
+    /// Consumes gold from this players stash. Clamping it to min of zero
+    /// </summary>
+    /// <param name="amount">Gold to consume. Needs to be a positive value</param>
+    public void consumeGold(int amount)
+    {
+        if (PhotonNetwork.IsConnected && !photonView.IsMine)
+            return;
+
+        if (amount <= 0)
+        {
+            Debug.LogWarning(string.Format("Unable to consume negative gold! (Value = {0}", amount));
+            return;
+        }
+
+        m_gold = Mathf.Max(m_gold - amount, 0);
+    }
+
+    /// <summary>
+    /// Checks if player can afford the pay arbitrary amount
+    /// </summary>
+    /// <param name="amount">Amount to query</param>
+    /// <returns>If player has required amount</returns>
+    public bool canAfford(int amount)
+    {
+        return m_gold >= amount;
+    }
+
+    void IPunObservable.OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if (stream.IsWriting)
+        {
+            stream.SendNext(m_health);
+        }
+        else
+        {
+            m_health = (int)stream.ReceiveNext();
+        }
     }
 }

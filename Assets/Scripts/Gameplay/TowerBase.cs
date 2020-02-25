@@ -6,6 +6,7 @@ using Photon.Pun;
 
 public class TowerBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallback//, IPunObservable
 {
+    [Min(0)] public int m_cost = 10;                // The cost to build this tower (0 = free)
     public float m_targetRadius = 10f;              // Radius the tower can see
     [Min(0.01f)] public float m_fireRate = 1f;      // Fire rate of towers turret
 
@@ -31,9 +32,7 @@ public class TowerBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallback
         if (Time.time >= m_lastFireTime + m_fireRate)
         {
             // 'Give gold'
-            PlayerInfo playerInfo = GameManager.manager.getPlayerInfo(m_ownerId);
-            if (playerInfo != null && playerInfo.controller)
-                playerInfo.controller.giveGold(monster.m_reward);
+            PlayerController.localPlayer.giveGold(monster.m_reward);
 
             // 'Shoot'
             MonsterManager.destroyMonster(monster);

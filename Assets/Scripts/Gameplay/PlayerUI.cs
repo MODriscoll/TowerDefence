@@ -13,14 +13,20 @@ public class PlayerUI : MonoBehaviour
 
     void Update()
     {
+        if (!m_owner)
+            return;
+
         if (m_debugText)
         {
             TowerBase selectedTower = m_owner.towersList.getSelectedTower();
 
             m_debugText.text = string.Format(
-                "Player ID: {0}\nSelected Tower: {1}", 
+                "Player ID: {0}\nSelected Tower: {1}\nYour Health: {2}\nOpponents Health: {3}\nGold: {4}", 
                 m_owner.playerId,
-                selectedTower ? selectedTower.name : "None");
+                selectedTower ? selectedTower.name : "None",
+                m_owner.Health,
+                PlayerController.remotePlayer ? PlayerController.remotePlayer.Health : -1,
+                m_owner.Gold);
         }
     }
 

@@ -7,25 +7,23 @@ using Photon.Realtime;
 
 public class GameManager : MonoBehaviourPunCallbacks
 {
-    public static GameManager manager;
-
-    public PlayerInfo m_p1Info;
-    public PlayerInfo m_p2Info;
+    public static GameManager manager;      // Singleton access to the game manager
 
     public BoardManager m_p1Board;      // Board for player 1
     public BoardManager m_p2Board;      // Board for player 2
 
     [SerializeField] private PlayerController m_playerPrefab;   // Player controller to spawn for a new player
-    private PlayerController m_p1Controller;
-    private PlayerController m_p2Controller;
 
-    public BoardManager PlayersBoard { get { return getPlayersBoard(); } }
-    public BoardManager OpponentsBoard { get { return getOpponentsBoard(); } }
+    public BoardManager PlayersBoard { get { return getPlayersBoard(); } }          // Get the local players board
+    public BoardManager OpponentsBoard { get { return getOpponentsBoard(); } }      // Get the opponent players board
 
     void Awake()
     {
         if (manager)
+        {
             Debug.LogError("GameManager has already been set!");
+            return;
+        }
 
         manager = this;
 
@@ -65,10 +63,6 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     private BoardManager getPlayersBoard()
     {
-#if UNITY_EDITOR
-        //return m_p1Board;
-#endif
-
         if (PlayerController.localPlayer)
             return getBoardManager(PlayerController.localPlayer.playerId);
 
@@ -77,10 +71,6 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     private BoardManager getOpponentsBoard()
     {
-#if UNITY_EDITOR
-        //return m_p2Board;
-#endif
-
         if (PlayerController.localPlayer)
         {
             if (PlayerController.localPlayer.playerId == 0)
@@ -92,6 +82,11 @@ public class GameManager : MonoBehaviourPunCallbacks
         return null;
     }
 
+    /// <summary>
+    /// Get a board manager based on player ID
+    /// </summary>
+    /// <param name="playerId">Players whose board to get</param>
+    /// <returns>Valid board or null</returns>
     public BoardManager getBoardManager(int playerId)
     {
         if (playerId == 0)
@@ -117,21 +112,28 @@ public class GameManager : MonoBehaviourPunCallbacks
         SceneManager.LoadScene(0);
     }
 
-    public PlayerInfo getPlayerInfo(int id)
-    {
-        if (id == 0)
-            return m_p1Info;
-        else if (id == 1)
-            return m_p2Info;
-        else
-            return null;
-    }
-
     /// <summary>
     /// Leaves the current game
     /// </summary>
     public void LeaveGame()
     {
         PhotonNetwork.LeaveRoom();
+    }
+
+    public void notifyGameFinished(int winnerId)
+    {
+        photonView.RPC("notifyGameFinishedRPC", RpcTarget.All, winnerId);
+    }
+
+    [PunRPC]
+    void notifyGameFinishedRPC(int winnerId)
+    {
+        if (winnerId == PlayerController.localPlayer.playerId)
+            Debug.LogError("YOU WIN!");
+        else
+            Debug.LogError("YOU LOSE...");
+
+        // for now
+        LeaveGame();
     }
 }

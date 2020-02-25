@@ -61,20 +61,47 @@ public class MonsterManager : MonoBehaviour
         return monster;
     }
 
-    public static void destroyMonster(MonsterBase monster)
+    /// <summary>
+    /// Destroys a monster, removing from the board it belongs to
+    /// </summary>
+    /// <param name="monster">Monster to destroy</param>
+    /// <param name="bImmediate">If we are able to immediately destroy the monster</param>
+    public static void destroyMonster(MonsterBase monster, bool bImmediate = true)
     {
-        monster.destroySelf();
+        BoardManager board = monster ? monster.Board : null;
+        if (board && board.monsterManager)
+            board.monsterManager.destroyMonsterImpl(monster, bImmediate);
     }
 
-    public void destroyMonsterImpl(MonsterBase monster)
+    /// <summary>
+    /// Implementation for destroying a monster
+    /// </summary>
+    /// <param name="monster">Monster to destroy</param>
+    /// <param name="bImmediate">If we can immediately destroy the monster</param>
+    private void destroyMonsterImpl(MonsterBase monster, bool bImmediate)
     {
         if (PhotonNetwork.IsConnected && !monster.photonView.IsMine)
             return;
 
-        if (monster)
+        if (bImmediate)
+        {
+            if (!m_tickingMonsters)
+            {
+                m_monsters.Remove(monster);
+                PhotonNetwork.Destroy(monster.gameObject);
+                return;
+            }
+
+            Debug.LogError("Can't immediately destroy monster as all monsters are being ticked! Placing into destroy queue");
+        }
+
+        // Only add monster once to prevent destroy being called multiple times
+        // Not expecting this to be long, so we use a regular find
+        if (!m_destroyedMonsters.Contains(monster))
             m_destroyedMonsters.Add(monster);
     }
 
+    // Internal function. Adds a monster that can be queried but should not be destroyed by this client
     public void addExternalMonster(MonsterBase monster)
     {
 #if UNITY_EDITOR
@@ -88,6 +115,7 @@ public class MonsterManager : MonoBehaviour
         m_monsters.Add(monster);
     }
 
+    // Internal function. Removes a monster that was originally added by addExternalMonster
     public void removeExternalMonster(MonsterBase monster)
     {
 #if UNITY_EDITOR
