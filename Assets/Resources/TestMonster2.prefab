@@ -129,6 +129,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_travelDuration: 1
   m_reward: 10
+  m_damage: 5
 --- !u!114 &6293389618481299608
 MonoBehaviour:
   m_ObjectHideFlags: 0

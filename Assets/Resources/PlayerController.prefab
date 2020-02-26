@@ -131,7 +131,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_camera: {fileID: 1674025923139972484}
   m_towersList: {fileID: 299274198644012295}
+  m_health: 100
   m_gold: 100
+  m_maxGold: 1000
   m_commonMonster: {fileID: 8982464395163395519, guid: b3e51e02fe7014340a7c02a5f8d9b4c9,
     type: 3}
   m_playerUIPrefab: {fileID: 5526208262564350979, guid: 726dd88ef37d4aa4aa4724e914e02e55,
