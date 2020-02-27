@@ -229,7 +229,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         if (m_health <= 0)
         {
             // We lost all our health. The opponent wins!
-            GameManager.manager.notifyGameFinished(remotePlayer.m_id);
+            GameManager.manager.finishMatch(remotePlayer.m_id);
         }
     }
 
@@ -277,6 +277,18 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     public bool canAfford(int amount)
     {
         return m_gold >= amount;
+    }
+
+    public void notifyWaveStarted(int waveNum)
+    {
+        if (m_playerUI)
+            m_playerUI.notifyWaveStart(waveNum);
+    }
+
+    public void notifyWaveFinished(int waveNum)
+    {
+        if (m_playerUI)
+            m_playerUI.notifyWaveFinished(waveNum);
     }
 
     void IPunObservable.OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)

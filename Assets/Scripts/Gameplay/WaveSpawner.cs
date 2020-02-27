@@ -18,7 +18,9 @@ public class WaveSpawner : MonoBehaviourPun
     public delegate void OnWaveFinished();          // Delegate for finishing a wave
     public OnWaveFinished onWaveFinished;           // Event for when a wave has finished (only called on server)
 
-    private Coroutine m_spawnRoutine;
+    private Coroutine m_spawnRoutine;               // Routine currently handling spawning
+
+    public bool IsWaveInProgress { get { return m_spawnRoutine != null; } }         // If a wave is current being processed
 
     public MonsterBase m_monsterPrefab;         // Monster to spawn (can be set in editor for testing)
 
@@ -50,9 +52,15 @@ public class WaveSpawner : MonoBehaviourPun
     /// <returns></returns>
     private IEnumerator spawnRoutine(WaveSpawnInfo info)
     {
+#if !UNITY_EDITOR
         BoardManager board = getLocalBoardManager();
         if (!board)
+        {
+            // Be sure to null this (see isWaveInProgress)
+            m_spawnRoutine = null;
             yield break;
+        }
+#endif
 
         int remainingSpawns = info.m_count;
         while (remainingSpawns > 0)
@@ -64,9 +72,13 @@ public class WaveSpawner : MonoBehaviourPun
             spawnMonster(board);
 #endif
 
-            yield return new WaitForSeconds(info.m_spawnInterval);
-
+            // We want to call onWaveFinished as 
+            // soon as the last monster is spawned
             --remainingSpawns;
+            if (remainingSpawns <= 0)
+                break;
+
+            yield return new WaitForSeconds(info.m_spawnInterval);     
         }
 
         // This may call initWave (it shouldn't), so we null out

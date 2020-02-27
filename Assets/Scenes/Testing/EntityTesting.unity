@@ -593,74 +593,6 @@ MonoBehaviour:
   m_controller: {fileID: 0}
   m_boardManager: {fileID: 800230786}
   m_monsterManager: {fileID: 0}
---- !u!1 &395158685
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 395158688}
-  - component: {fileID: 395158687}
-  - component: {fileID: 395158686}
-  m_Layer: 0
-  m_Name: MonsterSpawner
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &395158686
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 395158685}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ObservedComponentsFoldoutOpen: 1
-  Group: 0
-  prefixField: -1
-  Synchronization: 0
-  OwnershipTransfer: 0
-  ObservedComponents:
-  - {fileID: 0}
-  viewIdField: 2
-  InstantiationId: 0
-  isRuntimeInstantiated: 0
---- !u!114 &395158687
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 395158685}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 57fa2a5379363774fae13fc3b67c4df7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_spawner: {fileID: 1752449129}
-  m_waveDelay: 1
---- !u!4 &395158688
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 395158685}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.86, y: -3.31, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &514187912
 GameObject:
   m_ObjectHideFlags: 0
@@ -769,7 +701,7 @@ Transform:
   - {fileID: 222423890}
   - {fileID: 1567426310}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &800230789
 MonoBehaviour:
@@ -1293,12 +1225,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96f15c2cc73ace049a96b25d747e4849, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_p1Info: {fileID: 514187914}
-  m_p2Info: {fileID: 269669125}
   m_p1Board: {fileID: 2078598742}
   m_p2Board: {fileID: 800230786}
   m_playerPrefab: {fileID: 5519274462540034487, guid: fa9741345acf5ae4690441aac86a4f58,
     type: 3}
+  m_waveSpawner: {fileID: 1752449129}
+  m_waveDelay: 5
 --- !u!4 &1752449128
 Transform:
   m_ObjectHideFlags: 0
@@ -1313,7 +1245,7 @@ Transform:
   - {fileID: 514187913}
   - {fileID: 269669124}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1752449129
 MonoBehaviour:
@@ -1329,7 +1261,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_waves:
   - m_count: 5
-    m_spawnInterval: 5
+    m_spawnInterval: 2
   - m_count: 10
     m_spawnInterval: 1
   - m_count: 20
@@ -1450,7 +1382,7 @@ Transform:
   - {fileID: 1537231143}
   - {fileID: 1894752346}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2078598742
 MonoBehaviour:

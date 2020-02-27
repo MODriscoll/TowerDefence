@@ -5,11 +5,16 @@ using UnityEngine.Assertions;
 using Photon.Pun;
 
 public class MonsterManager : MonoBehaviour
-{ 
+{
+    public delegate void OnMonsterDestroyed();                  // Event for when a monster is destroyed
+    public static OnMonsterDestroyed onMonsterDestroyed;        // Static event called everytime a monster is destroyed
+
     private List<MonsterBase> m_monsters = new List<MonsterBase>();                 // All monsters that currently exist
     private List<MonsterBase> m_destroyedMonsters = new List<MonsterBase>();        // All monsters that have been destroyed
 
     private bool m_tickingMonsters = false;     // If we are currently ticking all monsters
+
+    public int NumMonsters { get { return getNumMonsters(); } }     // The number of active monsters
 
     public void tick(float deltaTime)
     {
@@ -21,16 +26,25 @@ public class MonsterManager : MonoBehaviour
         }
         m_tickingMonsters = false;
 
-        // Now destroy the monsters that were called to be destroyed though destroyMonster,
-        // we wait till after since we cannot modify the array while we are cycling through it,
-        // and some monsters might be calling destroy on themselves
-        foreach (MonsterBase monster in m_destroyedMonsters)
+        if (m_destroyedMonsters.Count > 0)
         {
-            m_monsters.Remove(monster);
-            PhotonNetwork.Destroy(monster.gameObject);
-        }
+            // Now destroy the monsters that were called to be destroyed though destroyMonster,
+            // we wait till after since we cannot modify the array while we are cycling through it,
+            // and some monsters might be calling destroy on themselves
+            foreach (MonsterBase monster in m_destroyedMonsters)
+            {
+                m_monsters.Remove(monster);
+                PhotonNetwork.Destroy(monster.gameObject);
+            }
 
-        m_destroyedMonsters.Clear();
+            m_destroyedMonsters.Clear();
+
+            // This kind of lies. The comment about the event implies we
+            // call it for every monster that is destroyed, in this case it
+            // would be for X monsters
+            if (onMonsterDestroyed != null)
+                onMonsterDestroyed.Invoke();
+        }
     }
 
     /// <summary>
@@ -89,6 +103,10 @@ public class MonsterManager : MonoBehaviour
             {
                 m_monsters.Remove(monster);
                 PhotonNetwork.Destroy(monster.gameObject);
+
+                if (onMonsterDestroyed != null)
+                    onMonsterDestroyed.Invoke();
+
                 return;
             }
 
@@ -104,13 +122,11 @@ public class MonsterManager : MonoBehaviour
     // Internal function. Adds a monster that can be queried but should not be destroyed by this client
     public void addExternalMonster(MonsterBase monster)
     {
-#if UNITY_EDITOR
         if (m_tickingMonsters)
         {
             Debug.LogError("Adding external monster while ticking monsters. This shouldn't happen");
             return;
         }
-#endif
 
         m_monsters.Add(monster);
     }
@@ -118,15 +134,16 @@ public class MonsterManager : MonoBehaviour
     // Internal function. Removes a monster that was originally added by addExternalMonster
     public void removeExternalMonster(MonsterBase monster)
     {
-#if UNITY_EDITOR
         if (m_tickingMonsters)
         {
             Debug.LogError("Removing external monster while ticking monsters. This shouldn't happen");
             return;
         }
-#endif
 
         m_monsters.Remove(monster);
+
+        if (onMonsterDestroyed != null)
+            onMonsterDestroyed.Invoke();
     }
 
     /// <summary>
@@ -218,5 +235,24 @@ public class MonsterManager : MonoBehaviour
         }
 
         return priorityMonster;
+    }
+
+    /// <summary>
+    /// Helper for getting the number of monsters still active.
+    /// Destroyed monsters are considered inactive, and are not counted
+    /// </summary>
+    /// <returns>Number of active monsters</returns>
+    private int getNumMonsters()
+    {
+        int numMonsters = m_monsters.Count - m_destroyedMonsters.Count;
+
+#if UNITY_EDITOR || UNITY_STANDALONE
+        bool bDebug = Application.isEditor || Debug.isDebugBuild;
+        if (bDebug && numMonsters < 0)
+            Debug.LogError(string.Format("Number of monsters is less than zero. Num = {0}, ({1} - {2})",
+                numMonsters, m_monsters.Count, m_destroyedMonsters.Count));
+#endif
+
+        return Mathf.Max(0, numMonsters);
     }
 }

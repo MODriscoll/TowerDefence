@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: PhotonServerSettings
   m_EditorClassIdentifier: 
   AppSettings:
-    AppIdRealtime: 002eab70-d871-40d8-beb0-8f2d903a7c41
+    AppIdRealtime: beb464ab-b6c4-48e0-ab92-5b467d47fe07
     AppIdChat: 
     AppIdVoice: 
     AppVersion: 
@@ -37,5 +37,7 @@ MonoBehaviour:
   - RespawnSpaceship
   - spawnMonsterRPC
   - startWave
+  - onWaveFinishedRPC
+  - startNextWaveRPC
   DisableAutoOpenWizard: 1
   ShowSettings: 0
