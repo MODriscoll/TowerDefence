@@ -250,14 +250,23 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
         if (PhotonNetwork.IsConnected && !PhotonNetwork.IsMasterClient)
             return;
 
+        // Did we just finish the last wave?
+        if (!m_waveSpawner.isValidWaveId(m_waveNum + 1))
+        {
 #if UNITY_EDITOR
-        // Manually call RPC in editor
-        onWaveFinishedRPC();
+            // Manually call RPC in editor
+            onWaveFinishedRPC();
 #else
         photonView.RPC("onWaveFinishedRPC", RpcTarget.All);
 #endif
 
-        Invoke("startNextWave", Mathf.Max(m_waveDelay, 1f));
+            Invoke("startNextWave", Mathf.Max(m_waveDelay, 1f));
+        }
+        else
+        {
+            LeaveGame();
+            return;
+        }
     }
 
     [PunRPC]
