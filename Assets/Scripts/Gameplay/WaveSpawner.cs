@@ -95,9 +95,14 @@ public class WaveSpawner : MonoBehaviourPun
             return;
 
         if (m_monsterPrefab)
-            board.monsterManager.spawnMonster(m_monsterPrefab, board);
+            board.MonsterManager.spawnMonster(m_monsterPrefab, board);
     }
 
+    /// <summary>
+    /// If id of wave is valid (the wave can be started)
+    /// </summary>
+    /// <param name="id">Id of wave</param>
+    /// <returns>If wave is valid</returns>
     public bool isValidWaveId(int id)
     {
         return id >= 0 && id < m_waves.Length;

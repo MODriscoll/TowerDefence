@@ -168,7 +168,11 @@ public class BoardManager : MonoBehaviourPun
 
     private Dictionary<Vector3Int, TowerBase> m_placedTowers = new Dictionary<Vector3Int, TowerBase>();     // All towers that have been placed on the map
 
-    public MonsterManager monsterManager { get { return m_monsterManager; } }
+    [SerializeField] private Transform m_cameraView;        // The position to place the camera when viewing this board
+
+    public Vector3 ViewPosition { get { return m_cameraView ? m_cameraView.position : Vector3.zero; } }     // The position for viewing this board
+
+    public MonsterManager MonsterManager { get { return m_monsterManager; } }
 
     void Awake()
     {
@@ -291,8 +295,8 @@ public class BoardManager : MonoBehaviourPun
     [PunRPC]
     private void spawnMonsterRPC(string prefabName)
     {
-        if (monsterManager)
-            monsterManager.spawnMonster(prefabName, this);
+        if (MonsterManager)
+            MonsterManager.spawnMonster(prefabName, this);
     }
 
 #if UNITY_EDITOR

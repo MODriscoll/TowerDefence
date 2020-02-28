@@ -17,6 +17,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     [SerializeField] private int m_maxGold = 1000;          // Max amount of gold a player can have
 
     private BoardManager m_board = null;        // Cached board we use
+    private int m_viewBoard = -1;               // The board we are currently viewing (matches player id)
 
     // The id of this player, is set in start
     public int playerId { get { return m_id; } }
@@ -58,6 +59,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
                     m_id = 1;
 
                 localPlayer = this;
+                switchViewImpl(m_id);
 
                 // Only create UI for local player
                 m_playerUI = Instantiate(m_playerUIPrefab, transform, false);
@@ -65,6 +67,10 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
                 {
                     m_playerUI.m_owner = this;
                 }
+
+                // View game through this camera
+                if (m_camera)
+                    m_camera.tag = "MainCamera";
             }
             else
             {
@@ -74,6 +80,10 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
                     m_id = 0;
 
                 remotePlayer = this;
+
+                // Don't need this camera if not local players
+                if (m_camera)
+                    Destroy(m_camera);
             }
 
             m_board = GameManager.manager.getBoardManager(m_id);
@@ -90,6 +100,8 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
                 m_id = 0;
 
                 localPlayer = this;
+                switchViewImpl(m_id);
+
                 m_playerUI = Instantiate(m_playerUIPrefab, transform, false);
                 if (m_playerUI)
                 {
@@ -121,9 +133,13 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         // Quick testing
         if (Input.GetMouseButtonDown(1))
         {
-            if (m_testMonster)
-                    GameManager.manager.OpponentsBoard.spawnMonster(m_testMonster.name, PhotonNetwork.LocalPlayer);
+            //if (m_testMonster)
+            //        GameManager.manager.OpponentsBoard.spawnMonster(m_testMonster.name, PhotonNetwork.LocalPlayer);
         }
+
+        // Quick testing
+        if (Input.GetKeyDown(KeyCode.F))
+            switchView();
 #endif
 
         Vector3 selectedPos;
@@ -277,6 +293,35 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     public bool canAfford(int amount)
     {
         return m_gold >= amount;
+    }
+
+    /// <summary>
+    /// Switches the board we are looking at
+    /// </summary>
+    public void switchView()
+    {
+        Debug.LogError("switchView");
+        switchViewImpl((m_viewBoard + 1) % 2);
+    }
+
+    /// <summary>
+    /// Sets the board we are looking at
+    /// </summary>
+    /// <param name="boardId">Id of board to look at</param>
+    private void switchViewImpl(int boardId)
+    {
+        if (m_viewBoard != boardId)
+        {
+            Debug.LogError(string.Format("different id: {0}", boardId));
+
+            BoardManager board = GameManager.manager.getBoardManager(boardId);
+            if (board)
+            {
+                transform.position = board.ViewPosition;
+                m_viewBoard = boardId;
+                Debug.LogError("Updated");
+            }
+        }
     }
 
     public void notifyWaveStarted(int waveNum)

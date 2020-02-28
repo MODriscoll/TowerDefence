@@ -75,13 +75,13 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
     void Update()
     {
         BoardManager board = getPlayersBoard();
-        if (board && board.monsterManager)
-            board.monsterManager.tick(Time.deltaTime);
+        if (board && board.MonsterManager)
+            board.MonsterManager.tick(Time.deltaTime);
 
 #if UNITY_EDITOR
         board = getBoardManager(1);
-        if (board && board.monsterManager)
-            board.monsterManager.tick(Time.deltaTime);
+        if (board && board.MonsterManager)
+            board.MonsterManager.tick(Time.deltaTime);
 #endif
     }
 
@@ -280,8 +280,8 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
 
         if (bWaveFinished)
         {
-            bool bNoMonstersB1 = getBoardManager(0).monsterManager.NumMonsters == 0;
-            bool bNoMonstersB2 = getBoardManager(1).monsterManager.NumMonsters == 0;
+            bool bNoMonstersB1 = getBoardManager(0).MonsterManager.NumMonsters == 0;
+            bool bNoMonstersB2 = getBoardManager(1).MonsterManager.NumMonsters == 0;
             return bNoMonstersB1 && bNoMonstersB2;
         }
 

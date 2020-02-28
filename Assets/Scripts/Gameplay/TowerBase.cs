@@ -42,8 +42,8 @@ public class TowerBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallback
 
     protected MonsterBase findTarget(float radius)
     {
-        if (m_board && m_board.monsterManager)
-            return m_board.monsterManager.getHighestPriorityMonster(transform.position, radius);
+        if (m_board && m_board.MonsterManager)
+            return m_board.MonsterManager.getHighestPriorityMonster(transform.position, radius);
         else
             return null;
     }

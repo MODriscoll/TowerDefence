@@ -25,7 +25,7 @@ public class MonsterBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallba
         // Add ourselves to our board on the instigators side (since monsters are spawned on player who owns the board)
         if (PhotonNetwork.IsConnected && !photonView.IsMine)
         {
-            MonsterManager monsterManager = m_board.monsterManager;
+            MonsterManager monsterManager = m_board.MonsterManager;
             if (monsterManager)
                 monsterManager.addExternalMonster(this);
         }
@@ -36,7 +36,7 @@ public class MonsterBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallba
         // Like in start, we need to remove ourselves on the instigators side
         if (PhotonNetwork.IsConnected && !photonView.IsMine)
         {
-            MonsterManager monsterManager = m_board.monsterManager;
+            MonsterManager monsterManager = m_board.MonsterManager;
             if (monsterManager)
                 monsterManager.removeExternalMonster(this);
         }

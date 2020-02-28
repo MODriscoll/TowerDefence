@@ -83,8 +83,8 @@ public class MonsterManager : MonoBehaviour
     public static void destroyMonster(MonsterBase monster, bool bImmediate = true)
     {
         BoardManager board = monster ? monster.Board : null;
-        if (board && board.monsterManager)
-            board.monsterManager.destroyMonsterImpl(monster, bImmediate);
+        if (board && board.MonsterManager)
+            board.MonsterManager.destroyMonsterImpl(monster, bImmediate);
     }
 
     /// <summary>

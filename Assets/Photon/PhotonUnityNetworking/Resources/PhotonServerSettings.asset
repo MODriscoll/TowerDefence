@@ -34,10 +34,10 @@ MonoBehaviour:
   - DestroySpaceship
   - Fire
   - notifyGameFinishedRPC
+  - onWaveFinishedRPC
   - RespawnSpaceship
   - spawnMonsterRPC
-  - startWave
-  - onWaveFinishedRPC
   - startNextWaveRPC
+  - startWave
   DisableAutoOpenWizard: 1
   ShowSettings: 0

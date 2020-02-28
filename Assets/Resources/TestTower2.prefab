@@ -128,7 +128,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5ad7eb2ff3a0d841a35b2e81e15f432, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_targetRadius: 2
+  m_cost: 40
+  m_targetRadius: 1.5
   m_fireRate: 1.25
 --- !u!114 &1342710038121297073
 MonoBehaviour:
