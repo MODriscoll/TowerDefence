@@ -166,7 +166,8 @@ public class BoardManager : MonoBehaviourPun
     [SerializeField] private BoardFlowfield m_flowField = new BoardFlowfield();     // Flow field used for path following
     [SerializeField] private Vector3Int[] m_spawnTiles = new Vector3Int[0];         // Spawn tiles used for faster spawning of monsters
 
-    private Dictionary<Vector3Int, TowerBase> m_placedTowers = new Dictionary<Vector3Int, TowerBase>();     // All towers that have been placed on the map
+    private Dictionary<Vector3Int, TowerBase> m_placedTowers = new Dictionary<Vector3Int, TowerBase>();     // Index to tile map, used for checking if tile exists
+    private List<TowerBase> m_allTowers = new List<TowerBase>();                                            // All towers that have been placed on the map
 
     [SerializeField] private Transform m_cameraView;        // The position to place the camera when viewing this board
 
@@ -259,16 +260,20 @@ public class BoardManager : MonoBehaviourPun
         }
 #endif
 
+        m_allTowers.Add(tower);
         m_placedTowers.Add(tileIndex, tower);
     }
 
     public void removeTower(TowerBase tower)
     {
+        // TODO: Optimize
+
         var it = m_placedTowers.GetEnumerator();
         while (it.MoveNext())
         {
             if (it.Current.Value == tower)
             {
+                m_allTowers.Remove(tower);
                 m_placedTowers.Remove(it.Current.Key);
                 return;
             }
@@ -280,6 +285,33 @@ public class BoardManager : MonoBehaviourPun
         return m_placedTowers.ContainsKey(tileIndex);
     }
 
+    public TowerBase getClosestTowerTo(Vector2 position, float radius)
+    {
+        // TODO: This is literal copy/past of MonsterManager.getClosestMonsterTo (make a helper function instead)
+
+        float radSqr = radius * radius;
+
+        // The current closest tower and its distance from position (squared)
+        TowerBase closest = null;
+        float closestDis = float.MaxValue;
+
+        // Iterate each monster and find the closest one
+        foreach (TowerBase tower in m_allTowers)
+        {
+            Vector2 dis = (Vector2)tower.transform.position - position;
+
+            // Tower needs to be in radius for it to be considered
+            float magSqr = dis.sqrMagnitude;
+            if (magSqr <= radSqr && magSqr < closestDis)
+            {
+                closest = tower;
+                closestDis = magSqr;
+            }
+        }
+
+        return closest;
+    }
+
     /// <summary>
     /// Helper for spawning a monster selected by passed in player. This
     /// is used by the PlayerController
@@ -288,7 +320,7 @@ public class BoardManager : MonoBehaviourPun
     /// <param name="spawningPlayer">Player that is spawning in the monster</param>
     public void spawnMonster(string prefabName, Photon.Realtime.Player spawningPlayer)
     {
-        photonView.RPC("spawnMonsterRPC", PhotonHelpers.getFirstPlayer(spawningPlayer), prefabName);
+        photonView.RPC("spawnMonsterRPC", PhotonHelpers.getFirstPlayerThatIsnt(spawningPlayer), prefabName);
     }
 
     // Spawns a user selected monster
@@ -382,5 +414,4 @@ public class BoardManagerEditor : Editor
             boardManager.refreshProperties();
     }
 }
-
 #endif

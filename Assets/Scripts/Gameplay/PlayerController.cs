@@ -11,6 +11,11 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     private int m_id = -1;                                          // Id of player
     [SerializeField] private Camera m_camera;                       // Players viewport of the scene
     [SerializeField] private PlayerTowersList m_towersList;         // List of all the towers the player can place
+   
+    public int playerId { get { return m_id; } }        // The id of this player, is set in start
+
+    public BoardManager Board { get { return m_board; } }                   // This players board
+    public PlayerTowersList towersList { get { return m_towersList; } }     // This players tower list
 
     [SerializeField] private int m_health = 100;            // How much health this player has
     [SerializeField] private int m_gold = 100;              // How much spending money this player has
@@ -19,24 +24,17 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     private BoardManager m_board = null;        // Cached board we use
     private int m_viewBoard = -1;               // The board we are currently viewing (matches player id)
 
-    // The id of this player, is set in start
-    public int playerId { get { return m_id; } }
+    public int Health { get { return m_health; } }      // Health this player has
+    public int Gold { get { return m_gold; } }          // Gold this player has
 
-    public int Health { get { return m_health; } }
-    public int Gold { get { return m_gold; } }
-
-    // The players tower list
-    public PlayerTowersList towersList { get { return m_towersList; } }
-
-    public BoardManager Board { get { return m_board; } }
-
-    // temp serialize (for testing)
-    [SerializeField] private MonsterBase m_commonMonster;           // The common monster that this player passively 'spawns'
+    private bool m_canPlaceTowers = false;          // If we can place towers (controlled by MasterClient)
+    private bool m_canSpawnMonsters = false;        // If we can spawn monsters (controlled by MasterClient)
+    private bool m_monsterSpawnLocked = false;      // If we are locked from spawning monsters (delay is active)
 
     public PlayerUI m_playerUIPrefab;       // UI to spawn for local player
-    private PlayerUI m_playerUI = null;     // Instance of players UI
+    private PlayerUI m_playerUI = null;     // Instance of players UI   
 
-    public MonsterBase m_testMonster;
+    public SpecialMonster m_testMonsterSpawn;
 
     void Awake()
     {
@@ -132,10 +130,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
 
         // Quick testing
         if (Input.GetMouseButtonDown(1))
-        {
-            //if (m_testMonster)
-            //        GameManager.manager.OpponentsBoard.spawnMonster(m_testMonster.name, PhotonNetwork.LocalPlayer);
-        }
+            spawnSpecialMonster(m_testMonsterSpawn);
 
         // Quick testing
         if (Input.GetKeyDown(KeyCode.F))
@@ -145,30 +140,41 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         Vector3 selectedPos;
         if (tryGetBoardInput(out selectedPos))
         {
-            // Convert from screen space to world space
-            selectedPos = m_camera.ScreenToWorldPoint(selectedPos);
-
-            Vector3Int tileIndex = Board.positionToIndex(selectedPos);
-            if (!m_board.isPlaceableTile(tileIndex))
-                return;
-
-            if (!m_board.isOccupied(tileIndex))
+            if (m_canPlaceTowers)
             {
-                // We call this as selectedPos is highly likely not to be
-                // the center of the tile, while this 100% will be
-                Vector3 spawnPos = m_board.indexToPosition(tileIndex);
+                // Convert from screen space to world space
+                selectedPos = m_camera.ScreenToWorldPoint(selectedPos);
 
-                // Spawn tower on the server (replicates back to us if not master client)
-                TowerBase towerPrefab = m_towersList.getSelectedTower();
-                if (towerPrefab && canAfford(towerPrefab.m_cost))
-                    placeTowerAt(towerPrefab, tileIndex, spawnPos);
-            }
-            else
-            {
-                // TODO: Might want to do stuff with the tower already occupied?
-                Debug.Log("Tile already occupied");
+                Vector3Int tileIndex = Board.positionToIndex(selectedPos);
+                if (!m_board.isPlaceableTile(tileIndex))
+                    return;
+
+                if (!m_board.isOccupied(tileIndex))
+                {
+                    // We call this as selectedPos is highly likely not to be
+                    // the center of the tile, while this 100% will be
+                    Vector3 spawnPos = m_board.indexToPosition(tileIndex);
+
+                    // Spawn tower on the server (replicates back to us if not master client)
+                    TowerBase towerPrefab = m_towersList.getSelectedTower();
+                    if (towerPrefab && canAfford(towerPrefab.m_cost))
+                        placeTowerAt(towerPrefab, tileIndex, spawnPos);
+                }
+                else
+                {
+                    // TODO: Might want to do stuff with the tower already occupied?
+                    Debug.Log("Tile already occupied");
+                }
             }
         }
+    }
+
+    void OnDestroy()
+    {
+        if (localPlayer == this)
+            localPlayer = null;
+        if (remotePlayer == this)
+            remotePlayer = null;
     }
 
     protected bool tryGetBoardInput(out Vector3 selectedPos)
@@ -213,7 +219,8 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     }
 
     /// <summary>
-    /// Places a tower that this player owns at tile
+    /// Places a tower that this player owns at tile. This does not check
+    /// if tile is already occupied or is even valid to place a tile on
     /// </summary>
     /// <param name="towerPrefab">Prefab of tower to spawn</param>
     /// <param name="tileIndex">Index of tile to place tower on</param>
@@ -222,7 +229,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     {
         consumeGold(towerPrefab.m_cost);
         
-        // Finally spawn the tower
+        // Finally spawn the tower (this will eventually lead to actually placing tile on the map)
         TowerBase.spawnTower(towerPrefab, m_id, tileIndex, spawnPos);
     }
 
@@ -244,8 +251,11 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         m_health = Mathf.Max(m_health - damage, 0);
         if (m_health <= 0)
         {
+            m_canSpawnMonsters = false;
+
             // We lost all our health. The opponent wins!
-            GameManager.manager.finishMatch(remotePlayer.m_id);
+            // TODO: Call function for master client to handle
+            GameManager.manager.finishMatch(TDWinCondition.OutOfHealth, remotePlayer.m_id);
         }
     }
 
@@ -296,11 +306,63 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     }
 
     /// <summary>
+    /// Spawns a special monster to deploy to the opponents board
+    /// </summary>
+    /// <param name="monsterPrefab">Monster to spawn</param>
+    public void spawnSpecialMonster(SpecialMonster monsterPrefab)
+    {
+        if (!canSpawnSpecialMonster(monsterPrefab))
+            return;
+
+        BoardManager opponentsBoard = GameManager.manager.OpponentsBoard;
+        if (opponentsBoard)
+        {
+            opponentsBoard.spawnMonster(monsterPrefab.name, PhotonNetwork.LocalPlayer);
+
+            // Apply costs for spawning this monster
+            consumeGold(monsterPrefab.Cost);
+
+            if (monsterPrefab.Delay > 0f)
+            {
+                m_monsterSpawnLocked = true;
+                Invoke("unlockMonsterSpawn", monsterPrefab.Delay);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Checks if we are able to spawn a special monster on the opponents board
+    /// </summary>
+    /// <param name="monsterPrefab">Monster to check</param>
+    /// <returns>If monster can be spawned</returns>
+    private bool canSpawnSpecialMonster(SpecialMonster monsterPrefab)
+    {
+        if (!monsterPrefab)
+            return false;
+
+        // Might be in-between rounds
+        if (!m_canSpawnMonsters || m_monsterSpawnLocked)
+            return false;
+
+        if (PhotonNetwork.IsConnected && !photonView.IsMine)
+            return false;
+
+        return canAfford(monsterPrefab.Cost);
+    }
+
+    /// <summary>
+    /// Callback after delay for spawning special monster is done
+    /// </summary>
+    private void unlockMonsterSpawn()
+    {
+        m_monsterSpawnLocked = false;
+    }
+
+    /// <summary>
     /// Switches the board we are looking at
     /// </summary>
     public void switchView()
     {
-        Debug.LogError("switchView");
         switchViewImpl((m_viewBoard + 1) % 2);
     }
 
@@ -312,26 +374,60 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     {
         if (m_viewBoard != boardId)
         {
-            Debug.LogError(string.Format("different id: {0}", boardId));
-
             BoardManager board = GameManager.manager.getBoardManager(boardId);
             if (board)
             {
                 transform.position = board.ViewPosition;
                 m_viewBoard = boardId;
-                Debug.LogError("Updated");
             }
         }
     }
 
+    public void notifyMatchStarted()
+    {
+        // Allow players to start placing towers now
+        m_canPlaceTowers = true;
+
+        if (m_playerUI)
+            m_playerUI.notifyMatchStarted();
+    }
+
+    public void notifyMatchFinished(TDWinCondition winCondition, int winnerId)
+    {
+        m_canPlaceTowers = false;
+        m_canSpawnMonsters = false;
+
+        bool bIsWinner = winnerId == m_id;
+
+        if (m_playerUI)
+            m_playerUI.notifyMatchFinished(bIsWinner, winCondition);
+
+        // for now
+        GameManager.manager.Invoke("LeaveGame", 5f);
+    }
+
+    /// <summary>
+    /// Notify this player that a wave has started. This should only be called by the GameManager
+    /// </summary>
+    /// <param name="waveNum">Number of wave that is starting</param>
     public void notifyWaveStarted(int waveNum)
     {
+        m_canPlaceTowers = true;
+        m_canSpawnMonsters = true;
+        m_monsterSpawnLocked = false;
+
         if (m_playerUI)
             m_playerUI.notifyWaveStart(waveNum);
     }
 
+    /// <summary>
+    /// Notify this player that a wave has finished. This should only be called by the GameManager
+    /// </summary>
+    /// <param name="waveNum">Number of wave that is finished</param>
     public void notifyWaveFinished(int waveNum)
     {
+        m_canSpawnMonsters = false;
+
         if (m_playerUI)
             m_playerUI.notifyWaveFinished(waveNum);
     }

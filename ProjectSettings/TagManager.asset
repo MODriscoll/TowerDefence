@@ -51,3 +51,6 @@ TagManager:
   - name: Tower
     uniqueID: 934353057
     locked: 0
+  - name: Effects
+    uniqueID: 3540238001
+    locked: 0

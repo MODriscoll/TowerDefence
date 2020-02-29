@@ -90,7 +90,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4143843131986725552}
-  - component: {fileID: 8982464395163395519}
+  - component: {fileID: 5171284587749281140}
+  - component: {fileID: -7273443016193421173}
   - component: {fileID: -5622797506343020279}
   - component: {fileID: 4455994620377203187}
   m_Layer: 9
@@ -115,7 +116,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8982464395163395519
+--- !u!114 &5171284587749281140
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -124,11 +125,31 @@ MonoBehaviour:
   m_GameObject: {fileID: 7597932220477736506}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7b3f6df3e39fe1d418a32a73158a5f97, type: 3}
+  m_Script: {fileID: 11500000, guid: 882cfe680faf5f64094623ffccd1a5c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_travelDuration: 1
   m_reward: 10
+  m_damage: 5
+  m_cost: 100
+  m_delay: 1
+--- !u!114 &-7273443016193421173
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7597932220477736506}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 415da20a8acefa54992364129be1ca07, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_monster: {fileID: 5171284587749281140}
+  m_targetRadius: 2
+  m_fireRate: 1
+  m_testEffect: {fileID: 896652429948846515, guid: b34133a2f90c7b0489d0634578f0bbce,
+    type: 3}
 --- !u!114 &-5622797506343020279
 MonoBehaviour:
   m_ObjectHideFlags: 0

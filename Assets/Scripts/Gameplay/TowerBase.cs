@@ -40,6 +40,13 @@ public class TowerBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallback
         }
     }
 
+    void OnDestroy()
+    {
+        if (PhotonNetwork.IsConnected && !photonView.IsMine)
+            if (m_board)
+                m_board.removeTower(this);
+    }
+
     protected MonsterBase findTarget(float radius)
     {
         if (m_board && m_board.MonsterManager)
@@ -68,6 +75,18 @@ public class TowerBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallback
         Assert.IsNotNull(tower);
 
         return tower;
+    }
+
+    public static void destroyTower(TowerBase tower)
+    {
+        PhotonView photonView = tower.photonView;
+        if (PhotonNetwork.IsConnected && !photonView.IsMine)
+            return;
+
+        if (tower.m_board)
+            tower.m_board.removeTower(tower);
+
+        PhotonNetwork.Destroy(tower.gameObject);
     }
 
     void IPunInstantiateMagicCallback.OnPhotonInstantiate(PhotonMessageInfo info)

@@ -43,8 +43,27 @@ public class PlayerUI : MonoBehaviour
     /// <param name="owner">Owner of the UI</param>
     public void init(PlayerController owner)
     {
-        // Do initialize stuff here
         m_owner = owner;
+    }
+
+    public void notifyMatchStarted()
+    {
+
+    }
+
+    public void notifyMatchFinished(bool bOwnerWon, TDWinCondition winCondition)
+    {
+        if (m_roundText)
+        {
+            if (winCondition == TDWinCondition.Tie)
+                m_roundText.text = "Draw";
+            else if (bOwnerWon)
+                m_roundText.text = "You Won!";
+            else
+                m_roundText.text = "You Lost...";
+
+            m_roundText.gameObject.SetActive(true);
+        }
     }
 
     /// <summary>

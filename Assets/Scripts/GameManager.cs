@@ -13,6 +13,14 @@ public enum TDMatchState
     PostMatch
 }
 
+public enum TDWinCondition
+{
+    OutOfHealth,        // Loser ran out of health
+    OutOfTime,          // Time ran out, but winner has more health
+
+    Tie                 // Scores are tied
+}
+
 public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
 {
     public static GameManager manager;      // Singleton access to the game manager
@@ -165,52 +173,56 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
 
     // ------------
 
-    // TODO: Add is match valid check (make sure boards and player controllers are present)
+    /// <summary>
+    /// Starts the match if allowed to. Nothing happens if match is already in progress
+    /// </summary>
     public void startMatch()
     {
-        if (hasMatchStarted)
-            return;
-
-        if (!m_waveSpawner)
-        {
-            Debug.LogError("Unable to correctly start match as wave spawner is null");
-            LeaveGame();
-            return;
-        }
-
-        if (PhotonNetwork.IsConnected && !PhotonNetwork.IsMasterClient)
+        if (!canStartMatch())
             return;
 
         matchState = TDMatchState.InProgress;
 
         // Hook events
         {
-            // Start wave cycle, this works based on callbacks
             m_waveSpawner.onWaveFinished += onWaveFinished;
-
             MonsterManager.onMonsterDestroyed += onMonsterDestroyed;
         }
 
-        // Call waveFinished instead of actual start next wave, this
-        // gives the users some breathing room before monsters actually start to appear
-        onWaveFinishedImpl();
-    }
+        // TODO: Tidy up
 
-    public void finishMatch(int winnerId)
-    {
-        photonView.RPC("notifyGameFinishedRPC", RpcTarget.All, winnerId);
+#if !UNITY_EDITOR
+        onMatchStartRPC();
+#else
+        photonView.RPC("onMatchStartRPC", RpcTarget.All);
+#endif
+
+        Invoke("startNextWave", Mathf.Max(m_waveDelay, 1f));
     }
 
     [PunRPC]
-    void notifyGameFinishedRPC(int winnerId)
+    private void onMatchStartRPC()
     {
-        if (winnerId == PlayerController.localPlayer.playerId)
-            Debug.LogError("YOU WIN!");
-        else
-            Debug.LogError("YOU LOSE...");
+        PlayerController.localPlayer.notifyMatchStarted();
+    }
 
-        // for now
-        LeaveGame();
+    [PunRPC]
+    private void onMatchFinishedRPC(byte condAsByte, int winnerId)
+    {
+        TDWinCondition winCondition = (TDWinCondition)condAsByte;
+
+        PlayerController.localPlayer.notifyMatchFinished(winCondition, winnerId);
+
+        if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient)
+        {
+            m_waveSpawner.onWaveFinished -= onWaveFinished;
+            MonsterManager.onMonsterDestroyed -= onMonsterDestroyed;
+        }
+    }
+
+    public void finishMatch(TDWinCondition winCondition, int winnerId)
+    {
+        photonView.RPC("onMatchFinishedRPC", RpcTarget.All, (byte)winCondition, winnerId);
     }
 
     // ------- Wave Handling (Give better names)
@@ -219,13 +231,12 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
     {
         ++m_waveNum;
 
-        // TODO: Handle if game is actually done
 #if UNITY_EDITOR
         // Manually call RPC in editor
         startNextWaveRPC(m_waveNum);
 #else
         photonView.RPC("startNextWaveRPC", RpcTarget.All, m_waveNum);
-#endif       
+#endif
     }
 
     [PunRPC]
@@ -250,22 +261,32 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
         if (PhotonNetwork.IsConnected && !PhotonNetwork.IsMasterClient)
             return;
 
-        // Did we just finish the last wave?
-        if (!m_waveSpawner.isValidWaveId(m_waveNum + 1))
+        if (m_waveSpawner.isValidWaveId(m_waveNum + 1))
         {
 #if UNITY_EDITOR
             // Manually call RPC in editor
             onWaveFinishedRPC();
 #else
-        photonView.RPC("onWaveFinishedRPC", RpcTarget.All);
+            photonView.RPC("onWaveFinishedRPC", RpcTarget.All);
 #endif
 
             Invoke("startNextWave", Mathf.Max(m_waveDelay, 1f));
         }
         else
         {
-            LeaveGame();
-            return;
+            int winnerId = -1;
+
+            // Check who has more health
+            if (PlayerController.localPlayer.Health > PlayerController.remotePlayer.Health)
+                winnerId = PlayerController.localPlayer.playerId;
+            else if (PlayerController.remotePlayer.Health > PlayerController.localPlayer.Health)
+                winnerId = PlayerController.remotePlayer.playerId;
+
+            TDWinCondition winCondition = TDWinCondition.Tie;
+            if (winnerId != -1)
+                winCondition = TDWinCondition.OutOfTime;
+
+            finishMatch(winCondition, winnerId);
         }
     }
 
@@ -307,5 +328,46 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
         {
             matchState = (TDMatchState)stream.ReceiveNext();   
         }
+    }
+
+    private bool canStartMatch()
+    {
+        // Only master client can start the match
+        if (PhotonNetwork.IsConnected && !PhotonNetwork.IsMasterClient)
+            return false;
+
+        // We don't support restarting match this way
+        if (hasMatchStarted)
+            return false;
+
+        // Have essential scripts been provided?
+        {
+            if (!m_p1Board)
+            {
+                Debug.LogError("Missing board for player 1");
+                return false;
+            }
+
+            if (!m_p2Board)
+            {
+                Debug.LogError("Missing board for player 2");
+                return false;
+            }
+
+            if (!m_waveSpawner)
+            {
+                Debug.LogError("Unable to start match as wave spawner is missing");
+                return false;
+            }
+
+            // No point in starting match if no waves have been set up
+            if (!m_waveSpawner.isValidWaveId(0))
+            {
+                Debug.LogError("Wave spawner is set up incorrectly. Please ensure there is at least one round set");
+                return false;
+            }
+        }
+
+        return true;
     }
 }

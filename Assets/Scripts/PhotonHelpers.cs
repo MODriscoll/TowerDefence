@@ -43,7 +43,7 @@ public struct PhotonHelpers
     /// </summary>
     /// <param name="notThis">Player to ignore</param>
     /// <returns>Player or null</returns>
-    public static Photon.Realtime.Player getFirstPlayer(Photon.Realtime.Player notThis)
+    public static Photon.Realtime.Player getFirstPlayerThatIsnt(Photon.Realtime.Player notThis)
     {
         foreach (Photon.Realtime.Player player in PhotonNetwork.PlayerList)
             if (player != notThis)
