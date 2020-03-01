@@ -7,6 +7,7 @@ using Photon.Pun;
 public class TowerBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallback//, IPunObservable
 {
     [Min(0)] public int m_cost = 10;                // The cost to build this tower (0 = free)
+    public int m_health = 10;                       // How much health this tower has
     public float m_targetRadius = 10f;              // Radius the tower can see
     [Min(0.01f)] public float m_fireRate = 1f;      // Fire rate of towers turret
 
@@ -27,6 +28,9 @@ public class TowerBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallback
 
         // Instantly rotate to face target
         transform.eulerAngles = new Vector3(0f, 0f, rot);
+
+        if (PhotonNetwork.IsConnected && !photonView.IsMine)
+            return;
 
         // Check if we can fire at this monster
         if (Time.time >= m_lastFireTime + m_fireRate)
@@ -59,6 +63,22 @@ public class TowerBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallback
     {
         m_ownerId = playerId;
         m_board = GameManager.manager.getBoardManager(m_ownerId);
+    }
+
+    public void takeDamage(int amount)
+    {
+        if (PhotonNetwork.IsConnected && !photonView.IsMine)
+            return;
+
+        if (amount <= 0)
+        {
+            Debug.LogError("Cannot apply less than zero damage to a tower");
+            return;
+        }
+
+        m_health = Mathf.Max(m_health - amount, 0);
+        if (m_health <= 0)
+            destroyTower(this);
     }
 
     public static TowerBase spawnTower(TowerBase towerPrefab, int playerId, Vector3Int tileIndex, Vector3 spawnPos)

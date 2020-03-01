@@ -8,13 +8,14 @@ public class MonsterBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallba
     [Min(0.01f)] public float m_travelDuration = 2f;        // Amount of time (in seconds) it takes to traverse 1 tile
     [Min(0)] public int m_reward = 10;                      // Reward to give player when we are killed
     [Min(1)] public int m_damage = 5;                       // The amount of damage this monster
+    public int m_health = 10;                               // How much health this monster has
 
     protected BoardManager m_board;                 // The board we are active on
 
     private Vector3Int m_targetTileIndex;   // Index of board we are moving to
     private Vector3 m_segmentStart;         // Start of current path segment in world space
     private Vector3 m_segmentEnd;           // End of current path segment in world space
-    private float m_progress;               // Progress along current segment
+    private float m_progress;               // Progress along current segment 
     private float m_tilesTravelled;         // Total amount of tiles this monster has travelled by
 
     public BoardManager Board { get { return m_board; } }
@@ -84,6 +85,22 @@ public class MonsterBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallba
 
         transform.position = Vector3.Lerp(m_segmentStart, m_segmentEnd, m_progress);
         m_tilesTravelled += delta;
+    }
+
+    public void takeDamage(int amount)
+    {
+        if (PhotonNetwork.IsConnected && !photonView.IsMine)
+            return;
+
+        if (amount <= 0)
+        {
+            Debug.LogError("Cannot apply less than zero damage to a monster");
+            return;
+        }
+
+        m_health = Mathf.Max(m_health - amount, 0);
+        if (m_health <= 0)
+            MonsterManager.destroyMonster(this);
     }
 
     void IPunInstantiateMagicCallback.OnPhotonInstantiate(PhotonMessageInfo info)

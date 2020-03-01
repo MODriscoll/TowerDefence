@@ -9,22 +9,10 @@ public class PlayerTowersList : MonoBehaviour
 
     public bool hasSelectedTower { get { return m_selectedTower != -1; } }
 
-//#if UNITY_EDITOR
-    // temp (we don't have UI yet)
-    [SerializeField] private UnityEngine.UI.Text m_debugText;
-
-    void Update()
+    void Start()
     {
-        if (m_debugText)
-        {
-            TowerBase selectedTower = getSelectedTower();
-            if (selectedTower)
-                m_debugText.text = string.Format("Selected Tower: {0}", selectedTower.ToString());
-            else
-                m_debugText.text = "No Selected Tower";
-        }
+        selectTower(0);
     }
-//#endif
 
     public TowerBase selectTower(int index)
     {

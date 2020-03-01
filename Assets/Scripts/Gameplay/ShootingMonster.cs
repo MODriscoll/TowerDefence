@@ -9,6 +9,7 @@ public class ShootingMonster : MonoBehaviourPun
     [SerializeField] private MonsterBase m_monster;                     // Monster we act for
     [SerializeField] private float m_targetRadius = 2.5f;               // Radius which monster can see towers
     [SerializeField, Min(0.01f)] private float m_fireRate = 1f;         // Rate at which the monster fires
+    [SerializeField, Min(1)] private int m_damage = 3;                  // How much damage this monster applies to towers per shot 
     
     private float m_lastFireTime = -float.MaxValue;     // The last time monster fired
 
@@ -32,8 +33,7 @@ public class ShootingMonster : MonoBehaviourPun
 
         if (Time.time >= m_lastFireTime + m_fireRate)
         {
-            // 'Shoot'
-            TowerBase.destroyTower(target);
+            target.takeDamage(m_damage);
 
 #if UNITY_EDITOR
             onFired(target.transform.position);
