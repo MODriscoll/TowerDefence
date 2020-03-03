@@ -154,7 +154,6 @@ MonoBehaviour:
   m_towers:
   - {fileID: 9196093534682404416, guid: 69897bd5cd494ad4cae37c7622a99330, type: 3}
   - {fileID: 9196093534682404416, guid: 2816a17fb5364684b8a2078ba67ec854, type: 3}
-  m_debugText: {fileID: 0}
 --- !u!114 &1422860588128768098
 MonoBehaviour:
   m_ObjectHideFlags: 0

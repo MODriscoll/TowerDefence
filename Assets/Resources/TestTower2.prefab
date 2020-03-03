@@ -92,6 +92,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9196093534682404417}
   - component: {fileID: 9196093534682404416}
+  - component: {fileID: -8430421423684404905}
   - component: {fileID: 1342710038121297073}
   - component: {fileID: 3165276665988159596}
   m_Layer: 8
@@ -129,8 +130,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_cost: 40
+  m_health: 10
   m_targetRadius: 1.5
   m_fireRate: 1.25
+--- !u!114 &-8430421423684404905
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9196093534682404415}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f8fef7927caa394c8b8c5fee2e372ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_tower: {fileID: 9196093534682404416}
+  m_targetsMonsters: 1
+  m_targetRadius: 2.5
+  m_fireRate: 1
+  m_projectilePrefab: {fileID: 5994368317154419059, guid: abb557efb338c6f47aaf4ece89a97b39,
+    type: 3}
 --- !u!114 &1342710038121297073
 MonoBehaviour:
   m_ObjectHideFlags: 0

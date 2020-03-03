@@ -16,6 +16,8 @@ public class TowerBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallback
     private int m_ownerId = -1;         // Id of player that owns this tower
     private BoardManager m_board;       // Cached board for fast access
 
+    public BoardManager Board { get { return m_board; } }
+
     void Update()
     {
         MonsterBase monster = findTarget(m_targetRadius);

@@ -180,7 +180,7 @@ public class MonsterManager : MonoBehaviour
     /// <param name="position">Position to check</param>
     /// <param name="radius">Radius monster must be in</param>
     /// <returns>Closest monster or null if no monster is in range</returns>
-    public MonsterBase getClosestMonsterTo(Vector2 position, float radius = 1000f)
+    public MonsterBase getClosestMonsterTo(Vector2 position, float radius)
     {
         float radSqr = radius * radius;
 
@@ -211,7 +211,7 @@ public class MonsterManager : MonoBehaviour
     /// <param name="position">Position to check</param>
     /// <param name="radius">Radius monster must be in</param>
     /// <returns>Monster with highest priority or null</returns>
-    public MonsterBase getHighestPriorityMonster(Vector2 position, float radius = 1000f)
+    public MonsterBase getHighestPriorityMonster(Vector2 position, float radius)
     {
         float radSqr = radius * radius;
 
@@ -235,6 +235,26 @@ public class MonsterManager : MonoBehaviour
         }
 
         return priorityMonster;
+    }
+
+    public bool getMonstersInRadius(Vector2 position, float radius, ref List<MonsterBase> monsters, HashSet<MonsterBase> ignoreMonsters = null)
+    {
+        float radSqr = radius * radius;
+
+        foreach (MonsterBase monster in m_monsters)
+        {
+            if (ignoreMonsters.Contains(monster))
+                continue;
+
+            Vector2 dis = (Vector2)monster.transform.position - position;
+
+            // Monster needs to be in radius for it to be considered
+            float magSqr = dis.sqrMagnitude;
+            if (magSqr <= radSqr)
+                monsters.Add(monster);
+        }
+
+        return monsters.Count > 0;
     }
 
     /// <summary>

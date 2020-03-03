@@ -87,20 +87,31 @@ public class MonsterBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallba
         m_tilesTravelled += delta;
     }
 
-    public void takeDamage(int amount)
+    // TODO: Document (returns true if killed)
+    public bool takeDamage(int amount)
     {
+        if (m_health <= 0)
+            return false;
+
         if (PhotonNetwork.IsConnected && !photonView.IsMine)
-            return;
+            return false;
 
         if (amount <= 0)
         {
             Debug.LogError("Cannot apply less than zero damage to a monster");
-            return;
+            return false;
         }
 
         m_health = Mathf.Max(m_health - amount, 0);
-        if (m_health <= 0)
-            MonsterManager.destroyMonster(this);
+        if (m_health > 0)
+            return false;
+
+        // We can give gold to the local player, since we already
+        // checked that this monster belongs to them
+        PlayerController.localPlayer.giveGold(m_reward);
+
+        MonsterManager.destroyMonster(this);
+        return true;
     }
 
     void IPunInstantiateMagicCallback.OnPhotonInstantiate(PhotonMessageInfo info)
