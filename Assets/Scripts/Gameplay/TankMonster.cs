@@ -28,8 +28,6 @@ public class TankMonster : MonoBehaviourPun, IPunObservable
     {
         if (bEnable != m_shieldActive)
         {
-            Debug.LogError("Updating");
-
             // Can't active shield while on cooldown
             if (bEnable && m_cooldownActive)
                 return;
