@@ -33,14 +33,13 @@ MonoBehaviour:
   - DestroyRpc
   - DestroySpaceship
   - Fire
-  - notifyGameFinishedRPC
+  - onFired
+  - onMatchFinishedRPC
+  - onMatchStartRPC
   - onWaveFinishedRPC
   - RespawnSpaceship
   - spawnMonsterRPC
   - startNextWaveRPC
   - startWave
-  - onFired
-  - onMatchFinishedRPC
-  - onMatchStartRPC
   DisableAutoOpenWizard: 1
   ShowSettings: 0

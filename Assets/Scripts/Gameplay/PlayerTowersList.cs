@@ -48,7 +48,6 @@ public class PlayerTowersList : MonoBehaviour
 
     private bool isValidIndex(int index)
     {
-        // We consider index to always be invalid if no towers are present
         if (m_towers != null)
             if (index >= 0 && index < m_towers.Count)
                 return true;

@@ -18,47 +18,11 @@ public class TowerBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallback
 
     public BoardManager Board { get { return m_board; } }
 
-    void Update()
-    {
-        MonsterBase monster = findTarget(m_targetRadius);
-        if (!monster)
-            return;
-
-        // Direction to face
-        Vector2 dir = (monster.transform.position - transform.position).normalized;
-        float rot = Mathf.Rad2Deg * Mathf.Atan2(dir.y, dir.x);
-
-        // Instantly rotate to face target
-        transform.eulerAngles = new Vector3(0f, 0f, rot);
-
-        if (PhotonNetwork.IsConnected && !photonView.IsMine)
-            return;
-
-        // Check if we can fire at this monster
-        if (Time.time >= m_lastFireTime + m_fireRate)
-        {
-            // 'Give gold'
-            PlayerController.localPlayer.giveGold(monster.m_reward);
-
-            // 'Shoot'
-            MonsterManager.destroyMonster(monster);
-            m_lastFireTime = Time.time;     
-        }
-    }
-
     void OnDestroy()
     {
         if (PhotonNetwork.IsConnected && !photonView.IsMine)
             if (m_board)
                 m_board.removeTower(this);
-    }
-
-    protected MonsterBase findTarget(float radius)
-    {
-        if (m_board && m_board.MonsterManager)
-            return m_board.MonsterManager.getHighestPriorityMonster(transform.position, radius);
-        else
-            return null;
     }
 
     public void setOwnerId(int playerId)

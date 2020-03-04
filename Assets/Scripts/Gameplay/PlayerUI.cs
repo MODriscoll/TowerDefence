@@ -96,6 +96,11 @@ public class PlayerUI : MonoBehaviour
         }
     }
 
+    public void notifyScreenViewSwitch(bool bViewingLocal)
+    {
+
+    }
+
     private void hideRoundText()
     {
         if (m_roundText)

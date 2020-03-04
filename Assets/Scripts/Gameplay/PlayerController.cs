@@ -11,11 +11,13 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     private int m_id = -1;                                          // Id of player
     [SerializeField] private Camera m_camera;                       // Players viewport of the scene
     [SerializeField] private PlayerTowersList m_towersList;         // List of all the towers the player can place
+    [SerializeField] private PlayerMonstersList m_monsterList;      // List of all the monsters the player can deploy
    
     public int playerId { get { return m_id; } }        // The id of this player, is set in start
 
-    public BoardManager Board { get { return m_board; } }                   // This players board
-    public PlayerTowersList towersList { get { return m_towersList; } }     // This players tower list
+    public BoardManager Board { get { return m_board; } }                       // This players board
+    public PlayerTowersList towersList { get { return m_towersList; } }         // This players tower list
+    public PlayerMonstersList monsterList { get { return m_monsterList; } }     // This players monster list
 
     [SerializeField] private int m_health = 100;            // How much health this player has
     [SerializeField] private int m_gold = 100;              // How much spending money this player has
@@ -34,8 +36,6 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     public PlayerUI m_playerUIPrefab;       // UI to spawn for local player
     private PlayerUI m_playerUI = null;     // Instance of players UI   
 
-    public SpecialMonster m_testMonsterSpawn;
-
     void Awake()
     {
         if (!m_camera)
@@ -43,6 +43,9 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
 
         if (!m_towersList)
             m_towersList = GetComponent<PlayerTowersList>();
+
+        if (!m_monsterList)
+            m_monsterList = GetComponent<PlayerMonstersList>();
     }
 
     void Start()
@@ -130,7 +133,10 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
 
         // Quick testing
         if (Input.GetMouseButtonDown(1))
-            spawnSpecialMonster(m_testMonsterSpawn);
+            if (Input.GetKey(KeyCode.LeftShift))
+                spawnSpecialMonster(m_monsterList.getMonster(1));
+            else
+                spawnSpecialMonster(m_monsterList.getMonster(0));
 
         // Quick testing
         if (Input.GetKeyDown(KeyCode.F))
@@ -162,8 +168,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
                 }
                 else
                 {
-                    // TODO: Might want to do stuff with the tower already occupied?
-                    Debug.Log("Tile already occupied");
+                    // Might want to do stuff with the tower already occupied?
                 }
             }
         }
@@ -379,6 +384,9 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             {
                 transform.position = board.ViewPosition;
                 m_viewBoard = boardId;
+
+                if (m_playerUI)
+                    m_playerUI.notifyScreenViewSwitch(m_viewBoard == m_id);
             }
         }
     }

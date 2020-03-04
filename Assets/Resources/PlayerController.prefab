@@ -94,6 +94,7 @@ GameObject:
   - component: {fileID: 1124493097882997090}
   - component: {fileID: 5519274462540034487}
   - component: {fileID: 299274198644012295}
+  - component: {fileID: -9199565851451362920}
   - component: {fileID: 1422860588128768098}
   m_Layer: 0
   m_Name: PlayerController
@@ -131,6 +132,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_camera: {fileID: 1674025923139972484}
   m_towersList: {fileID: 299274198644012295}
+  m_monsterList: {fileID: 0}
   m_health: 100
   m_gold: 10000
   m_maxGold: 1000
@@ -154,6 +156,21 @@ MonoBehaviour:
   m_towers:
   - {fileID: 9196093534682404416, guid: 69897bd5cd494ad4cae37c7622a99330, type: 3}
   - {fileID: 9196093534682404416, guid: 2816a17fb5364684b8a2078ba67ec854, type: 3}
+--- !u!114 &-9199565851451362920
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7236556157920799383}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe56d59ee441f6d4d8026ede2d5decd1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_monsters:
+  - {fileID: 5171284587749281140, guid: 13ecbb1a5f3075a4d8c32c88852b1588, type: 3}
+  - {fileID: 5171284587749281140, guid: 2b317a51388393a49ad74f396dcdddb0, type: 3}
 --- !u!114 &1422860588128768098
 MonoBehaviour:
   m_ObjectHideFlags: 0

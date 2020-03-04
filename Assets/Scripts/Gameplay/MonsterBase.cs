@@ -17,6 +17,10 @@ public class MonsterBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallba
     private Vector3 m_segmentEnd;           // End of current path segment in world space
     private float m_progress;               // Progress along current segment 
     private float m_tilesTravelled;         // Total amount of tiles this monster has travelled by
+    private bool m_canBeDamaged = true;     // If this monster can be damaged
+
+    public delegate void OnTakeDamage(int damage, bool bKilled);
+    public OnTakeDamage OnMonsterTakenDamage;
 
     public BoardManager Board { get { return m_board; } }
     public float TilesTravelled { get { return m_tilesTravelled; } }
@@ -90,7 +94,7 @@ public class MonsterBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallba
     // TODO: Document (returns true if killed)
     public bool takeDamage(int amount)
     {
-        if (m_health <= 0)
+        if (m_health <= 0 || !m_canBeDamaged)
             return false;
 
         if (PhotonNetwork.IsConnected && !photonView.IsMine)
@@ -103,6 +107,13 @@ public class MonsterBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallba
         }
 
         m_health = Mathf.Max(m_health - amount, 0);
+        bool bKilled = m_health <= 0;
+
+        // Execute events before potentially destroying ourselves
+        if (OnMonsterTakenDamage != null)
+            OnMonsterTakenDamage.Invoke(amount, bKilled);
+
+        // Nothing more needs to be done if still alive
         if (m_health > 0)
             return false;
 
@@ -112,6 +123,14 @@ public class MonsterBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallba
 
         MonsterManager.destroyMonster(this);
         return true;
+    }
+
+    public void setCanBeDamaged(bool bCanDamage)
+    {
+        if (PhotonNetwork.IsConnected && !photonView.IsMine)
+            return;
+
+        m_canBeDamaged = bCanDamage;
     }
 
     void IPunInstantiateMagicCallback.OnPhotonInstantiate(PhotonMessageInfo info)
@@ -125,10 +144,12 @@ public class MonsterBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallba
         if (stream.IsWriting)
         {
             stream.SendNext(m_tilesTravelled);
+            stream.SendNext(m_canBeDamaged);
         }
         else
         {
             m_tilesTravelled = (float)stream.ReceiveNext();
+            m_canBeDamaged = (bool)stream.ReceiveNext();
         }
     }
 }
