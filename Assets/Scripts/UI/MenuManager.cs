@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class MenuManager : MonoBehaviour
 {
+    public GameObject logoMenu;
     public GameObject mainMenu;
     public GameObject optionsMenu;
     public GameObject shopMenu;
@@ -15,7 +16,7 @@ public class MenuManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        menus = new GameObject[5] { mainMenu, matchTypeMenu, optionsMenu, shopMenu, privateMatchMenu };
+        menus = new GameObject[6] { logoMenu, mainMenu, matchTypeMenu, optionsMenu, shopMenu, privateMatchMenu };
     }
 
     public void LoadMenu(string newMenu)
@@ -33,5 +34,10 @@ public class MenuManager : MonoBehaviour
     public void LoadScene(string scene)
     {
         LoadScene(scene);
+    }
+
+    public void quit()
+    {
+        Application.Quit();
     }
 }
