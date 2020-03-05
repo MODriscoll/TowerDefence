@@ -8,6 +8,7 @@ public class PlayerUI : MonoBehaviour
 {
     // Owner of the UI, is set upon creation
     [System.NonSerialized] public PlayerController m_owner = null;
+    private PlayerTowersList m_playerTowersList = null;
 
     public Text m_roundText;
     public Text m_debugText;
@@ -18,10 +19,14 @@ public class PlayerUI : MonoBehaviour
     public Text m_enemyHealthText;
     public Button m_swapView;
 
+    public GameObject m_turretShop;
+    public GameObject m_miceShop;
+
     void Start()
     {
         if (m_roundText)
             m_roundText.gameObject.SetActive(false);
+        m_playerTowersList = m_owner.GetComponent<PlayerTowersList>();
     }
 
     void Update()
@@ -125,5 +130,17 @@ public class PlayerUI : MonoBehaviour
     public void changeView()
     {
         m_owner.switchView();
+        m_turretShop.SetActive(!m_turretShop.activeSelf);
+        m_miceShop.SetActive(!m_miceShop.activeSelf);
+    }
+
+    public void setCurrentTurret(int i)
+    {
+        m_playerTowersList.selectTower(i);
+    }
+
+    public void spawnMouse(int i)
+    {
+        m_owner.spawnSpecialMonster(m_owner.m_monsterList.getMonster(i));
     }
 }

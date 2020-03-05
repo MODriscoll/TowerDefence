@@ -433,6 +433,17 @@ MonoBehaviour:
           m_StringArgument: derp
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 0}
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &2141171178070225694
 GameObject:
   m_ObjectHideFlags: 0
@@ -550,7 +561,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 7790101659183048707}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 5526208262564350979}
+        m_MethodName: spawnMouse
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &2142757401808008286
 GameObject:
   m_ObjectHideFlags: 0
@@ -943,6 +965,8 @@ MonoBehaviour:
   m_playerHealthText: {fileID: 8741877775166849830}
   m_enemyHealthText: {fileID: 6740672223698011600}
   m_swapView: {fileID: 4519139096174322778}
+  m_turretShop: {fileID: 438463681822667506}
+  m_miceShop: {fileID: 7001569061427784253}
 --- !u!1 &2726583470010731805
 GameObject:
   m_ObjectHideFlags: 0
@@ -1365,7 +1389,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2707707761086663743}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 5526208262564350979}
+        m_MethodName: spawnMouse
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 1
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &6508773790103162583
 GameObject:
   m_ObjectHideFlags: 0
@@ -1820,7 +1855,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 3381693549691320258}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 5526208262564350979}
+        m_MethodName: setCurrentTurret
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 1
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &7297763301128913706
 GameObject:
   m_ObjectHideFlags: 0
@@ -2205,4 +2251,15 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 104775835297593723}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 5526208262564350979}
+        m_MethodName: setCurrentTurret
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
