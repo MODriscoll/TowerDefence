@@ -138,8 +138,6 @@ MonoBehaviour:
   m_maxGold: 1000
   m_playerUIPrefab: {fileID: 5526208262564350979, guid: 726dd88ef37d4aa4aa4724e914e02e55,
     type: 3}
-  m_testMonsterSpawn: {fileID: 5171284587749281140, guid: 13ecbb1a5f3075a4d8c32c88852b1588,
-    type: 3}
 --- !u!114 &299274198644012295
 MonoBehaviour:
   m_ObjectHideFlags: 0

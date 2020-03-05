@@ -12,6 +12,12 @@ public class PlayerUI : MonoBehaviour
     public Text m_roundText;
     public Text m_debugText;
 
+    // UI text elements
+    public Text m_moneyText;
+    public Text m_playerHealthText;
+    public Text m_enemyHealthText;
+    public Button m_swapView;
+
     void Start()
     {
         if (m_roundText)
@@ -27,6 +33,14 @@ public class PlayerUI : MonoBehaviour
         {
             TowerBase selectedTower = m_owner.towersList.getSelectedTower();
 
+            if (m_owner.Gold >= 1000)
+                m_moneyText.text = "$" + m_owner.Gold.ToString("0,000");
+            else
+                m_moneyText.text = "$" + m_owner.Gold.ToString();
+            m_playerHealthText.text = "P1 Health: " + m_owner.Health.ToString();
+            m_enemyHealthText.text = "P2 Health: " + "-1";
+
+            /* Old Debug UI Text
             m_debugText.text = string.Format(
                 "Player ID: {0}\nSelected Tower: {1}\nYour Health: {2}\nOpponents Health: {3}\nGold: {4}", 
                 m_owner.playerId,
@@ -34,6 +48,7 @@ public class PlayerUI : MonoBehaviour
                 m_owner.Health,
                 PlayerController.remotePlayer ? PlayerController.remotePlayer.Health : -1,
                 m_owner.Gold);
+                */
         }
     }
 
@@ -105,5 +120,10 @@ public class PlayerUI : MonoBehaviour
     {
         if (m_roundText)
             m_roundText.gameObject.SetActive(false);
+    }
+
+    public void changeView()
+    {
+        m_owner.switchView();
     }
 }
