@@ -59,7 +59,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 8.2
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -134,7 +134,7 @@ MonoBehaviour:
   m_towersList: {fileID: 299274198644012295}
   m_monsterList: {fileID: 0}
   m_health: 100
-  m_gold: 10000
+  m_gold: 200
   m_maxGold: 1000
   m_playerUIPrefab: {fileID: 5526208262564350979, guid: 726dd88ef37d4aa4aa4724e914e02e55,
     type: 3}
