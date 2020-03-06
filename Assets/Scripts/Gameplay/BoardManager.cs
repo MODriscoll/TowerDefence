@@ -285,6 +285,13 @@ public class BoardManager : MonoBehaviourPun
         return m_placedTowers.ContainsKey(tileIndex);
     }
 
+    public TowerBase getTowerOnTile(Vector3Int tileIndex)
+    {
+        TowerBase tower = null;
+        m_placedTowers.TryGetValue(tileIndex, out tower);
+        return tower;
+    }
+
     public TowerBase getClosestTowerTo(Vector2 position, float radius)
     {
         // TODO: This is literal copy/past of MonsterManager.getClosestMonsterTo (make a helper function instead)
