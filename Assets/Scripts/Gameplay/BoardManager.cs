@@ -312,6 +312,26 @@ public class BoardManager : MonoBehaviourPun
         return closest;
     }
 
+    public bool getTowersInRange(Vector2 position, float radius, ref List<TowerBase> towers)
+    {
+        // TODO: This is literal copy/past of getClosestTowerTo (make a helper function instead)
+
+        float radSqr = radius * radius;
+
+        // Iterate each monster and find the closest one
+        foreach (TowerBase tower in m_allTowers)
+        {
+            Vector2 dis = (Vector2)tower.transform.position - position;
+
+            // Tower needs to be in radius for it to be considered
+            float magSqr = dis.sqrMagnitude;
+            if (magSqr <= radSqr)
+                towers.Add(tower);
+        }
+
+        return towers.Count > 0;
+    }
+
     /// <summary>
     /// Helper for spawning a monster selected by passed in player. This
     /// is used by the PlayerController

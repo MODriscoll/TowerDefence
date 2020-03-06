@@ -41,5 +41,6 @@ MonoBehaviour:
   - spawnMonsterRPC
   - startNextWaveRPC
   - startWave
+  - onHealTowers
   DisableAutoOpenWizard: 1
   ShowSettings: 0
