@@ -10,6 +10,8 @@ public class PlayerData : MonoBehaviour
 
     private int backgroundCost = 3000;
 
+    public Color[] backgroundColours;
+
     private void Start()
     {
         ResetPlayerData();
@@ -18,22 +20,25 @@ public class PlayerData : MonoBehaviour
 
     public void Load()
     {
+        Camera.main.backgroundColor = backgroundColours[PlayerPrefs.GetInt("selectedBackground")];
         playerCash = PlayerPrefs.GetInt("playerCash");
         SetPremiumCurrencyText();
     }
 
-    public void BuyBackground(string name)
+    public void BuyBackground(int name)
     {
         // If the player hasn't bought it yet
-        if (PlayerPrefs.GetInt(name, 0) == 0)
+        if (PlayerPrefs.GetInt(name.ToString(), 0) == 0)
         {
             if (PlayerPrefs.HasKey("playerCash"))
             {
+                // If player has enough money
                 if (PlayerPrefs.GetInt("playerCash", 0) >= backgroundCost)
                 {
-                    PlayerPrefs.SetInt(name, 1);
+                    PlayerPrefs.SetInt(name.ToString(), 1);
                     PlayerPrefs.SetInt("playerCash", PlayerPrefs.GetInt("playerCash") - backgroundCost);
                     SetPremiumCurrencyText();
+                    PlayerPrefs.SetInt("selectedBackground", name);
                 }
             }
 
@@ -41,7 +46,7 @@ public class PlayerData : MonoBehaviour
         // If the player has bought it
         else
         {
-            PlayerPrefs.SetString("selectedBackground", name);
+            PlayerPrefs.SetInt("selectedBackground", name);
         }
     }
 
@@ -64,7 +69,7 @@ public class PlayerData : MonoBehaviour
         PlayerPrefs.SetInt("playerCash", 0);
         for (int i = 0; i < 5; i++)
         {
-            PlayerPrefs.SetInt("background" + i.ToString("00"), 0);
+            PlayerPrefs.SetInt(i.ToString(), 0);
         }
     }
 }

@@ -15,6 +15,6 @@ public class ConcedeButtonLogic : MonoBehaviour
 
     public void ExitToMain()
     {
-        SceneManager.LoadScene(0);
+        GameManager.manager.LeaveGame();
     }
 }

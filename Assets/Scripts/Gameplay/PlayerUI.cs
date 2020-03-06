@@ -143,4 +143,9 @@ public class PlayerUI : MonoBehaviour
     {
         m_owner.spawnSpecialMonster(m_owner.m_monsterList.getMonster(i));
     }
+
+    public void ToggleBulldose()
+    {
+        m_owner.m_canBulldose = !m_owner.m_canBulldose;
+    }
 }
