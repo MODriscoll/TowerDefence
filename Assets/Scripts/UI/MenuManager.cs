@@ -11,6 +11,7 @@ public class MenuManager : MonoBehaviour
     public GameObject shopMenu;
     public GameObject matchTypeMenu;
     public GameObject privateMatchMenu;
+    public GameObject winMenu;
     static private GameObject[] menus;
 
     // Start is called before the first frame update
