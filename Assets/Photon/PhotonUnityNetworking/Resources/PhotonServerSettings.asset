@@ -33,12 +33,12 @@ MonoBehaviour:
   - DestroyRpc
   - DestroySpaceship
   - Fire
-  - RespawnSpaceship
   - onFired
   - onHealTowers
   - onMatchFinishedRPC
   - onMatchStartRPC
   - onWaveFinishedRPC
+  - RespawnSpaceship
   - spawnMonsterRPC
   - startNextWaveRPC
   - startWave

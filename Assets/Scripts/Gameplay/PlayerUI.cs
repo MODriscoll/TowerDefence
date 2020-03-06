@@ -43,7 +43,7 @@ public class PlayerUI : MonoBehaviour
             else
                 m_moneyText.text = "$" + m_owner.Gold.ToString();
             m_playerHealthText.text = "P1 Health: " + m_owner.Health.ToString();
-            m_enemyHealthText.text = "P2 Health: " + "-1";
+            m_enemyHealthText.text = "P2 Health: " + (PlayerController.remotePlayer ? PlayerController.remotePlayer.Health : -1).ToString();
 
             /* Old Debug UI Text
             m_debugText.text = string.Format(

@@ -60,6 +60,9 @@ public class Launcher : MonoBehaviourPunCallbacks
     /// </summary>
     public void Connect()
     {
+        if (m_bIsConnecting)
+            return;
+
         m_bIsConnecting = true;   
 
         if (PhotonNetwork.IsConnected)
