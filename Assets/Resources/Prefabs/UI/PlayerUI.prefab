@@ -1233,12 +1233,12 @@ MonoBehaviour:
   onValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2713370754781408424}
-        m_MethodName: 
+      - m_Target: {fileID: 5526208262564350979}
+        m_MethodName: ToggleBulldose
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -1284,7 +1284,7 @@ RectTransform:
   - {fileID: 6747687411064776379}
   - {fileID: 1786113501844631716}
   - {fileID: 3202678336157337727}
-  - {fileID: 5202647558764055902}
+  - {fileID: 142771617449976699}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2544,7 +2544,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 5202647558764056459}
+      - m_Target: {fileID: 142771617449976698}
         m_MethodName: SetActive
         m_Mode: 6
         m_Arguments:
@@ -2910,7 +2910,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 5202647558764055140}
+      objectReference: {fileID: 4546724922805933503}
     - target: {fileID: 953509365678059528, guid: 6c369679fdec5c246a8be8bf88cdd9c7,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
@@ -2935,7 +2935,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 5202647558764056459}
+      objectReference: {fileID: 142771617449976698}
     - target: {fileID: 5316708697739172925, guid: 6c369679fdec5c246a8be8bf88cdd9c7,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
@@ -3078,19 +3078,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6c369679fdec5c246a8be8bf88cdd9c7, type: 3}
---- !u!1 &5202647558764056459 stripped
+--- !u!1 &142771617449976698 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5316708698321743239, guid: 6c369679fdec5c246a8be8bf88cdd9c7,
     type: 3}
   m_PrefabInstance: {fileID: 5202647558764056317}
   m_PrefabAsset: {fileID: 0}
---- !u!224 &5202647558764055902 stripped
+--- !u!224 &142771617449976699 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5316708698321743238, guid: 6c369679fdec5c246a8be8bf88cdd9c7,
     type: 3}
   m_PrefabInstance: {fileID: 5202647558764056317}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &5202647558764055140 stripped
+--- !u!114 &4546724922805933503 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8586871737087171394, guid: 6c369679fdec5c246a8be8bf88cdd9c7,
     type: 3}

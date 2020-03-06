@@ -32,7 +32,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     private bool m_canPlaceTowers = false;          // If we can place towers (controlled by MasterClient)
     private bool m_canSpawnMonsters = false;        // If we can spawn monsters (controlled by MasterClient)
     private bool m_monsterSpawnLocked = false;      // If we are locked from spawning monsters (delay is active)
-    private bool m_canBulldose = false;             // Toggles the ability to delete towers (delay is active)
+    public bool m_canBulldose = false;             // Toggles the ability to delete towers (delay is active)
 
     public PlayerUI m_playerUIPrefab;       // UI to spawn for local player
     private PlayerUI m_playerUI = null;     // Instance of players UI   
@@ -172,6 +172,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
                     if (m_canBulldose)
                     {
                         TowerBase tower = m_board.getTowerOnTile(tileIndex);
+                        Debug.Log(tower.name + " - " + tileIndex);
                         TowerBase.destroyTower(tower);
                     }
                 }
