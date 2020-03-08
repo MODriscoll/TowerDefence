@@ -9,9 +9,9 @@ public class TowerScript : MonoBehaviourPun
     [SerializeField] protected TowerBase m_tower;                       // Tower we act for
     [SerializeField] protected bool m_targetsMonsters = true;           // If this tower targets monsters
     [SerializeField] protected float m_targetRadius = 2.5f;             // Radius which tower can see towers
-    [SerializeField, Min(0.01f)] private float m_fireRate = 1f;         // Rate at which the tower acts
+    [SerializeField, Min(0.01f)] protected float m_fireRate = 1f;       // Rate at which the tower acts
 
-    private float m_lastFireTime = -float.MaxValue;         // The last time the turret fired
+    protected float m_lastFireTime = -float.MaxValue;         // The last time the turret fired
 
     void Awake()
     {
