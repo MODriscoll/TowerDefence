@@ -174,6 +174,10 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
                         TowerBase tower = m_board.getTowerOnTile(tileIndex);
                         Debug.Log(tower.name + " - " + tileIndex);
                         TowerBase.destroyTower(tower);
+
+                        // refund half of a cost of the tower
+                        giveGold(tower.m_cost / 2);
+
                     }
                 }
             }

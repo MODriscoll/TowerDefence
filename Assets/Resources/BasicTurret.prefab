@@ -212,7 +212,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_cost: 50
-  m_health: 100
+  m_health: 120
   m_maxHealth: 100
   m_targetRadius: 3
   m_fireRate: 3
@@ -233,6 +233,7 @@ MonoBehaviour:
   m_targetRadius: 2.5
   m_fireRate: 1
   m_damage: 15
+  m_shootSound: {fileID: 0}
 --- !u!114 &7581699381181694968
 MonoBehaviour:
   m_ObjectHideFlags: 0

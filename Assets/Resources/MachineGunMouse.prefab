@@ -149,7 +149,7 @@ MonoBehaviour:
   m_monster: {fileID: 5171284587749281140}
   m_targetRadius: 2
   m_fireRate: 1
-  m_damage: 3
+  m_damage: 20
   m_testEffect: {fileID: 896652429948846515, guid: b34133a2f90c7b0489d0634578f0bbce,
     type: 3}
 --- !u!114 &-5622797506343020279

@@ -229,8 +229,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_tower: {fileID: 9196093534682404416}
   m_targetsMonsters: 1
-  m_targetRadius: 2.5
-  m_fireRate: 1
+  m_targetRadius: 3
+  m_fireRate: 2
   m_projectilePrefab: {fileID: 5994368317154419059, guid: abb557efb338c6f47aaf4ece89a97b39,
     type: 3}
 --- !u!114 &1342710038121297073

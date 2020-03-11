@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5994368317154419060}
   - component: {fileID: 5994368317154419061}
   m_Layer: 0
-  m_Name: MortarProjectile
+  m_Name: PiercingProjectile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

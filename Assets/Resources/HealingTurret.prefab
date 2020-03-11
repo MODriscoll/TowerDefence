@@ -292,9 +292,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5ad7eb2ff3a0d841a35b2e81e15f432, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_cost: 40
-  m_health: 10
-  m_maxHealth: 10
+  m_cost: 75
+  m_health: 100
+  m_maxHealth: 100
   m_targetRadius: 1.5
   m_fireRate: 1.25
 --- !u!114 &3554308717398372796
@@ -312,8 +312,8 @@ MonoBehaviour:
   m_tower: {fileID: 9196093534682404416}
   m_targetsMonsters: 0
   m_targetRadius: 2.5
-  m_fireRate: 10
-  m_healPower: 3
+  m_fireRate: 5
+  m_healPower: 10
   m_range: 2.5
   m_healSingleTower: 0
   m_healPulseSource: {fileID: 8943195928620897109}
