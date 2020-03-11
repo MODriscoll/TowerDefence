@@ -8,6 +8,9 @@ public class BasicTurret : TowerScript
 {
     [SerializeField] private int m_damage = 3;      // How much damage we do
 
+    [Header("Aesthetics")]
+    [SerializeField] private AudioClip m_shootSound;    // Shooting sound effect
+
     // TowerScript Interface
     protected override void performAction(MonsterBase target)
     {
@@ -32,6 +35,6 @@ public class BasicTurret : TowerScript
     [PunRPC]
     private void onFired(Vector2 targetPos)
     {
-
+        SoundEffectsManager.playSoundEffect(m_shootSound);
     }
 }

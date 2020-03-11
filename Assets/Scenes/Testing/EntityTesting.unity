@@ -3494,6 +3494,7 @@ GameObject:
   - component: {fileID: 1752449128}
   - component: {fileID: 1752449127}
   - component: {fileID: 1752449129}
+  - component: {fileID: 1752449131}
   - component: {fileID: 1752449130}
   m_Layer: 0
   m_Name: GameManager
@@ -3583,6 +3584,20 @@ MonoBehaviour:
   viewIdField: 1
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!114 &1752449131
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1752449126}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b1bcb11cc7520b4f89ed94009a83ae4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_restartActiveEffects: 0
+  m_effectPrefab: {fileID: 0}
 --- !u!1 &1894752345
 GameObject:
   m_ObjectHideFlags: 0
