@@ -46,11 +46,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c7ebf352d514d24f92c84b513c8e75e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_damage: 10
+  m_damage: 25
   m_speed: 1
   m_lifespan: 3
   m_radius: 0.25
-  m_tickRate: 0.5
+  m_tickRate: 0.3
 --- !u!114 &5994368317154419060
 MonoBehaviour:
   m_ObjectHideFlags: 0
