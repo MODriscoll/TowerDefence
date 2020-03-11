@@ -71,7 +71,7 @@ SpriteRenderer:
   m_SortingLayer: 2
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: c6c9c9e2dbd65b741a0cb1adb0f535e0, type: 3}
-  m_Color: {r: 0.0018555713, g: 0.9811321, b: 0, a: 1}
+  m_Color: {r: 1, g: 0, b: 0.98393774, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -90,12 +90,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4143843131986725552}
-  - component: {fileID: 5171284587749281140}
-  - component: {fileID: -7273443016193421173}
-  - component: {fileID: -5622797506343020279}
-  - component: {fileID: 4455994620377203187}
+  - component: {fileID: 5517096975655646799}
+  - component: {fileID: 2876747122820784234}
+  - component: {fileID: 6293389618481299608}
+  - component: {fileID: 5860402826336380221}
   m_Layer: 9
-  m_Name: TestMonster3
+  m_Name: PathfinderMouse
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -116,7 +116,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5171284587749281140
+--- !u!114 &5517096975655646799
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -128,13 +128,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 882cfe680faf5f64094623ffccd1a5c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_travelDuration: 1
-  m_reward: 10
+  m_travelDuration: 0.5
+  m_reward: 12
   m_damage: 5
-  m_health: 10
-  m_cost: 100
+  m_health: 80
+  m_cost: 50
   m_delay: 1
---- !u!114 &-7273443016193421173
+--- !u!114 &2876747122820784234
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -146,13 +146,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 415da20a8acefa54992364129be1ca07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_monster: {fileID: 5171284587749281140}
-  m_targetRadius: 2
+  m_monster: {fileID: 0}
+  m_targetRadius: 2.5
   m_fireRate: 1
-  m_damage: 3
-  m_testEffect: {fileID: 896652429948846515, guid: b34133a2f90c7b0489d0634578f0bbce,
-    type: 3}
---- !u!114 &-5622797506343020279
+  m_damage: 15
+  m_testEffect: {fileID: 0}
+--- !u!114 &6293389618481299608
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -170,11 +169,11 @@ MonoBehaviour:
   Synchronization: 3
   OwnershipTransfer: 0
   ObservedComponents:
-  - {fileID: 4455994620377203187}
+  - {fileID: 5860402826336380221}
   viewIdField: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
---- !u!114 &4455994620377203187
+--- !u!114 &5860402826336380221
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

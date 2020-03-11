@@ -7,7 +7,7 @@ public class MonsterBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallba
 {
     [Min(0.01f)] public float m_travelDuration = 2f;        // Amount of time (in seconds) it takes to traverse 1 tile
     [Min(0)] public int m_reward = 10;                      // Reward to give player when we are killed
-    [Min(1)] public int m_damage = 5;                       // The amount of damage this monster
+    [Min(1)] public int m_damage = 5;                       // The amount of damage this monster deals when reaching the Goal Tile
     public int m_health = 10;                               // How much health this monster has
 
     protected BoardManager m_board;                 // The board we are active on

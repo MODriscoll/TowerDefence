@@ -112,7 +112,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 5962314914347130277}
+  - {fileID: 3675769415858211318}
   - {fileID: 4203837551606922770}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -130,10 +130,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_travelDuration: 1
-  m_reward: 10
+  m_reward: 9
   m_damage: 5
-  m_health: 10
-  m_cost: 100
+  m_health: 75
+  m_cost: 40
   m_delay: 1
 --- !u!114 &5090008550584579975
 MonoBehaviour:
@@ -150,7 +150,7 @@ MonoBehaviour:
   m_monster: {fileID: 5171284587749281140}
   m_shieldDuration: 2
   m_cooldown: 3
-  m_shieldObject: {fileID: 5962314914347130228}
+  m_shieldObject: {fileID: 4740583773791586242}
 --- !u!114 &-5622797506343020279
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -269,13 +269,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 716410bb14ae81046aabe20864229364, type: 3}
---- !u!1 &5962314914347130228 stripped
+--- !u!1 &4740583773791586242 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1402741543507893182, guid: 716410bb14ae81046aabe20864229364,
     type: 3}
   m_PrefabInstance: {fileID: 5962314914347129980}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &5962314914347130277 stripped
+--- !u!4 &3675769415858211318 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7042663467430827402, guid: 716410bb14ae81046aabe20864229364,
     type: 3}
