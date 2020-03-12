@@ -8,10 +8,13 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/MainMenu 2.unity
     guid: c6768f7cae45d844e851f1df856dfdc5
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Testing/Ivan Test.unity
     guid: ca1b698129379234b9799f092da4c153
   - enabled: 0
     path: Assets/Scenes/MainMenu.unity
     guid: 81ac3cbe41a75224cbcb7b87657d9dbe
+  - enabled: 1
+    path: Assets/Scenes/Testing/EntityTesting.unity
+    guid: 6c1330e656f580e45b82a72f30bc49f3
   m_configObjects: {}
