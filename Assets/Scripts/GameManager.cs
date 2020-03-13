@@ -61,6 +61,7 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
         manager = this;
 
         // PlayerController will set this reference upon start
+        // (This will also handle proper start for play in editor)
         if (!PlayerController.localPlayer)
             PhotonNetwork.Instantiate(m_playerPrefab.gameObject.name, transform.position, Quaternion.identity);
 
@@ -86,11 +87,8 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
         if (board && board.MonsterManager)
             board.MonsterManager.tick(Time.deltaTime);
 
-#if UNITY_EDITOR
-        board = getBoardManager(1);
-        if (board && board.MonsterManager)
-            board.MonsterManager.tick(Time.deltaTime);
-#endif
+        // We only tick local player board in editor. In an actual build,
+        // each connected player will update their own board
     }
 
     /// <summary>
@@ -118,13 +116,8 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
 
     private BoardManager getOpponentsBoard()
     {
-        if (PlayerController.localPlayer)
-        {
-            if (PlayerController.localPlayer.playerId == 0)
-                return m_p2Board;
-            else
-                return m_p1Board;
-        }
+        if (PlayerController.remotePlayer)
+            return getBoardManager(PlayerController.remotePlayer.playerId);
  
         return null;
     }
@@ -164,11 +157,11 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
     /// </summary>
     public void LeaveGame()
     {
-#if UNITY_EDITOR
-        Application.Quit();
-#else
-        PhotonNetwork.LeaveRoom();
-#endif
+        if (PhotonNetwork.IsConnected) 
+            PhotonNetwork.LeaveRoom();
+        else
+            // Most likely played this scene (didn't go through launch scene)
+            Application.Quit();
     }
 
     // ------------
@@ -191,11 +184,10 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
 
         // TODO: Tidy up
 
-#if !UNITY_EDITOR
-        onMatchStartRPC();
-#else
-        photonView.RPC("onMatchStartRPC", RpcTarget.All);
-#endif
+        if (PhotonNetwork.IsConnected)
+            photonView.RPC("onMatchStartRPC", RpcTarget.All);
+        else
+            onMatchStartRPC();
 
         Invoke("startNextWave", Mathf.Max(m_waveDelay, 1f));
     }
@@ -222,7 +214,10 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
 
     public void finishMatch(TDWinCondition winCondition, int winnerId)
     {
-        photonView.RPC("onMatchFinishedRPC", RpcTarget.All, (byte)winCondition, winnerId);
+        if (PhotonNetwork.IsConnected)
+            photonView.RPC("onMatchFinishedRPC", RpcTarget.All, (byte)winCondition, winnerId);
+        else
+            onMatchFinishedRPC((byte)winCondition, winnerId);
     }
 
     // ------- Wave Handling (Give better names)
@@ -231,12 +226,10 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
     {
         ++m_waveNum;
 
-#if UNITY_EDITOR
-        // Manually call RPC in editor
-        startNextWaveRPC(m_waveNum);
-#else
-        photonView.RPC("startNextWaveRPC", RpcTarget.All, m_waveNum);
-#endif
+        if (PhotonNetwork.IsConnected)
+            photonView.RPC("startNextWaveRPC", RpcTarget.All, m_waveNum);
+        else
+            startNextWaveRPC(m_waveNum);
     }
 
     [PunRPC]
@@ -263,24 +256,29 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
 
         if (m_waveSpawner.isValidWaveId(m_waveNum + 1))
         {
-#if UNITY_EDITOR
-            // Manually call RPC in editor
-            onWaveFinishedRPC();
-#else
-            photonView.RPC("onWaveFinishedRPC", RpcTarget.All);
-#endif
+            if (PhotonNetwork.IsConnected)
+                photonView.RPC("onWaveFinishedRPC", RpcTarget.All);
+            else
+                onWaveFinishedRPC();
 
             Invoke("startNextWave", Mathf.Max(m_waveDelay, 1f));
         }
         else
         {
-            int winnerId = -1;
+            // Use player 1 as winner by default (Play in Editor)
+            int winnerId = 0;
 
-            // Check who has more health
-            if (PlayerController.localPlayer.Health > PlayerController.remotePlayer.Health)
-                winnerId = PlayerController.localPlayer.playerId;
-            else if (PlayerController.remotePlayer.Health > PlayerController.localPlayer.Health)
-                winnerId = PlayerController.remotePlayer.playerId;
+            if (PhotonNetwork.IsConnected)
+            {
+                // Actually find the winner
+                winnerId = -1;
+
+                // Check who has more health
+                if (PlayerController.localPlayer.Health > PlayerController.remotePlayer.Health)
+                    winnerId = PlayerController.localPlayer.playerId;
+                else if (PlayerController.remotePlayer.Health > PlayerController.localPlayer.Health)
+                    winnerId = PlayerController.remotePlayer.playerId;
+            }
 
             TDWinCondition winCondition = TDWinCondition.Tie;
             if (winnerId != -1)

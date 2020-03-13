@@ -90,30 +90,28 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
 
             m_board = GameManager.manager.getBoardManager(m_id);
         }
-#if UNITY_EDITOR
         else
         {
             if (localPlayer)
             {
-                m_id = 1;
+                Debug.LogError("One player already exists! Destroying this player as only one player is supported in editor");
+                return;
             }
-            else
-            {
-                m_id = 0;
 
-                localPlayer = this;
-                switchViewImpl(m_id);
+            m_id = 0;
 
-                m_playerUI = Instantiate(m_playerUIPrefab, transform, false);
-                if (m_playerUI)
-                {
-                    m_playerUI.m_owner = this;
-                }
-            }
+            localPlayer = this;
+            switchViewImpl(m_id);
+
+            m_playerUI = Instantiate(m_playerUIPrefab, transform, false);
+            if (m_playerUI)
+                m_playerUI.m_owner = this;
 
             m_board = GameManager.manager.getBoardManager(m_id);
+
+            // Also set ourselves as remote player when playing offline
+            remotePlayer = this;
         }
-#endif
     }
 
     void Update()
@@ -124,7 +122,8 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
 #if UNITY_EDITOR || UNITY_STANDALONE
         if (m_towersList)
         {
-            for (int i = (int)KeyCode.Alpha1; i <= (int)KeyCode.Alpha9; ++i)
+            // Notice Alpha1 to Alpha4
+            for (int i = (int)KeyCode.Alpha1; i < (int)KeyCode.Alpha5; ++i)
                 if (Input.GetKeyDown((KeyCode)i))
                     m_towersList.selectTower(i - (int)KeyCode.Alpha1);
 
@@ -132,12 +131,13 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
                 m_towersList.unselectTower();
         }
 
-        // Quick testing
-        if (Input.GetMouseButtonDown(1))
-            if (Input.GetKey(KeyCode.LeftShift))
-                spawnSpecialMonster(m_monsterList.getMonster(1));
-            else
-                spawnSpecialMonster(m_monsterList.getMonster(0));
+        if (m_monsterList)
+        {
+            // Notice Alpha5 to Alpha9
+            for (int i = (int)KeyCode.Alpha5; i <= (int)KeyCode.Alpha9; ++i)
+                if (Input.GetKeyDown((KeyCode)i))
+                    spawnSpecialMonster(m_monsterList.getMonster(i - (int)KeyCode.Alpha9));
+        }
 
         // Quick testing
         if (Input.GetKeyDown(KeyCode.F))
@@ -270,7 +270,8 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
 
             // We lost all our health. The opponent wins!
             // TODO: Call function for master client to handle
-            GameManager.manager.finishMatch(TDWinCondition.OutOfHealth, remotePlayer.m_id);
+            int winnerId = PhotonNetwork.IsConnected ? remotePlayer.m_id : -1;
+            GameManager.manager.finishMatch(TDWinCondition.OutOfHealth, winnerId);
         }
     }
 
@@ -387,6 +388,10 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     /// <param name="boardId">Id of board to look at</param>
     private void switchViewImpl(int boardId)
     {
+        // If offline (play in editor) there is no second board
+        if (!PhotonNetwork.IsConnected)
+            boardId = 0;
+
         if (m_viewBoard != boardId)
         {
             BoardManager board = GameManager.manager.getBoardManager(boardId);

@@ -52,7 +52,6 @@ public class WaveSpawner : MonoBehaviourPun
     /// <returns></returns>
     private IEnumerator spawnRoutine(WaveSpawnInfo info)
     {
-#if !UNITY_EDITOR
         BoardManager board = getLocalBoardManager();
         if (!board)
         {
@@ -60,17 +59,11 @@ public class WaveSpawner : MonoBehaviourPun
             m_spawnRoutine = null;
             yield break;
         }
-#endif
 
         int remainingSpawns = info.m_count;
         while (remainingSpawns > 0)
         {
-#if UNITY_EDITOR
-            spawnMonster(GameManager.manager.getBoardManager(0));
-            spawnMonster(GameManager.manager.getBoardManager(1));
-#else
             spawnMonster(board);
-#endif
 
             // We want to call onWaveFinished as 
             // soon as the last monster is spawned

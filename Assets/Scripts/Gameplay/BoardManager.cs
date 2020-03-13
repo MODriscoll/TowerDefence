@@ -347,7 +347,10 @@ public class BoardManager : MonoBehaviourPun
     /// <param name="spawningPlayer">Player that is spawning in the monster</param>
     public void spawnMonster(string prefabName, Photon.Realtime.Player spawningPlayer)
     {
-        photonView.RPC("spawnMonsterRPC", PhotonHelpers.getFirstPlayerThatIsnt(spawningPlayer), prefabName);
+        if (PhotonNetwork.IsConnected)
+            photonView.RPC("spawnMonsterRPC", PhotonHelpers.getFirstPlayerThatIsnt(spawningPlayer), prefabName);
+        else
+            spawnMonsterRPC(prefabName);
     }
 
     // Spawns a user selected monster
