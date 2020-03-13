@@ -146,6 +146,6 @@ public class PlayerUI : MonoBehaviour
 
     public void ToggleBulldose()
     {
-        m_owner.m_canBulldose = !m_owner.m_canBulldose;
+        m_owner.toggleBulldozeTowers();
     }
 }

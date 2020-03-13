@@ -10,4 +10,12 @@ public class SpecialMonster : MonsterBase
     
     public int Cost { get { return m_cost; } }              // How much gold is required to spawn this monster
     public float Delay { get { return m_delay; } }          // How long to delay another special monster spawn
+
+    // MonsterBase Interface
+    public override void initMoster(BoardManager boardManager)
+    {
+        base.initMoster(boardManager);
+
+        AnalyticsHelpers.reportSpecialMonsterSpawned(this);
+    }
 }

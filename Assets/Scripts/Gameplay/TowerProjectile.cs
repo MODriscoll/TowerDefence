@@ -13,6 +13,8 @@ public class TowerProjectile : MonoBehaviourPun
 
     private HashSet<MonsterBase> m_hitMonsters = new HashSet<MonsterBase>();    // The monsters we have hit thus far
     private BoardManager m_board;                                               // The board to check monsters for
+    private TowerScript m_script;                                               // The script that instigated this projectile
+
 
     Vector3 m_moveDir;
 
@@ -25,11 +27,12 @@ public class TowerProjectile : MonoBehaviourPun
         transform.Translate(m_moveDir * m_speed * Time.deltaTime);
     }
 
-    public void initProjectile(Vector3 moveDir, BoardManager board)
+    public void initProjectile(Vector3 moveDir, BoardManager board, TowerScript script)
     {
         m_moveDir = moveDir;
 
         m_board = board;
+        m_script = script;
         StartCoroutine(checkCollisionRoutine());
 
         Invoke("onLifespanExpired", m_lifespan);
@@ -45,7 +48,7 @@ public class TowerProjectile : MonoBehaviourPun
 
         foreach (MonsterBase monster in hitMonsters)
         {
-            if (!monster.takeDamage(m_damage))
+            if (!monster.takeDamage(m_damage, m_script))
                 m_hitMonsters.Add(monster);
         }
     }

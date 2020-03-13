@@ -10,7 +10,6 @@ public struct WaveSpawnInfo
     public int m_spawnInterval;     // Interval for spawning a new monster
 }
 
-
 public class WaveSpawner : MonoBehaviourPun
 {
     public WaveSpawnInfo[] m_waves = new WaveSpawnInfo[0];      // Waves to spawn in the game

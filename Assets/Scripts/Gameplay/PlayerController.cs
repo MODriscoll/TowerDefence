@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Analytics;
 using Photon.Pun;
 
 public class PlayerController : MonoBehaviourPun, IPunObservable
@@ -11,7 +12,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     private int m_id = -1;                                          // Id of player
     [SerializeField] private Camera m_camera;                       // Players viewport of the scene
     [SerializeField] private PlayerTowersList m_towersList;         // List of all the towers the player can place
-    [SerializeField] public PlayerMonstersList m_monsterList;      // List of all the monsters the player can deploy
+    [SerializeField] public PlayerMonstersList m_monsterList;       // List of all the monsters the player can deploy
    
     public int playerId { get { return m_id; } }        // The id of this player, is set in start
 
@@ -32,7 +33,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     private bool m_canPlaceTowers = false;          // If we can place towers (controlled by MasterClient)
     private bool m_canSpawnMonsters = false;        // If we can spawn monsters (controlled by MasterClient)
     private bool m_monsterSpawnLocked = false;      // If we are locked from spawning monsters (delay is active)
-    public bool m_canBulldose = false;             // Toggles the ability to delete towers (delay is active)
+    private bool m_canBulldoze = false;             // If clicking on a tile with a tower will destroy it (only when delay isn't active)
 
     public PlayerUI m_playerUIPrefab;       // UI to spawn for local player
     private PlayerUI m_playerUI = null;     // Instance of players UI   
@@ -156,7 +157,21 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
                 if (!m_board.isPlaceableTile(tileIndex))
                     return;
 
-                if (!m_board.isOccupied(tileIndex))
+                TowerBase tower = m_board.getTowerOnTile(tileIndex);
+                if (tower)
+                {
+                    // Try destroying the tower if player has bulldozing active
+                    if (m_canBulldoze)
+                    {
+                        // Refund half of a cost of the tower
+                        giveGold(tower.m_cost / 2);
+
+                        AnalyticsHelpers.reportTowerBulldozed(tower);
+
+                        TowerBase.destroyTower(tower);
+                    }
+                }
+                else
                 {
                     // We call this as selectedPos is highly likely not to be
                     // the center of the tile, while this 100% will be
@@ -166,19 +181,6 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
                     TowerBase towerPrefab = m_towersList.getSelectedTower();
                     if (towerPrefab && canAfford(towerPrefab.m_cost))
                         placeTowerAt(towerPrefab, tileIndex, spawnPos);
-                }
-                else
-                {
-                    if (m_canBulldose)
-                    {
-                        TowerBase tower = m_board.getTowerOnTile(tileIndex);
-                        Debug.Log(tower.name + " - " + tileIndex);
-                        TowerBase.destroyTower(tower);
-
-                        // refund half of a cost of the tower
-                        giveGold(tower.m_cost / 2);
-
-                    }
                 }
             }
         }
@@ -372,6 +374,14 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     private void unlockMonsterSpawn()
     {
         m_monsterSpawnLocked = false;
+    }
+
+    /// <summary>
+    /// Toggles if player is in bulldoze mode instead of place node
+    /// </summary>
+    public void toggleBulldozeTowers()
+    {
+        m_canBulldoze = !m_canBulldoze;
     }
 
     /// <summary>

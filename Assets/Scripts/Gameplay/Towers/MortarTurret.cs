@@ -33,6 +33,6 @@ public class MortarTurret : TowerScript
         // TODO: quick way (optimize)
         Vector3 moveDir = (target.transform.position - transform.position).normalized;
 
-        projectile.initProjectile(moveDir, m_tower.Board);
+        projectile.initProjectile(moveDir, m_tower.Board, this);
     }
 }

@@ -9,15 +9,19 @@ public class TowerBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallback
     [Min(0)] public int m_cost = 10;                // The cost to build this tower (0 = free)
     public int m_health = 10;                       // How much health this tower has
     public int m_maxHealth = 10;                    // Max health this tower can have
-    public float m_targetRadius = 10f;              // Radius the tower can see
-    [Min(0.01f)] public float m_fireRate = 1f;      // Fire rate of towers turret
-
-    private float m_lastFireTime = -float.MaxValue;         // The last time the turret fired
 
     private int m_ownerId = -1;         // Id of player that owns this tower
     private BoardManager m_board;       // Cached board for fast access
+    private float m_spawnTime = -1f;    // Time when we were spawned
+
+    public float LifeSpan { get { return Mathf.Max(0f, Time.time - m_spawnTime); } }
 
     public BoardManager Board { get { return m_board; } }
+
+    void Start()
+    {
+        m_spawnTime = Time.time;
+    }
 
     void OnDestroy()
     {
@@ -46,7 +50,7 @@ public class TowerBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallback
         m_health = Mathf.Max(m_maxHealth, m_health + amount);
     }
 
-    public void takeDamage(int amount)
+    public void takeDamage(int amount, Object instigator)
     {
         if (PhotonNetwork.IsConnected && !photonView.IsMine)
             return;
@@ -59,7 +63,10 @@ public class TowerBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallback
 
         m_health = Mathf.Max(m_health - amount, 0);
         if (m_health <= 0)
+        {
+            AnalyticsHelpers.reportTowerDestroyed(this, instigator ? instigator.name : "Unknown");
             destroyTower(this);
+        }
     }
 
     public static TowerBase spawnTower(TowerBase towerPrefab, int playerId, Vector3Int tileIndex, Vector3 spawnPos)
@@ -74,6 +81,9 @@ public class TowerBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallback
 
         TowerBase tower = towerObj.GetComponent<TowerBase>();
         Assert.IsNotNull(tower);
+
+        // This only gets called once per server
+        AnalyticsHelpers.reportTowerPlaced(tower, tileIndex);
 
         return tower;
     }

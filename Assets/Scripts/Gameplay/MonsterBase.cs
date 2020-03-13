@@ -75,6 +75,8 @@ public class MonsterBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallba
                 // Damage the player
                 PlayerController.localPlayer.applyDamage(m_damage);
 
+                AnalyticsHelpers.reportMonsterReachedGoal(this);
+
                 // We destroy ourselves after tick has concluded
                 MonsterManager.destroyMonster(this, false);
                 return;
@@ -92,7 +94,7 @@ public class MonsterBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallba
     }
 
     // TODO: Document (returns true if killed)
-    public bool takeDamage(int amount)
+    public bool takeDamage(int amount, Object instigator = null)
     {
         if (m_health <= 0 || !m_canBeDamaged)
             return false;
@@ -116,6 +118,8 @@ public class MonsterBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallba
         // Nothing more needs to be done if still alive
         if (m_health > 0)
             return false;
+
+        AnalyticsHelpers.reportMonsterDeath(this, instigator ? instigator.name : "unknown");
 
         // We can give gold to the local player, since we already
         // checked that this monster belongs to them

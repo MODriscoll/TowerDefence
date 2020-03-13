@@ -33,15 +33,14 @@ public class ShootingMonster : MonoBehaviourPun
 
         if (Time.time >= m_lastFireTime + m_fireRate)
         {
-            target.takeDamage(m_damage);
-
-#if UNITY_EDITOR
-            onFired(target.transform.position);
-#else
-            photonView.RPC("onFired", RpcTarget.All, target.transform.position);
-#endif
-
+            target.takeDamage(m_damage, this);
             m_lastFireTime = Time.time;
+
+            // Play cosmetics
+            if (PhotonNetwork.IsConnected)
+                photonView.RPC("onFired", RpcTarget.All, target.transform.position);
+            else
+                onFired(target.transform.position);          
         }
     }
 
