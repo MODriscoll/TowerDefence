@@ -5,6 +5,7 @@ using UnityEngine.Tilemaps;
 
 public enum TDTileType
 {
+    Cosmetic,       // Tile is purely cosmetic and is not used for anything
     Placeable,      // Towers can be placed on this tile
     Path,           // Monsters can travel to this tile
     Spawn,          // Monsters can be spawned on this tile
