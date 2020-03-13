@@ -136,7 +136,6 @@ MonoBehaviour:
   m_health: 100
   m_gold: 200
   m_maxGold: 1000
-  m_canBulldose: 0
   m_playerUIPrefab: {fileID: 5526208262564350979, guid: 726dd88ef37d4aa4aa4724e914e02e55,
     type: 3}
 --- !u!114 &299274198644012295

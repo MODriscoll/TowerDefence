@@ -35,4 +35,4 @@ MonoBehaviour:
     type: 3}
   m_Flags: 1
   m_ColliderType: 0
-  m_tileType: 1
+  m_tileType: 2
