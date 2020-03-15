@@ -6,10 +6,17 @@ public class ButtonClick : MonoBehaviour
 {
     public AudioClip ClickSound;
 
-    public AudioSource audiosource;
+    private AudioSource audioSource;
+
+    private void Start()
+    {
+        if (audioSource == null)
+            audioSource = FindObjectOfType<AudioSource>();
+    }
+
     public void PlaySound()
     {
-        audiosource.PlayOneShot(ClickSound);
+        audioSource.PlayOneShot(ClickSound);
     }
 
 }
