@@ -70,9 +70,8 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
             {
 #if UNITY_EDITOR
                 // Check if prefab set is actually for a player controller
-                GameObject tt = Resources.Load(m_playerPrefab) as GameObject;
-                PlayerController testController = tt.GetComponent<PlayerController>();// Resources.Load(m_playerPrefab) as PlayerController;
-                if (!testController)
+                GameObject controllerObject = Resources.Load(m_playerPrefab) as GameObject;
+                if (!controllerObject || controllerObject.GetComponent<PlayerController>() == null)
                     Debug.LogWarning("Player Prefab set is not of a player controller!");
                 else
 #endif
