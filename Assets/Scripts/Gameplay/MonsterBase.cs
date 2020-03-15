@@ -12,18 +12,15 @@ public class MonsterBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallba
 
     protected BoardManager m_board;                 // The board we are active on
 
-    private Vector3Int m_targetTileIndex;   // Index of board we are moving to
-    private Vector3 m_segmentStart;         // Start of current path segment in world space
-    private Vector3 m_segmentEnd;           // End of current path segment in world space
-    private float m_progress;               // Progress along current segment 
-    private float m_tilesTravelled;         // Total amount of tiles this monster has travelled by
+    private float m_progress = 0f;          // Progress along current path. Is used by board manager to find where we are
+    private int m_pathIndex = -1;           // Index of the path we are following
     private bool m_canBeDamaged = true;     // If this monster can be damaged
 
     public delegate void OnTakeDamage(int damage, bool bKilled);
     public OnTakeDamage OnMonsterTakenDamage;
 
     public BoardManager Board { get { return m_board; } }
-    public float TilesTravelled { get { return m_tilesTravelled; } }
+    public float TilesTravelled { get { return m_progress; } }
 
     void Start()
     {
@@ -47,30 +44,25 @@ public class MonsterBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallba
         }
     }
 
-    public virtual void initMoster(BoardManager boardManager)
+    public virtual void initMoster(BoardManager boardManager, int pathToFollow)
     {
         m_board = boardManager;
 
-        Vector3Int spawnTile = m_board.getRandomSpawnTile();
-        m_targetTileIndex = m_board.getNextPathTile(spawnTile);
-
-        m_segmentStart = m_board.indexToPosition(spawnTile);
-        m_segmentEnd = m_board.indexToPosition(m_targetTileIndex);
-
-        transform.position = m_segmentStart;
         m_progress = 0f;
-        m_tilesTravelled = 0f;
+        m_pathIndex = pathToFollow;
+
+        updatePositionAlongPath(0f);
     }
 
     public virtual void tick(float deltaTime)
     {
-        float delta = deltaTime / m_travelDuration;
-
-        // Have we reached the end of the segment
-        m_progress += delta;
-        if (m_progress >= 1f)
+        if (photonView.IsMine)
         {
-            if (m_board.isGoalTile(m_targetTileIndex))
+            float delta = deltaTime / m_travelDuration;
+
+            // Travel along our path, destroy ourselves once we reach the goal
+            m_progress += delta;
+            if (updatePositionAlongPath(m_progress))
             {
                 // Damage the player
                 PlayerController.localPlayer.applyDamage(m_damage);
@@ -81,16 +73,7 @@ public class MonsterBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallba
                 MonsterManager.destroyMonster(this, false);
                 return;
             }
-
-            m_segmentStart = m_segmentEnd;
-            m_targetTileIndex = m_board.getNextPathTile(m_targetTileIndex);
-            m_segmentEnd = m_board.indexToPosition(m_targetTileIndex);
-
-            m_progress %= 1f;
         }
-
-        transform.position = Vector3.Lerp(m_segmentStart, m_segmentEnd, m_progress);
-        m_tilesTravelled += delta;
     }
 
     // TODO: Document (returns true if killed)
@@ -137,23 +120,42 @@ public class MonsterBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallba
         m_canBeDamaged = bCanDamage;
     }
 
+    /// <summary>
+    /// Updates monsters position along the path it is following based on progress
+    /// </summary>
+    /// <param name="progress">Progress along path we are</param>
+    /// <returns>If monster is at goal tile or false if not</returns>
+    private bool updatePositionAlongPath(float progress)
+    {
+        bool atGoalTile = false;
+        if (m_board)
+            transform.position = m_board.pathProgressToPosition(m_pathIndex, progress, out atGoalTile);
+
+        return atGoalTile;
+    }
+
     void IPunInstantiateMagicCallback.OnPhotonInstantiate(PhotonMessageInfo info)
     {
         int boardId = (int)info.photonView.InstantiationData[0];
         m_board = GameManager.manager.getBoardManager(boardId);
+
+        m_pathIndex = (int)info.photonView.InstantiationData[1];
+        updatePositionAlongPath(0f);
     }
 
     void IPunObservable.OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
         if (stream.IsWriting)
         {
-            stream.SendNext(m_tilesTravelled);
+            stream.SendNext(m_progress);
             stream.SendNext(m_canBeDamaged);
         }
         else
         {
-            m_tilesTravelled = (float)stream.ReceiveNext();
+            m_progress = (float)stream.ReceiveNext();
             m_canBeDamaged = (bool)stream.ReceiveNext();
+
+            updatePositionAlongPath(m_progress);
         }
     }
 }

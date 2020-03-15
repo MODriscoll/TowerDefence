@@ -9,11 +9,12 @@ using UnityEditor;
 using Photon.Pun;
 
 /// <summary>
-/// Wraps the flow field used by the board manager to establish a path. Would like this
-/// to be serialized so we don't have to generate it at runtime but unity doesn't
-/// support serialization of dictionaries yet
+/// Wraps the flow field used by the board manager to establish multiple paths. While
+/// the flow field isn't saved (since dictionaries can't be serialized), the individual paths
+/// are stored instead and can be accessed by index
 /// </summary>
-public struct BoardFlowfield
+[System.Serializable]
+public struct BoardPaths
 {
     // Directions we can move in
     public static Vector3Int[] moveDirs = new Vector3Int[]
@@ -24,16 +25,31 @@ public struct BoardFlowfield
         new Vector3Int(1, 0, 0)     // Right
     };
 
-    // Map containing the directions to move to based on a tile, the
-    // goal tile will simply have its direction point to itself
-    public Dictionary<Vector3Int, Vector3Int> m_flowMap;
+    // Wrapper around a list, so we can serialize the path
+    [System.Serializable]
+    private struct Path
+    {
+        // List of tiles needed to be able to reach goal tile.
+        // This is ordered from spawn tile first to goal tile last
+        public List<Vector3Int> m_list;
+    }
 
     // The goal tile, cached so we don't have to check
     // the flow maps direction value to see if what is the goal
-    public Vector3Int m_goal;
+    [SerializeField, HideInInspector]
+    private Vector3Int m_goal;
 
-    // If this flow field has been generated
-    public bool Generated { get { return m_flowMap != null; } }
+    [SerializeField, HideInInspector] 
+    private List<Path> m_paths;
+
+    // If the paths have been generated
+    public bool Generated { get { return m_paths != null; } }
+
+    // The goal tile of each path
+    public Vector3Int GoalTile { get { return m_goal; } }
+
+    // The number of paths that can be taken
+    public int NumPaths { get { return Generated ? m_paths.Count : 0; } }
 
     /// <summary>
     /// Generates the flow map based off a tile map. This assumes there is no
@@ -42,7 +58,7 @@ public struct BoardFlowfield
     /// <param name="tileMap">Tile map to generate based off</param>
     public bool generate(Tilemap tileMap)
     {
-        m_flowMap = null;
+        m_paths = null;
 
         if (!tileMap)
             return false;
@@ -51,10 +67,17 @@ public struct BoardFlowfield
         if (!tileMap.HasTile(m_goal))
             return false;
 
-        m_flowMap = new Dictionary<Vector3Int, Vector3Int>();
+        m_paths = new List<Path>();
+
+        // Map containing the directions to move to based on a tile. We generate
+        // the flow field first which we then use to generate individual paths
+        Dictionary<Vector3Int, Vector3Int> flowField = new Dictionary<Vector3Int, Vector3Int>();
 
         HashSet<Vector3Int> visitedTiles = new HashSet<Vector3Int>();
         Queue<Vector3Int> tilesToVisit = new Queue<Vector3Int>();
+
+        // Used later to start creating individual paths
+        List<Vector3Int> spawnTiles = new List<Vector3Int>();
 
         // Start from goal tile, and move to outer tiles
         tilesToVisit.Enqueue(m_goal);
@@ -65,6 +88,10 @@ public struct BoardFlowfield
             Vector3Int tileIndex = tilesToVisit.Dequeue();
             visitedTiles.Add(tileIndex);
 
+            // We can use this tile later to generate the individual paths
+            if (isTileOfType(tileMap, tileIndex, TDTileType.Spawn))
+                spawnTiles.Add(tileIndex);
+
             // Check which neighbors we can travel to
             Vector3Int[] neighbors = getNeighbors(tileMap, tileIndex);
             for (int i = 0; i < neighbors.Length; ++i)
@@ -73,14 +100,31 @@ public struct BoardFlowfield
                 Vector3Int neighbor = neighbors[i];
                 if (!visitedTiles.Contains(neighbor))
                 {
-                    m_flowMap.Add(neighbor, tileIndex);
+                    flowField.Add(neighbor, tileIndex);
                     tilesToVisit.Enqueue(neighbor);
                 }
             }
         }
 
-        // Assign goal to move back to itself
-        m_flowMap.Add(m_goal, Vector3Int.zero);
+        // Using flow field, generate each path for each spawn point
+        foreach (Vector3Int spawnTile in spawnTiles)
+        {
+            List<Vector3Int> pathList = new List<Vector3Int>();
+            pathList.Add(spawnTile);
+
+            // This flowfield map will not contain a key for the goal tile,
+            // once we reach the goal tile, we will exit out
+            Vector3Int curTile = spawnTile;
+            while (flowField.ContainsKey(curTile))
+            {
+                curTile = flowField[curTile];
+                pathList.Add(curTile);
+            }
+
+            Path path = new Path();
+            path.m_list = pathList;
+            m_paths.Add(path);
+        }    
 
         return true;
     }
@@ -143,12 +187,57 @@ public struct BoardFlowfield
     {
         if (tile)
         {
-            // We can travel to spawn and path tiles
             TDTileType tileType = tile.TileType;
             return tileType == TDTileType.Path || tileType == TDTileType.Spawn;
         }
 
         return false;
+    }
+
+    /// <summary>
+    /// Checks if tile at index is of given tile type
+    /// </summary>
+    /// <param name="tileMap">Tile map to query</param>
+    /// <param name="tileIndex">Index of tile to check</param>
+    /// <param name="type">Type the tile should be</param>
+    /// <returns>If tile is of type</returns>
+    static private bool isTileOfType(Tilemap tileMap, Vector3Int tileIndex, TDTileType type)
+    {
+#if UNITY_EDITOR
+        Assert.IsTrue(tileMap.HasTile(tileIndex));
+#endif
+
+        TDTileBase tile = tileMap.GetTile<TDTileBase>(tileIndex);
+        if (tile)
+            return tile.TileType == type;
+
+        return false;
+    }
+
+    /// <summary>
+    /// Gets an index to a random path that can be used to follow
+    /// </summary>
+    /// <returns>Index >= 0 or -1 if not generated</returns>
+    public int getRandomPathIndex()
+    {
+        if (Generated)
+            return Random.Range(0, m_paths.Count);
+        else
+            return -1;
+    }
+
+    /// <summary>
+    /// Gets path at given index
+    /// </summary>
+    /// <param name="index">Index of path to retrieve</param>
+    /// <returns>Valid path or null</returns>
+    public List<Vector3Int> getPath(int index)
+    {
+        if (m_paths != null)
+            if (index >= 0 && index < m_paths.Count)
+                return m_paths[index].m_list;
+
+        return null;
     }
 }
 
@@ -163,8 +252,7 @@ public class BoardManager : MonoBehaviourPun
     [SerializeField] private MonsterManager m_monsterManager;       // This boards monster manager
 
     [Header("Board Details")]
-    [SerializeField] private BoardFlowfield m_flowField = new BoardFlowfield();     // Flow field used for path following
-    [SerializeField] private Vector3Int[] m_spawnTiles = new Vector3Int[0];         // Spawn tiles used for faster spawning of monsters
+    [SerializeField] private BoardPaths m_paths = new BoardPaths();             // Paths the monsters can possibly follow
 
     private Dictionary<Vector3Int, TowerBase> m_placedTowers = new Dictionary<Vector3Int, TowerBase>();     // Index to tile map, used for checking if tile exists
     private List<TowerBase> m_allTowers = new List<TowerBase>();                                            // All towers that have been placed on the map
@@ -180,9 +268,9 @@ public class BoardManager : MonoBehaviourPun
         if (!m_tileMap)
             m_tileMap = GetComponentInChildren<Tilemap>();
 
-        // Need to generate this now since flow field isn't serialized
+        // Generate paths even if waven't done so already
         if (m_tileMap)
-            if (!m_flowField.generate(m_tileMap))
+            if (!m_paths.Generated && !m_paths.generate(m_tileMap))
                 Debug.LogError("Failed to Generate Flow Field!");
     }
 
@@ -204,7 +292,7 @@ public class BoardManager : MonoBehaviourPun
 
     public bool isGoalTile(Vector3Int tileIndex)
     {
-        return m_flowField.m_goal == tileIndex;
+        return m_paths.GoalTile == tileIndex;
     }
 
     public bool isPlaceableTile(Vector3Int tileIndex)
@@ -219,35 +307,41 @@ public class BoardManager : MonoBehaviourPun
         return false;
     }
 
-    public Vector3Int getRandomSpawnTile()
+    public int getRandomPathToFollow()
     {
-        if (m_tileMap)
-            if (m_spawnTiles.Length > 0)
-            {
-                Vector3Int tileIndex = m_spawnTiles[Random.Range(0, m_spawnTiles.Length)];
-                return tileIndex;
-            }
-
-        return Vector3Int.zero;
+        return m_paths.getRandomPathIndex();
     }
-
-    public Vector3Int getNextPathTile(Vector3Int tileIndex)
+    
+    public Vector3 pathProgressToPosition(int pathIndex, float progress, out bool atGoalTile)
     {
-#if UNITY_EDITOR
-        if (!m_flowField.Generated)
-        {
-            Debug.LogError("getNextPathTile called with no flow field generated");
-            return Vector3Int.zero;
-        }
+        atGoalTile = false;
 
-        if (!m_flowField.m_flowMap.ContainsKey(tileIndex))
+#if UNITY_EDITOR
+        if (!m_paths.Generated)
         {
-            Debug.LogError("getNextPathTile called with invalid tile index");
-            return Vector3Int.zero;
+            Debug.LogError("pathProgressToPosition called with no paths generated");
+            return Vector3.zero;
         }
 #endif
 
-        return m_flowField.m_flowMap[tileIndex];
+        List<Vector3Int> path = m_paths.getPath(pathIndex);
+        if (path == null)
+            return Vector3.zero;
+
+        // Check if goal tile
+        int curIndex = Mathf.FloorToInt(progress);
+        if (curIndex >= (path.Count - 1))
+        {
+            atGoalTile = true;
+            return indexToPosition(m_paths.GoalTile);
+        }
+
+        int nextIndex = Mathf.CeilToInt(progress);
+
+        Vector3 curTilePos = indexToPosition(path[curIndex]);
+        Vector3 nextTilePos = indexToPosition(path[nextIndex]);
+
+        return Vector3.Lerp(curTilePos, nextTilePos, progress - curIndex);
     }
 
     public void placeTower(TowerBase tower, Vector3Int tileIndex)
@@ -370,25 +464,9 @@ public class BoardManager : MonoBehaviourPun
         // Compress bounds so we work with latest size
         m_tileMap.CompressBounds();
 
-        // Generate the flow field
-        if (!m_flowField.generate(m_tileMap))
-            Debug.LogWarning("Failed to generate the flow field! PathFollowing will not work correctly!");
-        
-        // Tiles we need to find and cache for use in game
-        List<Vector3Int> spawnTiles = new List<Vector3Int>();
-
-        foreach (Vector3Int tileIndex in m_tileMap.cellBounds.allPositionsWithin)
-        {
-            TDTileBase tile = m_tileMap.GetTile<TDTileBase>(tileIndex);
-            if (!tile)
-                continue;
-
-            if (tile.TileType == TDTileType.Spawn)
-                spawnTiles.Add(tileIndex);
-        }
-
-        // Cache information
-        m_spawnTiles = spawnTiles.ToArray();
+        // Generate the paths
+        if (!m_paths.generate(m_tileMap))
+            Debug.LogWarning("Failed to generate the paths for Board! PathFollowing will not work correctly!");
     }
 #endif
 
@@ -397,20 +475,27 @@ public class BoardManager : MonoBehaviourPun
         if (!m_tileMap)
             return;
 
-        if (m_flowField.Generated)
+        //foreach (var entry in m_flowField.m_flowMap)
+        for (int i = 0; i < m_paths.NumPaths; ++i)
         {
-            foreach (var entry in m_flowField.m_flowMap)
+            List<Vector3Int> path = m_paths.getPath(i);
+            for (int j = 0; j < path.Count; ++j)
             {
-                if (entry.Key == m_flowField.m_goal)
+                Vector3Int curTile = path[j];
+
+                // Is this the goal tile (last tile in the list)
+                if ((j + 1) >= path.Count)
                 {
                     Gizmos.color = Color.green;
-                    Gizmos.DrawCube(m_tileMap.GetCellCenterWorld(m_flowField.m_goal), m_tileMap.cellSize * 0.5f);
+                    Gizmos.DrawCube(m_tileMap.GetCellCenterWorld(m_paths.GoalTile), m_tileMap.cellSize * 0.5f);
                 }
                 else
                 {
-                    Vector3 entryPos = m_tileMap.GetCellCenterWorld(entry.Key);
-                    Vector3 goalPos = m_tileMap.GetCellCenterWorld(entry.Value);
-              
+                    Vector3Int nextTile = path[j + 1];
+
+                    Vector3 entryPos = m_tileMap.GetCellCenterWorld(curTile);
+                    Vector3 goalPos = m_tileMap.GetCellCenterWorld(nextTile);
+
                     Gizmos.color = Color.blue;
                     Gizmos.DrawLine(entryPos, goalPos);
 
@@ -419,7 +504,7 @@ public class BoardManager : MonoBehaviourPun
                     offset = m_tileMap.orientationMatrix.MultiplyVector(offset);
 
                     // The direction we move in, we use this to act as arrows basically
-                    Vector3 moveDir = entry.Value - entry.Key;
+                    Vector3 moveDir = nextTile - curTile;
                     moveDir.Scale(offset);
 
                     Gizmos.color = Color.red;

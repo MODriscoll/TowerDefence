@@ -12,9 +12,9 @@ public class SpecialMonster : MonsterBase
     public float Delay { get { return m_delay; } }          // How long to delay another special monster spawn
 
     // MonsterBase Interface
-    public override void initMoster(BoardManager boardManager)
+    public override void initMoster(BoardManager boardManager, int pathToFollow)
     {
-        base.initMoster(boardManager);
+        base.initMoster(boardManager, pathToFollow);
 
         AnalyticsHelpers.reportSpecialMonsterSpawned(this);
     }

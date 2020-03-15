@@ -49,8 +49,11 @@ public class MonsterManager : MonoBehaviour
 
     public MonsterBase spawnMonster(string prefabName, BoardManager board)
     {
-        object[] spawnData = new object[1];
+        int randomPath = board.getRandomPathToFollow();
+
+        object[] spawnData = new object[2];
         spawnData[0] = PlayerController.localPlayer.playerId;
+        spawnData[1] = randomPath;
         GameObject newMonster = PhotonNetwork.Instantiate(prefabName, Vector3.zero, Quaternion.identity, 0, spawnData);
         if (!newMonster)
             return null;
@@ -60,7 +63,7 @@ public class MonsterManager : MonoBehaviour
 
         m_monsters.Add(monster);
 
-        monster.initMoster(board);
+        monster.initMoster(board, randomPath);
         return monster;
     }
 
