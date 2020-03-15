@@ -28,7 +28,9 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
     public BoardManager m_p1Board;      // Board for player 1
     public BoardManager m_p2Board;      // Board for player 2
 
-    [SerializeField] private PlayerController m_playerPrefab;   // Player controller to spawn for a new player
+    // Player controller to spawn for a new player
+    [PhotonPrefab(typeof(PlayerController))]
+    [SerializeField] private string m_playerPrefab;   
 
     public BoardManager PlayersBoard { get { return getPlayersBoard(); } }          // Get the local players board
     public BoardManager OpponentsBoard { get { return getOpponentsBoard(); } }      // Get the opponent players board
@@ -63,7 +65,23 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
         // PlayerController will set this reference upon start
         // (This will also handle proper start for play in editor)
         if (!PlayerController.localPlayer)
-            PhotonNetwork.Instantiate(m_playerPrefab.gameObject.name, transform.position, Quaternion.identity);
+        {
+            if (!string.IsNullOrEmpty(m_playerPrefab))
+            {
+#if UNITY_EDITOR
+                // Check if prefab set is actually for a player controller
+                GameObject tt = Resources.Load(m_playerPrefab) as GameObject;
+                PlayerController testController = tt.GetComponent<PlayerController>();// Resources.Load(m_playerPrefab) as PlayerController;
+                if (!testController)
+                    Debug.LogWarning("Player Prefab set is not of a player controller!");
+                else
+#endif
+                {
+                    PhotonNetwork.Instantiate(m_playerPrefab, transform.position, Quaternion.identity);
+                }
+            }
+
+        }
 
         // Wait for all players to connect before starting,
         // this component will destroy itself once the match has started

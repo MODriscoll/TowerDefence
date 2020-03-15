@@ -51,11 +51,10 @@ public class HealthTurret : TowerScript
         }
 
         // Call this regardless
-#if UNITY_EDITOR
-        onHealTowers();
-#else
-        photonView.RPC("onHealTowers", RpcTarget.All);
-#endif
+        if (PhotonNetwork.IsConnected)
+            photonView.RPC("onHealTowers", RpcTarget.All);
+        else
+            onHealTowers();
     }
 
     [PunRPC]

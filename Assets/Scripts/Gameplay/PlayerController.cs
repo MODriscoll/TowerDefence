@@ -123,10 +123,13 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
 #if UNITY_EDITOR || UNITY_STANDALONE
         if (m_towersList)
         {
+            // Used as out parameters for select functions
+            string dummy;
+
             // Notice Alpha1 to Alpha4
             for (int i = (int)KeyCode.Alpha1; i < (int)KeyCode.Alpha5; ++i)
                 if (Input.GetKeyDown((KeyCode)i))
-                    m_towersList.selectTower(i - (int)KeyCode.Alpha1);
+                    m_towersList.selectTower(i - (int)KeyCode.Alpha1, out dummy);
 
             if (Input.GetKeyDown(KeyCode.Alpha0))
                 m_towersList.unselectTower();
@@ -137,7 +140,10 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             // Notice Alpha5 to Alpha9
             for (int i = (int)KeyCode.Alpha5; i <= (int)KeyCode.Alpha9; ++i)
                 if (Input.GetKeyDown((KeyCode)i))
-                    spawnSpecialMonster(m_monsterList.getMonster(i - (int)KeyCode.Alpha9));
+                {
+                    string prefabName;
+                    spawnSpecialMonster(m_monsterList.getMonster(i - (int)KeyCode.Alpha5, out prefabName), prefabName);
+                }
         }
 
         // Quick testing
@@ -178,9 +184,10 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
                     Vector3 spawnPos = m_board.indexToPosition(tileIndex);
 
                     // Spawn tower on the server (replicates back to us if not master client)
-                    TowerBase towerPrefab = m_towersList.getSelectedTower();
+                    string prefabName;
+                    TowerBase towerPrefab = m_towersList.getSelectedTower(out prefabName);
                     if (towerPrefab && canAfford(towerPrefab.m_cost))
-                        placeTowerAt(towerPrefab, tileIndex, spawnPos);
+                        placeTowerAt(towerPrefab, prefabName, tileIndex, spawnPos);
                 }
             }
         }
@@ -240,14 +247,15 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     /// if tile is already occupied or is even valid to place a tile on
     /// </summary>
     /// <param name="towerPrefab">Prefab of tower to spawn</param>
+    /// <param name="prefabName">Path to tower prefab in resources folder</param>
     /// <param name="tileIndex">Index of tile to place tower on</param>
     /// <param name="spawnPos">Spawn position (in world space) for the tower</param>
-    public void placeTowerAt(TowerBase towerPrefab, Vector3Int tileIndex, Vector3 spawnPos)
+    public void placeTowerAt(TowerBase towerPrefab, string prefabName, Vector3Int tileIndex, Vector3 spawnPos)
     {
         consumeGold(towerPrefab.m_cost);
         
         // Finally spawn the tower (this will eventually lead to actually placing tile on the map)
-        TowerBase.spawnTower(towerPrefab, m_id, tileIndex, spawnPos);
+        TowerBase.spawnTower(prefabName, m_id, tileIndex, spawnPos);
     }
 
     /// <summary>
@@ -327,15 +335,16 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     /// Spawns a special monster to deploy to the opponents board
     /// </summary>
     /// <param name="monsterPrefab">Monster to spawn</param>
-    public void spawnSpecialMonster(SpecialMonster monsterPrefab)
+    /// <param name="prefabName">Actual path to monster prefab from resources folder</param>
+    public void spawnSpecialMonster(SpecialMonster monsterPrefab, string prefabName)
     {
-        if (!canSpawnSpecialMonster(monsterPrefab))
+        if (!canSpawnSpecialMonster(monsterPrefab, prefabName))
             return;
 
         BoardManager opponentsBoard = GameManager.manager.OpponentsBoard;
         if (opponentsBoard)
         {
-            opponentsBoard.spawnMonster(monsterPrefab.name, PhotonNetwork.LocalPlayer);
+            opponentsBoard.spawnMonster(prefabName, PhotonNetwork.LocalPlayer);
 
             // Apply costs for spawning this monster
             consumeGold(monsterPrefab.Cost);
@@ -352,10 +361,11 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     /// Checks if we are able to spawn a special monster on the opponents board
     /// </summary>
     /// <param name="monsterPrefab">Monster to check</param>
+    /// <param name="prefabName">Path from resources folder to prefab</param>
     /// <returns>If monster can be spawned</returns>
-    private bool canSpawnSpecialMonster(SpecialMonster monsterPrefab)
+    private bool canSpawnSpecialMonster(SpecialMonster monsterPrefab, string prefabName)
     {
-        if (!monsterPrefab)
+        if (!monsterPrefab || string.IsNullOrEmpty(prefabName))
             return false;
 
         // Might be in-between rounds

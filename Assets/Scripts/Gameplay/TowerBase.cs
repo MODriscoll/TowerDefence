@@ -69,13 +69,13 @@ public class TowerBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallback
         }
     }
 
-    public static TowerBase spawnTower(TowerBase towerPrefab, int playerId, Vector3Int tileIndex, Vector3 spawnPos)
+    public static TowerBase spawnTower(string prefabId, int playerId, Vector3Int tileIndex, Vector3 spawnPos)
     {
         object[] spawnData = new object[2];
         spawnData[0] = playerId;
         spawnData[1] = tileIndex;
 
-        GameObject towerObj = PhotonNetwork.Instantiate(towerPrefab.name, spawnPos, Quaternion.identity, 0, spawnData);
+        GameObject towerObj = PhotonNetwork.Instantiate(prefabId, spawnPos, Quaternion.identity, 0, spawnData);
         if (!towerObj)
             return null;
 

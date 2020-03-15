@@ -25,11 +25,10 @@ public class BasicTurret : TowerScript
         // Shoot the laser
         target.takeDamage(m_damage);
 
-#if UNITY_EDITOR
-        onFired(targetPosition);
-#else
-        photonView.RPC("onFired", RpcTarget.All, targetPosition);
-#endif
+        if (PhotonNetwork.IsConnected)
+            photonView.RPC("onFired", RpcTarget.All, targetPosition);
+        else
+            onFired(targetPosition);
     }
 
     [PunRPC]

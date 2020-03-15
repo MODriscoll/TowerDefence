@@ -17,17 +17,21 @@ public class GameStartHandler : MonoBehaviour
             return;
         }
 
-#if UNITY_EDITOR   
-        startMatch();
-        return;
-#else
-        if (PhotonNetwork.IsConnected && PhotonNetwork.PlayerList.Length >= 2)
-            // Only start match if master client
-            if (PhotonNetwork.IsMasterClient)
+        if (PhotonNetwork.IsConnected)
+        {
+            // Wait for both to be ready before starting
+            if (PhotonNetwork.IsMasterClient &&
+                PhotonNetwork.PlayerList.Length >= 2)
             {
                 startMatch();
-                return;
             }
+        }
+#if UNITY_EDITOR
+        else
+        {
+            // Most likely playing in editor, just start now
+            startMatch();
+        }
 #endif
     }
 

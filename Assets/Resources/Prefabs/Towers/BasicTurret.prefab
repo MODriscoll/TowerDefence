@@ -214,8 +214,6 @@ MonoBehaviour:
   m_cost: 50
   m_health: 120
   m_maxHealth: 100
-  m_targetRadius: 3
-  m_fireRate: 3
 --- !u!114 &-134496267488553184
 MonoBehaviour:
   m_ObjectHideFlags: 0

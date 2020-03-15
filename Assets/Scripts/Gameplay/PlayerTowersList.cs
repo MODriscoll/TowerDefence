@@ -4,45 +4,62 @@ using UnityEngine;
 
 public class PlayerTowersList : MonoBehaviour
 {
-    [SerializeField] private int m_selectedTower = -1;
-    [SerializeField] private List<TowerBase> m_towers = new List<TowerBase>();
+    // Prefabs for towers that can be spawned
+    [PhotonPrefab(typeof(TowerBase))]
+    [SerializeField] private List<string> m_towers = new List<string>();
 
-    public bool hasSelectedTower { get { return m_selectedTower != -1; } }
+    private int m_selectedTower = -1;           // Tower player has selected
+
+    public bool hasSelectedTower { get { return m_selectedTower != -1; } }      // If a tower has been selected by the player
 
     void Start()
     {
-        selectTower(0);
+        // Load in each resource now
+        foreach (string prefab in m_towers)
+            Resources.Load(prefab);
     }
 
-    public TowerBase selectTower(int index)
+    public TowerBase selectTower(int index, out string prefabName)
     {
         if (isValidIndex(index))
         {
             m_selectedTower = index;
-            return m_towers[m_selectedTower];
+
+            return getTower(m_selectedTower, out prefabName);
         }
         else
         {
+            
             m_selectedTower = -1;
+
+            prefabName = null;
             return null;
         }
     }
 
     public void unselectTower()
     {
-        selectTower(-1);
+        m_selectedTower = -1;
     }
 
-    public TowerBase getSelectedTower()
+    public TowerBase getSelectedTower(out string prefabName)
     {
-        return getTower(m_selectedTower);
+        return getTower(m_selectedTower, out prefabName);
     }
 
-    public TowerBase getTower(int index)
+    public TowerBase getTower(int index, out string prefabName)
     {
         if (isValidIndex(index))
-            return m_towers[index];
+        {
+            // Gets reset back to null if prefab is invalid
+            prefabName = m_towers[index];
 
+            GameObject towerObject = Resources.Load(m_towers[index]) as GameObject;
+            if (towerObject)
+                return towerObject.GetComponent<TowerBase>();
+        }
+
+        prefabName = null;
         return null;
     }
 

@@ -34,27 +34,14 @@ public class PlayerUI : MonoBehaviour
         if (!m_owner)
             return;
 
-        if (m_debugText)
-        {
-            TowerBase selectedTower = m_owner.towersList.getSelectedTower();
+        if (m_moneyText)
+            m_moneyText.text = string.Format("${0}", m_owner.Gold);
 
-            if (m_owner.Gold >= 1000)
-                m_moneyText.text = "$" + m_owner.Gold.ToString("0,000");
-            else
-                m_moneyText.text = "$" + m_owner.Gold.ToString();
-            m_playerHealthText.text = "P1 Health: " + m_owner.Health.ToString();
-            m_enemyHealthText.text = "P2 Health: " + (PlayerController.remotePlayer ? PlayerController.remotePlayer.Health : -1).ToString();
+        if (m_playerHealthText)
+            m_playerHealthText.text = string.Format("P1 Health: {0}", m_owner.Health);
 
-            /* Old Debug UI Text
-            m_debugText.text = string.Format(
-                "Player ID: {0}\nSelected Tower: {1}\nYour Health: {2}\nOpponents Health: {3}\nGold: {4}", 
-                m_owner.playerId,
-                selectedTower ? selectedTower.name : "None",
-                m_owner.Health,
-                PlayerController.remotePlayer ? PlayerController.remotePlayer.Health : -1,
-                m_owner.Gold);
-                */
-        }
+        if (m_enemyHealthText)
+            m_enemyHealthText.text = string.Format("P2 Health: {0}", PlayerController.remotePlayer ? PlayerController.remotePlayer.Health : -1);
     }
 
     /// <summary>
@@ -136,12 +123,14 @@ public class PlayerUI : MonoBehaviour
 
     public void setCurrentTurret(int i)
     {
-        m_playerTowersList.selectTower(i);
+        string dummy;
+        m_playerTowersList.selectTower(i, out dummy);
     }
 
     public void spawnMouse(int i)
     {
-        m_owner.spawnSpecialMonster(m_owner.m_monsterList.getMonster(i));
+        string prefabName;
+        m_owner.spawnSpecialMonster(m_owner.m_monsterList.getMonster(i, out prefabName), prefabName);
     }
 
     public void ToggleBulldose()

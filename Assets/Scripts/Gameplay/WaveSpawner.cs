@@ -21,7 +21,9 @@ public class WaveSpawner : MonoBehaviourPun
 
     public bool IsWaveInProgress { get { return m_spawnRoutine != null; } }         // If a wave is current being processed
 
-    public MonsterBase m_monsterPrefab;         // Monster to spawn (can be set in editor for testing)
+    // Monster to spawn
+    [PhotonPrefab(typeof(MonsterBase))]
+    [SerializeField] private string m_monsterPrefab;         
 
     /// <summary>
     /// Initializes the wave. Needs to be called locally on all clients
@@ -86,7 +88,7 @@ public class WaveSpawner : MonoBehaviourPun
         if (!board)
             return;
 
-        if (m_monsterPrefab)
+        if (!string.IsNullOrEmpty(m_monsterPrefab))
             board.MonsterManager.spawnMonster(m_monsterPrefab, board);
     }
 

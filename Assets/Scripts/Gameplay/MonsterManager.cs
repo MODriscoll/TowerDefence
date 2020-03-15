@@ -47,17 +47,6 @@ public class MonsterManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Spawns a monster that this manager is responsible for updating
-    /// </summary>
-    /// <param name="prefab">Prefab of monster to spawn</param>
-    /// <param name="board">Board to place it on</param>
-    /// <returns>New monster prefab or null</returns>
-    public MonsterBase spawnMonster(MonsterBase prefab, BoardManager board)
-    {
-        return spawnMonster(prefab.name, board);
-    }
-
     public MonsterBase spawnMonster(string prefabName, BoardManager board)
     {
         object[] spawnData = new object[1];

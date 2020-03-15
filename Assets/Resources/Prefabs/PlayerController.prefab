@@ -132,7 +132,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_camera: {fileID: 1674025923139972484}
   m_towersList: {fileID: 299274198644012295}
-  m_monsterList: {fileID: 0}
+  m_monsterList: {fileID: -9199565851451362920}
   m_health: 100
   m_gold: 200
   m_maxGold: 1000
@@ -150,11 +150,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88aaa93421308a84582db2db3a86c5b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_selectedTower: -1
   m_towers:
-  - {fileID: 9196093534682404416, guid: 69897bd5cd494ad4cae37c7622a99330, type: 3}
-  - {fileID: 9196093534682404416, guid: 2816a17fb5364684b8a2078ba67ec854, type: 3}
-  - {fileID: 9196093534682404416, guid: fef9c2b192529ab40806a9f9e48b85db, type: 3}
+  - Prefabs/Towers/BasicTurret
+  - Prefabs/Towers/PiercingTurret
+  - Prefabs/Towers/HealingTurret
 --- !u!114 &-9199565851451362920
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -168,8 +167,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_monsters:
-  - {fileID: 5171284587749281140, guid: 13ecbb1a5f3075a4d8c32c88852b1588, type: 3}
-  - {fileID: 5171284587749281140, guid: 2b317a51388393a49ad74f396dcdddb0, type: 3}
+  - Prefabs/Monsters/MachineGunMouse
+  - Prefabs/Monsters/TankMouse
+  - Prefabs/Monsters/PathfinderMouse
 --- !u!114 &1422860588128768098
 MonoBehaviour:
   m_ObjectHideFlags: 0

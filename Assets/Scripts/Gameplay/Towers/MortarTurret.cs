@@ -7,7 +7,9 @@ using Photon.Pun;
 // Script for the mortar turret a player can place
 public class MortarTurret : TowerScript
 {
-    [SerializeField] private TowerProjectile m_projectilePrefab;        // The projectile we shoot
+    // The projectile we shoot
+    [PhotonPrefab(typeof(TowerProjectile))]
+    [SerializeField] private string m_projectilePrefab;
 
     // TowerScript Interface
     protected override void performAction(MonsterBase target)
@@ -18,10 +20,10 @@ public class MortarTurret : TowerScript
             return;
         }
 
-        if (!m_projectilePrefab)
+        if (string.IsNullOrEmpty(m_projectilePrefab))
             return;
 
-        GameObject projectileObject = PhotonNetwork.Instantiate(m_projectilePrefab.name, transform.position, Quaternion.identity);
+        GameObject projectileObject = PhotonNetwork.Instantiate(m_projectilePrefab, transform.position, Quaternion.identity);
         if (!projectileObject)
             return;
 

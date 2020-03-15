@@ -4,14 +4,31 @@ using UnityEngine;
 
 public class PlayerMonstersList : MonoBehaviour
 {
-    [SerializeField] private List<SpecialMonster> m_monsters = new List<SpecialMonster>();
+    // Prefabs for monsters that can be spawned
+    [PhotonPrefab(typeof(SpecialMonster))]
+    [SerializeField] private List<string> m_monsters = new List<string>();   
 
-    public SpecialMonster getMonster(int index)
+    void Start()
+    {
+        // Load in each resource now
+        foreach (string prefab in m_monsters)
+            Resources.Load(prefab);
+    }
+
+    public SpecialMonster getMonster(int index, out string prefabName)
     {
         if (isValidIndex(index))
-            return m_monsters[index];
-        else
-            return null;
+        {
+            // Gets reset back to null if prefab is invalid
+            prefabName = m_monsters[index];
+
+            GameObject monsterObject = Resources.Load(prefabName) as GameObject;
+            if (monsterObject)
+                return monsterObject.GetComponent<SpecialMonster>();
+        }
+
+        prefabName = null;
+        return null;
     }
 
     private bool isValidIndex(int index)
