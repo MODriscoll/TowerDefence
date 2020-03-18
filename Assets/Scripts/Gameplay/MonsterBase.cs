@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Assertions;
 using Photon.Pun;
 
 public class MonsterBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallback, IPunObservable
@@ -15,6 +16,9 @@ public class MonsterBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallba
     private float m_progress = 0f;          // Progress along current path. Is used by board manager to find where we are
     private int m_pathIndex = -1;           // Index of the path we are following
     private bool m_canBeDamaged = true;     // If this monster can be damaged
+
+    private float m_networkProgress = 0f;   // Progress that our owner is up to, we use this is smooth our movement on remote monsters
+    private float m_progressDelta = 0f;     // Delta between local progress and network progress when progress was last replicated
 
     public delegate void OnTakeDamage(int damage, bool bKilled);
     public OnTakeDamage OnMonsterTakenDamage;
@@ -58,6 +62,9 @@ public class MonsterBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallba
     {
         if (photonView.IsMine)
         {
+            if (PhotonNetwork.IsConnected)
+                Assert.IsTrue(photonView.IsMine);
+
             float delta = deltaTime / m_travelDuration;
 
             // Travel along our path, destroy ourselves once we reach the goal
@@ -73,6 +80,12 @@ public class MonsterBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallba
                 MonsterManager.destroyMonster(this, false);
                 return;
             }
+        }
+        else
+        {
+            // Mimics how PhotonTransformView works
+            m_progress = Mathf.MoveTowards(m_progress, m_networkProgress, m_progressDelta * (1.0f / PhotonNetwork.SerializationRate));
+            updatePositionAlongPath(m_progress);
         }
     }
 
@@ -152,10 +165,10 @@ public class MonsterBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallba
         }
         else
         {
-            m_progress = (float)stream.ReceiveNext();
+            m_networkProgress = (float)stream.ReceiveNext();
             m_canBeDamaged = (bool)stream.ReceiveNext();
 
-            updatePositionAlongPath(m_progress);
+            m_progressDelta = m_networkProgress - m_progress;
         }
     }
 }

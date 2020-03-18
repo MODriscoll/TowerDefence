@@ -104,8 +104,14 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
         if (board && board.MonsterManager)
             board.MonsterManager.tick(Time.deltaTime);
 
-        // We only tick local player board in editor. In an actual build,
-        // each connected player will update their own board
+        // We only tick local player board in editor
+        if (!Application.isEditor)
+        {
+            // We call this only to allow for network updates of monsters
+            board = getOpponentsBoard();
+            if (board && board.MonsterManager)
+                board.MonsterManager.tick(Time.deltaTime);
+        }
     }
 
     /// <summary>

@@ -41,6 +41,5 @@ MonoBehaviour:
   - RespawnSpaceship
   - spawnMonsterRPC
   - startNextWaveRPC
-  - startWave
   DisableAutoOpenWizard: 1
   ShowSettings: 0
