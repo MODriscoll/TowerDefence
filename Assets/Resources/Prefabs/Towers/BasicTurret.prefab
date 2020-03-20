@@ -174,7 +174,6 @@ GameObject:
   - component: {fileID: 9196093534682404416}
   - component: {fileID: -134496267488553184}
   - component: {fileID: 7581699381181694968}
-  - component: {fileID: -8749751031708628852}
   - component: {fileID: 2722916156334210310}
   m_Layer: 8
   m_Name: BasicTurret
@@ -250,25 +249,10 @@ MonoBehaviour:
   Synchronization: 1
   OwnershipTransfer: 0
   ObservedComponents:
-  - {fileID: -8749751031708628852}
+  - {fileID: 0}
   viewIdField: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
---- !u!114 &-8749751031708628852
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9196093534682404415}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SynchronizePosition: 0
-  m_SynchronizeRotation: 1
-  m_SynchronizeScale: 0
 --- !u!82 &2722916156334210310
 AudioSource:
   m_ObjectHideFlags: 0

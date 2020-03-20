@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 5994368317154419058}
   - component: {fileID: 5994368317154419059}
   - component: {fileID: 5994368317154419060}
-  - component: {fileID: 5994368317154419061}
   m_Layer: 0
   m_Name: PiercingProjectile
   m_TagString: Untagged
@@ -47,10 +46,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_damage: 25
-  m_speed: 1
+  m_speed: 5
   m_lifespan: 3
   m_radius: 0.25
   m_tickRate: 0.3
+  m_maxHits: 3
 --- !u!114 &5994368317154419060
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -69,25 +69,10 @@ MonoBehaviour:
   Synchronization: 2
   OwnershipTransfer: 0
   ObservedComponents:
-  - {fileID: 5994368317154419061}
+  - {fileID: 0}
   viewIdField: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
---- !u!114 &5994368317154419061
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5994368317154419062}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SynchronizePosition: 1
-  m_SynchronizeRotation: 1
-  m_SynchronizeScale: 0
 --- !u!1 &5994368318742698050
 GameObject:
   m_ObjectHideFlags: 0
@@ -112,13 +97,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5994368318742698050}
-  m_LocalRotation: {x: 0, y: 0, z: -0.7071068, w: 0.7071068}
+  m_LocalRotation: {x: 0, y: 0, z: 1, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5994368317154419058}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 180}
 --- !u!212 &5994368318742698048
 SpriteRenderer:
   m_ObjectHideFlags: 0

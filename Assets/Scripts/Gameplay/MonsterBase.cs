@@ -23,8 +23,13 @@ public class MonsterBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallba
     public delegate void OnTakeDamage(int damage, bool bKilled);
     public OnTakeDamage OnMonsterTakenDamage;
 
+    [SerializeField] private Renderer m_renderer;       // This monsters renderer. Is used for collision checks
+
     public BoardManager Board { get { return m_board; } }
     public float TilesTravelled { get { return m_progress; } }
+
+    public bool HasBounds { get { return m_renderer != null; } }
+    public Bounds Bounds { get { return m_renderer ? m_renderer.bounds : new Bounds(); } }
 
     void Start()
     {

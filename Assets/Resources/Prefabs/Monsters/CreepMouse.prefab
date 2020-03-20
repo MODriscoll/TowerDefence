@@ -130,6 +130,7 @@ MonoBehaviour:
   m_reward: 2
   m_damage: 5
   m_health: 20
+  m_renderer: {fileID: 6925401245502795444}
 --- !u!114 &6293389618481299608
 MonoBehaviour:
   m_ObjectHideFlags: 0

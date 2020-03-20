@@ -1607,9 +1607,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b195ae8dfe582242ac130109a35c570, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_controller: {fileID: 0}
-  m_boardManager: {fileID: 800230786}
-  m_monsterManager: {fileID: 0}
 --- !u!1 &338344757
 GameObject:
   m_ObjectHideFlags: 0
@@ -1683,9 +1680,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b195ae8dfe582242ac130109a35c570, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_controller: {fileID: 0}
-  m_boardManager: {fileID: 2078598742}
-  m_monsterManager: {fileID: 0}
 --- !u!1 &731105743
 GameObject:
   m_ObjectHideFlags: 0
@@ -1846,9 +1840,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_tileMap: {fileID: 222423888}
   m_monsterManager: {fileID: 1567426311}
-  m_spawnTiles:
-  - {x: 1, y: -10, z: 0}
-  - {x: 5, y: -10, z: 0}
+  m_paths:
+    m_goal: {x: 0, y: 0, z: 0}
+    m_paths: []
   m_cameraView: {fileID: 338344758}
 --- !u!156049354 &800230787
 Grid:
@@ -3520,6 +3514,7 @@ MonoBehaviour:
   m_playerPrefab: Prefabs/PlayerController
   m_waveSpawner: {fileID: 1752449129}
   m_waveDelay: 5
+  m_gameSpeed: 1
 --- !u!4 &1752449128
 Transform:
   m_ObjectHideFlags: 0
@@ -3701,9 +3696,69 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_tileMap: {fileID: 1537231145}
   m_monsterManager: {fileID: 1894752348}
-  m_spawnTiles:
-  - {x: 0, y: 2, z: 0}
-  - {x: 4, y: 2, z: 0}
+  m_paths:
+    m_goal: {x: 2, y: -10, z: 0}
+    m_paths:
+    - m_list:
+      - {x: 0, y: 2, z: 0}
+      - {x: 0, y: 1, z: 0}
+      - {x: 0, y: 0, z: 0}
+      - {x: -1, y: 0, z: 0}
+      - {x: -1, y: -1, z: 0}
+      - {x: -1, y: -2, z: 0}
+      - {x: 0, y: -2, z: 0}
+      - {x: 1, y: -2, z: 0}
+      - {x: 2, y: -2, z: 0}
+      - {x: 2, y: -3, z: 0}
+      - {x: 2, y: -4, z: 0}
+      - {x: 1, y: -4, z: 0}
+      - {x: 0, y: -4, z: 0}
+      - {x: -1, y: -4, z: 0}
+      - {x: -1, y: -5, z: 0}
+      - {x: -1, y: -6, z: 0}
+      - {x: 0, y: -6, z: 0}
+      - {x: 1, y: -6, z: 0}
+      - {x: 2, y: -6, z: 0}
+      - {x: 3, y: -6, z: 0}
+      - {x: 4, y: -6, z: 0}
+      - {x: 5, y: -6, z: 0}
+      - {x: 5, y: -7, z: 0}
+      - {x: 5, y: -8, z: 0}
+      - {x: 4, y: -8, z: 0}
+      - {x: 3, y: -8, z: 0}
+      - {x: 2, y: -8, z: 0}
+      - {x: 2, y: -9, z: 0}
+      - {x: 2, y: -10, z: 0}
+    - m_list:
+      - {x: 4, y: 2, z: 0}
+      - {x: 4, y: 1, z: 0}
+      - {x: 4, y: 0, z: 0}
+      - {x: 5, y: 0, z: 0}
+      - {x: 5, y: -1, z: 0}
+      - {x: 5, y: -2, z: 0}
+      - {x: 4, y: -2, z: 0}
+      - {x: 3, y: -2, z: 0}
+      - {x: 2, y: -2, z: 0}
+      - {x: 2, y: -3, z: 0}
+      - {x: 2, y: -4, z: 0}
+      - {x: 1, y: -4, z: 0}
+      - {x: 0, y: -4, z: 0}
+      - {x: -1, y: -4, z: 0}
+      - {x: -1, y: -5, z: 0}
+      - {x: -1, y: -6, z: 0}
+      - {x: 0, y: -6, z: 0}
+      - {x: 1, y: -6, z: 0}
+      - {x: 2, y: -6, z: 0}
+      - {x: 3, y: -6, z: 0}
+      - {x: 4, y: -6, z: 0}
+      - {x: 5, y: -6, z: 0}
+      - {x: 5, y: -7, z: 0}
+      - {x: 5, y: -8, z: 0}
+      - {x: 4, y: -8, z: 0}
+      - {x: 3, y: -8, z: 0}
+      - {x: 2, y: -8, z: 0}
+      - {x: 2, y: -9, z: 0}
+      - {x: 2, y: -10, z: 0}
   m_cameraView: {fileID: 956881431}
 --- !u!114 &2078598743
 MonoBehaviour:

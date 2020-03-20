@@ -325,7 +325,7 @@ public class BoardManager : MonoBehaviourPun
 #endif
 
         List<Vector3Int> path = m_paths.getPath(pathIndex);
-        if (path == null)
+        if (path == null || path.Count == 0)
             return Vector3.zero;
 
         // Check if goal tile

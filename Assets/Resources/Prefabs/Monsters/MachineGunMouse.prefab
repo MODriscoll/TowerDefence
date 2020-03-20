@@ -131,6 +131,7 @@ MonoBehaviour:
   m_reward: 7
   m_damage: 5
   m_health: 50
+  m_renderer: {fileID: 6925401245502795444}
   m_cost: 30
   m_delay: 1
 --- !u!114 &-7273443016193421173

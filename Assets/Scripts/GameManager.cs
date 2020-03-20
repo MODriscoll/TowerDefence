@@ -52,6 +52,11 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
 
     public int waveNumber { get { return m_waveNum; } }     // The wave that is currently active
 
+#if UNITY_EDITOR
+    [Header("Testing")]
+    [Min(0.01f)] public float m_gameSpeed = 1f;         // Game speed (used for testing in editor)
+#endif
+
     void Awake()
     {
         if (manager)
@@ -100,9 +105,14 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
 
     void Update()
     {
+        float deltaTime = Time.deltaTime;
+#if UNITY_EDITOR
+        deltaTime *= m_gameSpeed;
+#endif
+
         BoardManager board = getPlayersBoard();
         if (board && board.MonsterManager)
-            board.MonsterManager.tick(Time.deltaTime);
+            board.MonsterManager.tick(deltaTime);
 
         // We only tick local player board in editor
         if (!Application.isEditor)
@@ -110,7 +120,7 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
             // We call this only to allow for network updates of monsters
             board = getOpponentsBoard();
             if (board && board.MonsterManager)
-                board.MonsterManager.tick(Time.deltaTime);
+                board.MonsterManager.tick(deltaTime);
         }
     }
 

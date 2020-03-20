@@ -8,8 +8,10 @@ using Photon.Pun;
 public class MortarTurret : TowerScript
 {
     // The projectile we shoot
-    [PhotonPrefab(typeof(TowerProjectile))]
+    [PhotonPrefab(typeof(MortarProjectile))]
     [SerializeField] private string m_projectilePrefab;
+
+    [SerializeField] private Transform m_shootFrom;         // Transform which we shoot from
 
     // TowerScript Interface
     protected override void performAction(MonsterBase target)
@@ -23,18 +25,20 @@ public class MortarTurret : TowerScript
         if (string.IsNullOrEmpty(m_projectilePrefab))
             return;
 
-        GameObject projectileObject = PhotonNetwork.Instantiate(m_projectilePrefab, transform.position, Quaternion.identity);
+        Transform spawnTransform = m_shootFrom ? m_shootFrom : transform;
+        Vector3 eulerAngles = m_shootFrom.eulerAngles;
+
+        // Since game is 2D, we only need one axis of rotation
+        object[] spawnData = new object[1];
+        spawnData[0] = eulerAngles.z;
+
+        GameObject projectileObject = PhotonNetwork.Instantiate(m_projectilePrefab, m_shootFrom.position, Quaternion.identity, 0, spawnData);
         if (!projectileObject)
             return;
 
-        TowerProjectile projectile = projectileObject.GetComponent<TowerProjectile>();
+        MortarProjectile projectile = projectileObject.GetComponent<MortarProjectile>();
         Assert.IsNotNull(projectile);
 
-        // For some reason, passing transform.rotation to Instantiate doesn't
-        // actually update the rotation, so we need to manually do it ourselves
-        // TODO: quick way (optimize)
-        Vector3 moveDir = (target.transform.position - transform.position).normalized;
-
-        projectile.initProjectile(moveDir, m_tower.Board, this);
+        projectile.initProjectile(spawnTransform.eulerAngles, m_tower.Board, this);
     }
 }

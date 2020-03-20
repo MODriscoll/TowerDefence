@@ -231,6 +231,9 @@ public class MonsterManager : MonoBehaviour
 
     public bool getMonstersInRadius(Vector2 position, float radius, ref List<MonsterBase> monsters, HashSet<MonsterBase> ignoreMonsters = null)
     {
+        // TODO: Do actual Sphere vs AABB collision, for now
+        Bounds collisionBounds = new Bounds(position, new Vector3(radius, radius, radius));
+
         float radSqr = radius * radius;
 
         foreach (MonsterBase monster in m_monsters)
@@ -238,12 +241,20 @@ public class MonsterManager : MonoBehaviour
             if (ignoreMonsters.Contains(monster))
                 continue;
 
-            Vector2 dis = (Vector2)monster.transform.position - position;
+            if (monster.HasBounds)
+            {
+                if (monster.Bounds.Intersects(collisionBounds))
+                    monsters.Add(monster);
+            }
+            else
+            {
+                // Fallback to position in radius
+                Vector2 dis = (Vector2)monster.transform.position - position;
 
-            // Monster needs to be in radius for it to be considered
-            float magSqr = dis.sqrMagnitude;
-            if (magSqr <= radSqr)
-                monsters.Add(monster);
+                float magSqr = dis.sqrMagnitude;
+                if (magSqr <= radSqr)
+                    monsters.Add(monster);
+            }
         }
 
         return monsters.Count > 0;
