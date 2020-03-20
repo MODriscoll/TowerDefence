@@ -60,11 +60,8 @@ public class MonsterBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallba
 
     public virtual void tick(float deltaTime)
     {
-        if (photonView.IsMine)
+        if (!PhotonNetwork.IsConnected || photonView.IsMine)
         {
-            if (PhotonNetwork.IsConnected)
-                Assert.IsTrue(photonView.IsMine);
-
             float delta = deltaTime / m_travelDuration;
 
             // Travel along our path, destroy ourselves once we reach the goal
