@@ -13,6 +13,8 @@ public class TowerScript : MonoBehaviourPun
 
     protected float m_lastFireTime = -float.MaxValue;         // The last time the turret fired
 
+    public BoardManager Board { get { return m_tower ? m_tower.Board : null; } }
+
     void Awake()
     {
         if (!m_tower)

@@ -12,6 +12,9 @@ public class MortarProjectile : MonoBehaviourPun, IPunInstantiateMagicCallback
     [SerializeField] private float m_tickRate = 0.5f;           // Tick rate for checking collisions (to prevent checks every frame)
     [SerializeField, Min(0)] private int m_maxHits = 3;         // Max amount of monsters this projectile can hurt before destroying itself
 
+    [SerializeField] private AudioClip m_hitSound;              // Sound to play when we hit something
+    [SerializeField] private AudioClip m_expiredSound;          // Sound to play when we expire
+
     private HashSet<MonsterBase> m_hitMonsters = new HashSet<MonsterBase>();    // The monsters we have hit thus far
     private BoardManager m_board;                                               // The board to check monsters for
     private TowerScript m_script;                                               // The script that instigated this projectile
@@ -26,6 +29,11 @@ public class MortarProjectile : MonoBehaviourPun, IPunInstantiateMagicCallback
 
         // Move ourselves forward, we simulate movement locally
         transform.position += m_cachedMoveDir * m_force * Time.deltaTime;    
+    }
+
+    void OnDestroy()
+    {
+        SoundEffectsManager.playSoundEffect(m_expiredSound, m_board);
     }
 
     public void initProjectile(Vector3 eulerAngles, BoardManager board, TowerScript script)
@@ -45,18 +53,23 @@ public class MortarProjectile : MonoBehaviourPun, IPunInstantiateMagicCallback
             return false;
 
         List<MonsterBase> hitMonsters = new List<MonsterBase>();
-        m_board.MonsterManager.getMonstersInRadius(transform.position, m_radius, ref hitMonsters, m_hitMonsters);
-
-        foreach (MonsterBase monster in hitMonsters)
+        if (m_board.MonsterManager.getMonstersInRadius(transform.position, m_radius, ref hitMonsters, m_hitMonsters))
         {
-            monster.takeDamage(m_damage, m_script);
-            m_hitMonsters.Add(monster);
-        }
+            foreach (MonsterBase monster in hitMonsters)
+            {
+                // Only record this monster if still alive
+                if (!monster.takeDamage(m_damage, m_script))
+                    m_hitMonsters.Add(monster);
+            }
 
-        if (m_hitMonsters.Count >= m_maxHits)
-        {
-            destroySelf();
-            return true;
+            if (PhotonNetwork.IsConnected)
+                photonView.RPC("onMonstersHit", RpcTarget.All, (Vector2)transform.position);
+
+            if (m_hitMonsters.Count >= m_maxHits)
+            {
+                destroySelf();
+                return true;
+            }
         }
 
         return false;
@@ -95,9 +108,18 @@ public class MortarProjectile : MonoBehaviourPun, IPunInstantiateMagicCallback
         m_cachedMoveDir = new Vector3(Mathf.Cos(rad), Mathf.Sin(rad), 0f);
     }
 
+    [PunRPC]
+    private void onMonstersHit(Vector2 position)
+    {
+        SoundEffectsManager.playSoundEffect(m_hitSound, m_board);
+    }
+
     void IPunInstantiateMagicCallback.OnPhotonInstantiate(PhotonMessageInfo info)
     {
-        float eulerZ = (float)info.photonView.InstantiationData[0];
+        int playerId = (int)info.photonView.InstantiationData[0];
+        m_board = GameManager.manager.getBoardManager(playerId);
+
+        float eulerZ = (float)info.photonView.InstantiationData[1];
         setMovementDirection(new Vector3(0f, 0f, eulerZ));
     }
 

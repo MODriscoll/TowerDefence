@@ -9,6 +9,7 @@ public class HealthTurret : TowerScript
     [SerializeField] private float m_range = 2.5f;                  // Amount of tiles this tower reaches
     [SerializeField] private bool m_healSingleTower = true;         // If only a single tower should be healed
 
+    [SerializeField] private AudioClip m_healPulseSound;                     // Sound to play when pulsing
     [SerializeField] private GameObject m_healPulseSource;              // Game object thta we scale for healing effect
     [SerializeField] private Vector3 m_pulseScale = Vector3.one;        // What to scale the pulse to
     [SerializeField, Min(0.1f)] private float m_pulseDuration = 0.5f;   // How long the pulse lasts for
@@ -19,7 +20,7 @@ public class HealthTurret : TowerScript
     {
         // TowerScript is set up right now to allow towers to fire upon
         // being spawned in. We don't want this for the healing turret though
-        if (PhotonNetwork.IsConnected && photonView.IsMine)
+        if (!PhotonNetwork.IsConnected || photonView.IsMine)
             m_lastFireTime = Time.time + m_fireRate; 
     }
 
@@ -60,6 +61,8 @@ public class HealthTurret : TowerScript
     [PunRPC]
     private void onHealTowers()
     {
+        SoundEffectsManager.playSoundEffect(m_healPulseSound, Board);
+
         if (!m_healPulseSource)
             return;
 

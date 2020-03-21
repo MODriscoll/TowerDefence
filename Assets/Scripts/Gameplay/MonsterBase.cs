@@ -11,6 +11,8 @@ public class MonsterBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallba
     [Min(1)] public int m_damage = 5;                       // The amount of damage this monster deals when reaching the Goal Tile
     public int m_health = 10;                               // How much health this monster has
 
+    [SerializeField] private AudioClip m_spawnSound;        // This sound is played when we are spawned in
+
     protected BoardManager m_board;                 // The board we are active on
 
     private float m_progress = 0f;          // Progress along current path. Is used by board manager to find where we are
@@ -61,6 +63,9 @@ public class MonsterBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallba
         m_pathIndex = pathToFollow;
 
         updatePositionAlongPath(0f);
+
+        // Spawn cosmetics here as this gets called after Start()
+        SoundEffectsManager.playSoundEffect(m_spawnSound, m_board);
     }
 
     public virtual void tick(float deltaTime)
@@ -156,6 +161,9 @@ public class MonsterBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallba
 
         m_pathIndex = (int)info.photonView.InstantiationData[1];
         updatePositionAlongPath(0f);
+
+        // Play sound here as this gets called after Start()
+        SoundEffectsManager.playSoundEffect(m_spawnSound, m_board);
     }
 
     void IPunObservable.OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)

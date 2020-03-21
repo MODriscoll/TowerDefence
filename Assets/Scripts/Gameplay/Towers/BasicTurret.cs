@@ -34,6 +34,6 @@ public class BasicTurret : TowerScript
     [PunRPC]
     private void onFired(Vector2 targetPos)
     {
-        SoundEffectsManager.playSoundEffect(m_shootSound);
+        SoundEffectsManager.playSoundEffect(m_shootSound, Board);
     }
 }

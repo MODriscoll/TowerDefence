@@ -51,6 +51,8 @@ MonoBehaviour:
   m_radius: 0.25
   m_tickRate: 0.3
   m_maxHits: 3
+  m_hitSound: {fileID: 0}
+  m_expiredSound: {fileID: 0}
 --- !u!114 &5994368317154419060
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -66,7 +68,7 @@ MonoBehaviour:
   ObservedComponentsFoldoutOpen: 1
   Group: 0
   prefixField: -1
-  Synchronization: 2
+  Synchronization: 0
   OwnershipTransfer: 0
   ObservedComponents:
   - {fileID: 0}

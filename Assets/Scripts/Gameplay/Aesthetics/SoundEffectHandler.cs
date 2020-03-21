@@ -10,6 +10,20 @@ public class SoundEffectHandler : MonoBehaviour
 
     public AudioClip clip { get { return m_audioSource ? m_audioSource.clip : null; } }     // The sound effect we are playing
 
+    // Tf this effect should be muted
+    public bool Mute
+    {
+        get
+        {
+            return m_audioSource ? m_audioSource.mute : false;
+        }
+        set
+        {
+            if (m_audioSource)
+                m_audioSource.mute = value;
+        }
+    }
+
     public delegate void OnSoundEffectFinished(SoundEffectHandler handler);     // Delegate for when an effect has finished
     public OnSoundEffectFinished onEffectFinished;                              // Event called when audio has finished playing
 
@@ -23,7 +37,8 @@ public class SoundEffectHandler : MonoBehaviour
     /// Plays the sound clip from beginning
     /// </summary>
     /// <param name="clip">Audio to play</param>
-    public void playClip(AudioClip clip)
+    /// <param name="startMuted">If clip should play but initially be muted</param>
+    public void playClip(AudioClip clip, bool startMuted = false)
     {
         CancelInvoke("onAudioFinished");
 
@@ -34,6 +49,7 @@ public class SoundEffectHandler : MonoBehaviour
         }
 
         m_audioSource.clip = clip;
+        m_audioSource.mute = startMuted;
         m_audioSource.Play();
 
         enabled = true;

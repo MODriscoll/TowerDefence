@@ -170,6 +170,21 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
         return null;
     }
 
+    /// <summary>
+    /// Get the player Id based on a board manager
+    /// </summary>
+    /// <param name="board">Board whose player Id to get</param>
+    /// <returns>Valid Id or -1</returns>
+    public int getPlayerIdFromBoard(BoardManager board)
+    {
+        if (board == m_p1Board)
+            return 0;
+        else if (board == m_p2Board)
+            return 1;
+
+        return -1;
+    }
+
     public override void OnPlayerLeftRoom(Player other)
     {
         if (PhotonNetwork.IsMasterClient)

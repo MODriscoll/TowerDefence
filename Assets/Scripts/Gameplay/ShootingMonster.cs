@@ -10,6 +10,8 @@ public class ShootingMonster : MonoBehaviourPun
     [SerializeField] private float m_targetRadius = 2.5f;               // Radius which monster can see towers
     [SerializeField, Min(0.01f)] private float m_fireRate = 1f;         // Rate at which the monster fires
     [SerializeField, Min(1)] private int m_damage = 3;                  // How much damage this monster applies to towers per shot 
+
+    [SerializeField] private AudioClip m_shootSound;                    // Sound to play when this monster shoots
     
     private float m_lastFireTime = -float.MaxValue;     // The last time monster fired
 
@@ -55,6 +57,8 @@ public class ShootingMonster : MonoBehaviourPun
     [PunRPC]
     private void onFired(Vector3 position)
     {
+        SoundEffectsManager.playSoundEffect(m_shootSound, m_monster.Board);
+
         if (m_testEffect)
             Instantiate(m_testEffect, position, Quaternion.identity);
     }

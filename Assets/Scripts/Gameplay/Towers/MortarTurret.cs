@@ -29,8 +29,9 @@ public class MortarTurret : TowerScript
         Vector3 eulerAngles = m_shootFrom.eulerAngles;
 
         // Since game is 2D, we only need one axis of rotation
-        object[] spawnData = new object[1];
-        spawnData[0] = eulerAngles.z;
+        object[] spawnData = new object[2];
+        spawnData[0] = GameManager.manager.getPlayerIdFromBoard(Board);
+        spawnData[1] = eulerAngles.z;
 
         GameObject projectileObject = PhotonNetwork.Instantiate(m_projectilePrefab, m_shootFrom.position, Quaternion.identity, 0, spawnData);
         if (!projectileObject)

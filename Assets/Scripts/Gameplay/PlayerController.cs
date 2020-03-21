@@ -423,6 +423,8 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
                 if (m_playerUI)
                     m_playerUI.notifyScreenViewSwitch(m_viewBoard == m_id);
             }
+
+            SoundEffectsManager.setActiveGroup(m_viewBoard);
         }
     }
 
