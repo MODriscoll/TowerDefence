@@ -37,10 +37,10 @@ MonoBehaviour:
   - onHealTowers
   - onMatchFinishedRPC
   - onMatchStartRPC
+  - onMonstersHit
   - onWaveFinishedRPC
   - RespawnSpaceship
   - spawnMonsterRPC
   - startNextWaveRPC
-  - onMonstersHit
   DisableAutoOpenWizard: 1
   ShowSettings: 0

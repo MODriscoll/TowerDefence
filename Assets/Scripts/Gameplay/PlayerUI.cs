@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
+using TMPro;
 // Handles the player UI, is spawned at runtime, only for the local player
 public class PlayerUI : MonoBehaviour
 {
@@ -14,12 +14,13 @@ public class PlayerUI : MonoBehaviour
     public Text m_debugText;
 
     // UI text elements
-    public Text m_moneyText;
-    public Text m_playerHealthText;
-    public Text m_enemyHealthText;
+    public TextMeshProUGUI m_moneyText;
+    public TextMeshProUGUI m_playerHealthText;
+    public TextMeshProUGUI m_enemyHealthText;
     public Button m_swapView;
 
     public GameObject m_turretShop;
+    public GameObject m_bulldoseButton;
     public GameObject m_miceShop;
 
     void Start()
@@ -118,6 +119,7 @@ public class PlayerUI : MonoBehaviour
     {
         m_owner.switchView();
         m_turretShop.SetActive(!m_turretShop.activeSelf);
+        m_bulldoseButton.SetActive(m_turretShop.activeSelf);
         m_miceShop.SetActive(!m_miceShop.activeSelf);
     }
 
