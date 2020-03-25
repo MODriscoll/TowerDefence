@@ -9,7 +9,8 @@ public class BasicTurret : TowerScript
     [SerializeField] private int m_damage = 3;      // How much damage we do
 
     [Header("Aesthetics")]
-    [SerializeField] private AudioClip m_shootSound;    // Shooting sound effect
+    [SerializeField] private BasicTurretEffect m_effectPrefab;          // Effect to instantiate when shooting
+    [SerializeField] private AudioClip m_shootSound;                    // Shooting sound effect
 
     // TowerScript Interface
     protected override void performAction(MonsterBase target)
@@ -23,17 +24,20 @@ public class BasicTurret : TowerScript
         Vector2 targetPosition = target.transform.position;
 
         // Shoot the laser
-        target.takeDamage(m_damage);
+        bool bKilled = target.takeDamage(m_damage);
 
         if (PhotonNetwork.IsConnected)
-            photonView.RPC("onFired", RpcTarget.All, targetPosition);
+            photonView.RPC("onFired", RpcTarget.All, targetPosition, bKilled);
         else
-            onFired(targetPosition);
+            onFired(targetPosition, bKilled);
     }
 
     [PunRPC]
-    private void onFired(Vector2 targetPos)
+    private void onFired(Vector2 targetPos, bool killed)
     {
+        if (m_effectPrefab)
+            Instantiate(m_effectPrefab, new Vector3(targetPos.x, targetPos.y, 0f), Quaternion.identity);
+
         SoundEffectsManager.playSoundEffect(m_shootSound, Board);
     }
 }

@@ -11,12 +11,10 @@ public class ShootingMonster : MonoBehaviourPun
     [SerializeField, Min(0.01f)] private float m_fireRate = 1f;         // Rate at which the monster fires
     [SerializeField, Min(1)] private int m_damage = 3;                  // How much damage this monster applies to towers per shot 
 
+    [SerializeField] private ShootingMonsterEffect m_effectPrefab;      // Effect prefab to spawn when shooting
     [SerializeField] private AudioClip m_shootSound;                    // Sound to play when this monster shoots
     
     private float m_lastFireTime = -float.MaxValue;     // The last time monster fired
-
-    // Testing
-    public TestMonsterFireEffect m_testEffect;
 
     void Awake()
     {
@@ -59,7 +57,7 @@ public class ShootingMonster : MonoBehaviourPun
     {
         SoundEffectsManager.playSoundEffect(m_shootSound, m_monster.Board);
 
-        if (m_testEffect)
-            Instantiate(m_testEffect, position, Quaternion.identity);
+        if (m_effectPrefab)
+            Instantiate(m_effectPrefab, position, Quaternion.identity);
     }
 }

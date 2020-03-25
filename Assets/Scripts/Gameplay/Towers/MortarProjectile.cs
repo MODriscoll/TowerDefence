@@ -12,6 +12,9 @@ public class MortarProjectile : MonoBehaviourPun, IPunInstantiateMagicCallback
     [SerializeField] private float m_tickRate = 0.5f;           // Tick rate for checking collisions (to prevent checks every frame)
     [SerializeField, Min(0)] private int m_maxHits = 3;         // Max amount of monsters this projectile can hurt before destroying itself
 
+    [SerializeField] private MortarProjectileEffect m_effectPrefab;         // Prefab to play when we expire
+    [SerializeField] private MortarTurretEffect m_turretEffectPrefab;       // Placing this here as we can avoid an RPC call
+
     [SerializeField] private AudioClip m_hitSound;              // Sound to play when we hit something
     [SerializeField] private AudioClip m_expiredSound;          // Sound to play when we expire
 
@@ -22,6 +25,12 @@ public class MortarProjectile : MonoBehaviourPun, IPunInstantiateMagicCallback
     private Vector3 m_cachedMoveDir = Vector3.zero;     // Cached direction to move in
     private float m_force = 0f;                         // Force of projectile
 
+    void Start()
+    {
+        if (m_turretEffectPrefab)
+            Instantiate(m_turretEffectPrefab, transform.position, Quaternion.identity);
+    }
+
     void Update()
     {
         m_force += m_speed * Time.deltaTime;
@@ -29,11 +38,6 @@ public class MortarProjectile : MonoBehaviourPun, IPunInstantiateMagicCallback
 
         // Move ourselves forward, we simulate movement locally
         transform.position += m_cachedMoveDir * m_force * Time.deltaTime;    
-    }
-
-    void OnDestroy()
-    {
-        SoundEffectsManager.playSoundEffect(m_expiredSound, m_board);
     }
 
     public void initProjectile(Vector3 eulerAngles, BoardManager board, TowerScript script)
@@ -44,7 +48,7 @@ public class MortarProjectile : MonoBehaviourPun, IPunInstantiateMagicCallback
         m_script = script;
         StartCoroutine(checkCollisionRoutine());
 
-        Invoke("destroySelf", m_lifespan);
+        Invoke("onExpired", m_lifespan);
     }
 
     private bool collide()
@@ -62,13 +66,22 @@ public class MortarProjectile : MonoBehaviourPun, IPunInstantiateMagicCallback
                     m_hitMonsters.Add(monster);
             }
 
-            if (PhotonNetwork.IsConnected)
-                photonView.RPC("onMonstersHit", RpcTarget.All, (Vector2)transform.position);
-
             if (m_hitMonsters.Count >= m_maxHits)
             {
-                destroySelf();
+                // This RPC will call destroy for us (see onExpired)
+                if (PhotonNetwork.IsConnected)
+                    photonView.RPC("onExpired", RpcTarget.All);
+                else
+                    onExpired();
+
                 return true;
+            }
+            else
+            {
+                if (PhotonNetwork.IsConnected)
+                    photonView.RPC("onMonstersHit", RpcTarget.All, (Vector2)transform.position);
+                else
+                    onMonstersHit(transform.position);
             }
         }
 
@@ -112,6 +125,21 @@ public class MortarProjectile : MonoBehaviourPun, IPunInstantiateMagicCallback
     private void onMonstersHit(Vector2 position)
     {
         SoundEffectsManager.playSoundEffect(m_hitSound, m_board);
+    }
+
+    [PunRPC]
+    private void onExpired()
+    {
+        if (m_effectPrefab)
+            Instantiate(m_effectPrefab, transform.position, Quaternion.identity);
+
+        SoundEffectsManager.playSoundEffect(m_expiredSound, m_board);
+
+        // Hide ourselves (we only want expire effect to play)
+        gameObject.SetActive(false);
+
+        // This handles case where we might not be owner
+        destroySelf();
     }
 
     void IPunInstantiateMagicCallback.OnPhotonInstantiate(PhotonMessageInfo info)

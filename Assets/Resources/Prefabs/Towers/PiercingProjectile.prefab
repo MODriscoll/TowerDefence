@@ -51,6 +51,10 @@ MonoBehaviour:
   m_radius: 0.25
   m_tickRate: 0.3
   m_maxHits: 3
+  m_effectPrefab: {fileID: -1056245323383593808, guid: e1556aa32492464488551bb29a5290f1,
+    type: 3}
+  m_turretEffectPrefab: {fileID: 7549472409064853672, guid: db998cf81d3e6dc45b357debc08e418a,
+    type: 3}
   m_hitSound: {fileID: 0}
   m_expiredSound: {fileID: 0}
 --- !u!114 &5994368317154419060

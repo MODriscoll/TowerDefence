@@ -10,6 +10,9 @@ public class TankMonster : MonoBehaviourPun, IPunObservable
     [SerializeField] private float m_cooldown = 3f;             // How long cooldown lasts after using shield
     [SerializeField] private GameObject m_shieldObject;         // Shield prefab to show/hide activation
 
+    [SerializeField] private AudioClip m_activeSound;           // Sound to play when activating shield
+    [SerializeField] private AudioClip m_deactiveSound;         // Sound to play when deactivating shield
+
     private bool m_shieldActive = false;            // If shield is currently active
     private bool m_cooldownActive = false;          // If shield cooldown is active
     void Awake()
@@ -42,6 +45,26 @@ public class TankMonster : MonoBehaviourPun, IPunObservable
 
             if (m_shieldActive)
                 Invoke("onShieldExpired", m_shieldDuration);
+
+            // Play sounds
+            {
+                // TODO: Make a base class for monster scripts (Like TowerScripts). This would handle getting monster on awake
+                // for now
+                MonsterBase monster = GetComponent<MonsterBase>();
+                if (monster)
+                {
+                    if (m_shieldActive)
+                    {
+                        if (m_activeSound)
+                            SoundEffectsManager.playSoundEffect(m_activeSound, monster.Board);
+                    }
+                    else
+                    {
+                        if (m_deactiveSound)
+                            SoundEffectsManager.playSoundEffect(m_deactiveSound, monster.Board);
+                    }
+                }
+            }
         }
     }
 

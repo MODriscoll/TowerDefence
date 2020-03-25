@@ -66,8 +66,6 @@ public class SoundEffectsManager : MonoBehaviour
             handlerList.Remove(handler);
             if (handlerList.Count == 0)
                 m_activeSoundEffects.Remove(handler.clip);
-
-            Debug.Log("Sound Effect Destroyed, Number remaining: " + handlerList.Count);
         }
 
         private SoundEffectHandler spawnHandler()
