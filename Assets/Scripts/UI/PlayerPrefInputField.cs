@@ -16,7 +16,10 @@ public class PlayerPrefInputField : MonoBehaviour
     {
         m_inputField = GetComponent<InputField>();
         if (m_inputField)
+        {
             m_inputField.text = getKeyValue(false);
+            onKeyValueSet(m_inputField.text);
+        }
     }
 
     /// <summary>

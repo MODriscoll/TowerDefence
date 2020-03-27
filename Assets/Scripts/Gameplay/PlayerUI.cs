@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Photon.Pun;
 using TMPro;
+
 // Handles the player UI, is spawned at runtime, only for the local player
 public class PlayerUI : MonoBehaviour
 {
@@ -38,11 +40,40 @@ public class PlayerUI : MonoBehaviour
         if (m_moneyText)
             m_moneyText.text = string.Format("${0}", m_owner.Gold);
 
-        if (m_playerHealthText)
-            m_playerHealthText.text = string.Format("P1 Health: {0}", m_owner.Health);
+        if (PhotonNetwork.IsConnected)
+        {
+            if (m_playerHealthText)
+                m_playerHealthText.text = string.Format("{0} Health: {1}", PhotonNetwork.NickName, m_owner.Health);
 
-        if (m_enemyHealthText)
-            m_enemyHealthText.text = string.Format("P2 Health: {0}", PlayerController.remotePlayer ? PlayerController.remotePlayer.Health : -1);
+            if (m_enemyHealthText)
+            {
+                if (PlayerController.remotePlayer != null)
+                {
+                    m_enemyHealthText.gameObject.SetActive(true);
+
+                    PhotonView remoteView = PlayerController.remotePlayer.photonView;
+                    if (remoteView.Owner != null)
+                        m_enemyHealthText.text = string.Format("{0} Health: {1}", remoteView.Owner.NickName, m_owner.Health);
+                    else
+                        m_enemyHealthText.text = string.Format("Enemy Health: {1}", m_owner.Health);
+                }
+                else
+                {
+                    // Cheating, We know the text is a child of a game object
+                    m_enemyHealthText.transform.parent.gameObject.SetActive(false);
+                }
+            }
+        }
+        else
+        {
+            if (m_playerHealthText)
+                m_playerHealthText.text = string.Format("P1 Health: {0}", m_owner.Health);
+
+            // Most likely playing in editor (only one player is supported)
+            if (m_enemyHealthText)
+                // Cheating, We know the text is a child of a game object
+                m_enemyHealthText.transform.parent.gameObject.SetActive(false);
+        }
     }
 
     /// <summary>
