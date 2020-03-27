@@ -231,7 +231,7 @@ MonoBehaviour:
   m_damage: 15
   m_effectPrefab: {fileID: 1316818491492748565, guid: a4c3aeec307e34e4287fbf76b9258076,
     type: 3}
-  m_shootSound: {fileID: 8300000, guid: 8331a8819ccbfcd4a85d3ab7484cc5c7, type: 3}
+  m_shootSound: {fileID: 8300000, guid: ce0882953dbf8884fa36979acb65642b, type: 3}
 --- !u!114 &7581699381181694968
 MonoBehaviour:
   m_ObjectHideFlags: 0
