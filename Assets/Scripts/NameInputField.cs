@@ -1,37 +1,18 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using Photon.Pun;
 
-[RequireComponent(typeof(InputField))]
-public class NameInputField : MonoBehaviour
+public class NameInputField : PlayerPrefInputField
 {
-    private InputField m_inputField;    // Field for inputting name
-
-    void Start()
+    public NameInputField()
     {
-        string name = string.Empty;
-
-        m_inputField = GetComponent<InputField>();
-        if (m_inputField)
-        {
-            if (PlayerPrefs.HasKey("PlayerName"))
-            {
-                name = PlayerPrefs.GetString("PlayerName");
-                m_inputField.text = name;
-            }
-        }
-
-        PhotonNetwork.NickName = name;
+        m_prefKey = "PlayerName";
     }
 
-    public void setPlayerName(string newName)
+    // PlayerPrefInputField Interface
+    protected override void onKeyValueSet(string value)
     {
-        if (string.IsNullOrEmpty(newName))
-            return;
-
-        PlayerPrefs.SetString("PlayerName", newName);
-        PhotonNetwork.NickName = newName;
+        //PhotonNetwork.NickName = value;
     }
 }

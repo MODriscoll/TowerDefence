@@ -18,6 +18,10 @@ public class Launcher : MonoBehaviourPunCallbacks
         PhotonHelpers.register();
 
         PhotonNetwork.AutomaticallySyncScene = true;
+
+        // Connect to photon
+        PhotonNetwork.ConnectUsingSettings();
+        PhotonNetwork.GameVersion = gameVersion;
     }
 
     public override void OnConnectedToMaster()
@@ -25,34 +29,30 @@ public class Launcher : MonoBehaviourPunCallbacks
         Debug.Log("OnConnectedToMaster() was called by PUN");
 
         if (m_bIsConnecting)
-        {
             // Try joining a random room, if this fails, OnJoinRandomRoom is called
             PhotonNetwork.JoinRandomRoom();
-        }
     }
 
     public override void OnDisconnected(DisconnectCause cause)
     {
-        Debug.LogWarningFormat("OnDisconnected() was called by PUN with reason {0}", cause);
         m_bIsConnecting = false;
     }
 
     public override void OnJoinedRoom()
     {
-        Debug.Log("OnJoinedRoom() called by PUN. Now this client is in a room.");
-
+        // If we are the first one in the room, go and wait in the game level
         if (PhotonNetwork.CurrentRoom.PlayerCount == 1)
-        {
             PhotonNetwork.LoadLevel(m_gameLevel);
-        }
     }
 
     public override void OnJoinRandomFailed(short returnCode, string message)
     {
-        Debug.Log("OnJoinRandomFailed() was called by PUN. No random room available, so we create one.\nCalling: PhotonNetwork.CreateRoom");
-
         // Failed to connect to a random room, create our own one instead
-        PhotonNetwork.CreateRoom(null, new RoomOptions { MaxPlayers = maxPlayers });
+        string roomName = null;
+        if (PlayerPrefs.HasKey("PlayerName"))
+            roomName = PlayerPrefs.GetString("PlayerName");
+
+        PhotonNetwork.CreateRoom(roomName, new RoomOptions { MaxPlayers = maxPlayers });
     }
 
     /// <summary>
@@ -67,12 +67,20 @@ public class Launcher : MonoBehaviourPunCallbacks
 
         if (PhotonNetwork.IsConnected)
         {
-            PhotonNetwork.JoinRandomRoom();
+            // If room name has been set, use that instead
+            if (PlayerPrefs.HasKey("PlayerRoom"))
+                PhotonNetwork.JoinOrCreateRoom(PlayerPrefs.GetString("PlayerRoom"), getDefaultRoomOptions(), TypedLobby.Default);
+            else
+                PhotonNetwork.JoinRandomRoom();
         }
         else
         {
-            PhotonNetwork.ConnectUsingSettings();
-            PhotonNetwork.GameVersion = gameVersion;
+            m_bIsConnecting = false;
         }
+    }
+
+    private RoomOptions getDefaultRoomOptions()
+    {
+        return new RoomOptions { MaxPlayers = maxPlayers };
     }
 }
