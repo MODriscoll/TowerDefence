@@ -1300,7 +1300,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81af5adcc596ccc48bc528bea6c1e37d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ClickSound: {fileID: 8300000, guid: 33210875bb187d44c969529ecb00eca8, type: 3}
+  ClickSound: {fileID: 8300000, guid: 32abb16e30296d24d9f9b508a3e157d7, type: 3}
 --- !u!1 &7699484532358828019
 GameObject:
   m_ObjectHideFlags: 0
@@ -2197,6 +2197,12 @@ PrefabInstance:
       propertyPath: m_textInfo.pageCount
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2348598820152343987, guid: 1072501bf460f0f4eb251a8dde8a3637,
+        type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee,
+        type: 2}
     - target: {fileID: 3152915704351550432, guid: 1072501bf460f0f4eb251a8dde8a3637,
         type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -2374,6 +2380,12 @@ PrefabInstance:
       propertyPath: m_textInfo.spaceCount
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 2348598820152343987, guid: 1072501bf460f0f4eb251a8dde8a3637,
+        type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee,
+        type: 2}
     - target: {fileID: 2702050593129566106, guid: 1072501bf460f0f4eb251a8dde8a3637,
         type: 3}
       propertyPath: m_Color.r
@@ -2571,6 +2583,12 @@ PrefabInstance:
       propertyPath: m_textInfo.spaceCount
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 2348598820152343987, guid: 1072501bf460f0f4eb251a8dde8a3637,
+        type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee,
+        type: 2}
     - target: {fileID: 2702050593129566106, guid: 1072501bf460f0f4eb251a8dde8a3637,
         type: 3}
       propertyPath: m_Color.r
@@ -2753,6 +2771,11 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5316708697739172914, guid: 6c369679fdec5c246a8be8bf88cdd9c7,
+        type: 3}
+      propertyPath: ClickSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 32abb16e30296d24d9f9b508a3e157d7, type: 3}
     - target: {fileID: 5316708697739172925, guid: 6c369679fdec5c246a8be8bf88cdd9c7,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -3001,6 +3024,12 @@ PrefabInstance:
       propertyPath: m_textAlignment
       value: 1026
       objectReference: {fileID: 0}
+    - target: {fileID: 5533963812841910517, guid: 0adbf3ca4f6da964087fc3b3a0895f47,
+        type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee,
+        type: 2}
     - target: {fileID: 5533963812841910518, guid: 0adbf3ca4f6da964087fc3b3a0895f47,
         type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -3536,6 +3565,12 @@ PrefabInstance:
       propertyPath: m_textAlignment
       value: 1026
       objectReference: {fileID: 0}
+    - target: {fileID: 5533963812841910517, guid: 0adbf3ca4f6da964087fc3b3a0895f47,
+        type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee,
+        type: 2}
     - target: {fileID: 5533963812841910518, guid: 0adbf3ca4f6da964087fc3b3a0895f47,
         type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -3786,6 +3821,12 @@ PrefabInstance:
       propertyPath: m_enableWordWrapping
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5533963812841910517, guid: 0adbf3ca4f6da964087fc3b3a0895f47,
+        type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee,
+        type: 2}
     - target: {fileID: 5533963812841910518, guid: 0adbf3ca4f6da964087fc3b3a0895f47,
         type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -4048,6 +4089,12 @@ PrefabInstance:
       propertyPath: m_textAlignment
       value: 1026
       objectReference: {fileID: 0}
+    - target: {fileID: 5533963812841910517, guid: 0adbf3ca4f6da964087fc3b3a0895f47,
+        type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee,
+        type: 2}
     - target: {fileID: 5533963812841910518, guid: 0adbf3ca4f6da964087fc3b3a0895f47,
         type: 3}
       propertyPath: m_AnchoredPosition.y

@@ -131,6 +131,7 @@ MonoBehaviour:
   m_reward: 7
   m_damage: 5
   m_health: 50
+  m_spawnSound: {fileID: 0}
   m_renderer: {fileID: 6925401245502795444}
   m_cost: 30
   m_delay: 1
@@ -150,8 +151,8 @@ MonoBehaviour:
   m_targetRadius: 2
   m_fireRate: 1
   m_damage: 20
-  m_testEffect: {fileID: 896652429948846515, guid: b34133a2f90c7b0489d0634578f0bbce,
-    type: 3}
+  m_effectPrefab: {fileID: 0}
+  m_shootSound: {fileID: 8300000, guid: 86db162512a7d60419faef33f1e2fa2a, type: 3}
 --- !u!114 &-5622797506343020279
 MonoBehaviour:
   m_ObjectHideFlags: 0

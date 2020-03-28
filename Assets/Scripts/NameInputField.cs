@@ -5,14 +5,9 @@ using Photon.Pun;
 
 public class NameInputField : PlayerPrefInputField
 {
-    public NameInputField()
-    {
-        m_prefKey = "PlayerName";
-    }
-
     // PlayerPrefInputField Interface
     protected override void onKeyValueSet(string value)
     {
-        //PhotonNetwork.NickName = value;
+        PhotonNetwork.NickName = value;
     }
 }

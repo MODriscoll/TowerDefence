@@ -49,18 +49,15 @@ public class PlayerUI : MonoBehaviour
             {
                 if (PlayerController.remotePlayer != null)
                 {
-                    m_enemyHealthText.gameObject.SetActive(true);
-
                     PhotonView remoteView = PlayerController.remotePlayer.photonView;
                     if (remoteView.Owner != null)
                         m_enemyHealthText.text = string.Format("{0} Health: {1}", remoteView.Owner.NickName, m_owner.Health);
                     else
-                        m_enemyHealthText.text = string.Format("Enemy Health: {1}", m_owner.Health);
+                        m_enemyHealthText.text = string.Format("Enemy Health: {0}", m_owner.Health);
                 }
                 else
                 {
-                    // Cheating, We know the text is a child of a game object
-                    m_enemyHealthText.transform.parent.gameObject.SetActive(false);
+                    m_enemyHealthText.text = string.Format("Enemy Health: -1");
                 }
             }
         }
