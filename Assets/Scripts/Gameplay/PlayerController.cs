@@ -298,6 +298,10 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             int winnerId = PhotonNetwork.IsConnected ? remotePlayer.m_id : -1;
             GameManager.manager.finishMatch(TDWinCondition.OutOfHealth, winnerId);
         }
+        else
+        {
+            GameManagerCosmetics.playGoalHurtSound(m_id);
+        }
     }
 
     /// <summary>
