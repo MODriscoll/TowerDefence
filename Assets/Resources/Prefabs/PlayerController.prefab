@@ -138,6 +138,8 @@ MonoBehaviour:
   m_maxGold: 1000
   m_playerUIPrefab: {fileID: 5526208262564350979, guid: 726dd88ef37d4aa4aa4724e914e02e55,
     type: 3}
+  m_canBuildInBulldozeMode: 0
+  m_infGold: 1
 --- !u!114 &299274198644012295
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -14,6 +14,10 @@ public class TowerBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallback
     private BoardManager m_board;       // Cached board for fast access
     private float m_spawnTime = -1f;    // Time when we were spawned
 
+    [SerializeField] private AudioClip m_spawnSound;        // Sound to play when spawned
+    [SerializeField] private AudioClip m_destroyedSound;    // Sound to play when destroyed
+    [SerializeField] private AudioClip m_bulldozedSound;    // Sound to play when bulldozed
+
     public float LifeSpan { get { return Mathf.Max(0f, Time.time - m_spawnTime); } }
 
     public BoardManager Board { get { return m_board; } }
@@ -88,7 +92,7 @@ public class TowerBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallback
         return tower;
     }
 
-    public static void destroyTower(TowerBase tower)
+    public static void destroyTower(TowerBase tower, bool bulldozed = false)
     {
         PhotonView photonView = tower.photonView;
         if (PhotonNetwork.IsConnected && !photonView.IsMine)
@@ -97,7 +101,22 @@ public class TowerBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallback
         if (tower.m_board)
             tower.m_board.removeTower(tower);
 
-        PhotonNetwork.Destroy(tower.gameObject);
+        if (PhotonNetwork.IsConnected)
+            tower.photonView.RPC("destroyTowerRPC", RpcTarget.All, bulldozed);
+        else
+            tower.destroyTowerRPC(bulldozed);
+    }
+
+    [PunRPC]
+    private void destroyTowerRPC(bool bulldozed)
+    {
+        if (bulldozed)
+            SoundEffectsManager.playSoundEffect(m_bulldozedSound, m_board);
+        else
+            SoundEffectsManager.playSoundEffect(m_destroyedSound, m_board);
+
+        if (!PhotonNetwork.IsConnected || photonView.IsMine)
+            PhotonNetwork.Destroy(gameObject);
     }
 
     void IPunInstantiateMagicCallback.OnPhotonInstantiate(PhotonMessageInfo info)
@@ -107,6 +126,9 @@ public class TowerBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallback
 
         Vector3Int tile = (Vector3Int)instantiationData[1];
         if (m_board)
+        {
             m_board.placeTower(this, tile);
+            SoundEffectsManager.playSoundEffect(m_spawnSound, m_board);
+        }
     }
 }
