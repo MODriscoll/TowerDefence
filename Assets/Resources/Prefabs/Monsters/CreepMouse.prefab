@@ -131,6 +131,7 @@ MonoBehaviour:
   m_damage: 5
   m_health: 20
   m_spawnSound: {fileID: 8300000, guid: 33210875bb187d44c969529ecb00eca8, type: 3}
+  m_deathScriptPrefab: Prefabs/Monsters/GeneralMonsterDeathScript
   m_renderer: {fileID: 6925401245502795444}
 --- !u!114 &6293389618481299608
 MonoBehaviour:

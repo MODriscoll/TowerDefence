@@ -13,6 +13,10 @@ public class MonsterBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallba
 
     [SerializeField] private AudioClip m_spawnSound;        // This sound is played when we are spawned in
 
+    // Script to spawn when we die (not when reaching goal)
+    [PhotonPrefab(typeof(MonsterDeathScript))]
+    [SerializeField] private string m_deathScriptPrefab;
+
     protected BoardManager m_board;                 // The board we are active on
 
     private float m_progress = 0f;          // Progress along current path. Is used by board manager to find where we are
@@ -85,7 +89,6 @@ public class MonsterBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallba
 
                 // We destroy ourselves after tick has concluded
                 MonsterManager.destroyMonster(this, false);
-                return;
             }
         }
         else
@@ -127,6 +130,13 @@ public class MonsterBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallba
         // We can give gold to the local player, since we already
         // checked that this monster belongs to them
         PlayerController.localPlayer.giveGold(m_reward);
+
+        if (!string.IsNullOrEmpty(m_deathScriptPrefab))
+        {
+            object[] spawnData = new object[1];
+            spawnData[0] = GameManager.manager.getPlayerIdFromBoard(m_board);
+            PhotonNetwork.Instantiate(m_deathScriptPrefab, transform.position, Quaternion.identity, 0, spawnData);
+        }
 
         MonsterManager.destroyMonster(this);
         return true;
