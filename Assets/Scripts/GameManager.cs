@@ -116,6 +116,10 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
 
     void Update()
     {
+        // Do not update if match is over (no point)
+        if (matchState == TDMatchState.PostMatch)
+            return;
+
         float deltaTime = Time.deltaTime;
 #if UNITY_EDITOR
         deltaTime *= m_gameSpeed;
