@@ -3757,7 +3757,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c9a7ea6f1fdef441a1056aa4b98dd4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_generalSoundsSource: {fileID: 0}
+  m_generalSoundsSource: {fileID: 844908504}
   m_friendlyGoalHurtSound: {fileID: 8300000, guid: 29c07e4f50fe98841a02208b1254b47f,
     type: 3}
   m_enemyGoalHurtSound: {fileID: 8300000, guid: 29c07e4f50fe98841a02208b1254b47f,
