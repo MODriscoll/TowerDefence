@@ -9,7 +9,107 @@ ModelImporter:
   - first:
       74: -7881739814215078984
     second: 0_T-Pose
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: 1EyeIrises
+    second: {fileID: 2100000, guid: f3726758d1596c44da2009205f8971b6, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: 1EyeLites
+    second: {fileID: 2100000, guid: e687203edeaa75446a93447fb8301063, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: 1EyePupils
+    second: {fileID: 2100000, guid: bf72411d71ded7a41b929ba90d6d9a85, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: 1EyeTargets
+    second: {fileID: 2100000, guid: 78ad39e1158c24f48b5fb6334ef6c722, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: 1EyeWhites
+    second: {fileID: 2100000, guid: 932ef8365cd8bd5468bc2b0c76af9321, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: 1FurHead
+    second: {fileID: 2100000, guid: b6ff729daef349a4facd402c13e6489b, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: 1InnerEar
+    second: {fileID: 2100000, guid: 4aac59c72b94d204b851e533a9d96eca, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: 1InnerEye
+    second: {fileID: 2100000, guid: af93f5b839e158a4fa1c8203f8708605, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: 1InnerMouth
+    second: {fileID: 2100000, guid: 05434a07df15e8e47bfeb0b41ad02b58, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: 1Lips
+    second: {fileID: 2100000, guid: 7b201a43fc7872644ba67dd241bb6031, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: 1Nose
+    second: {fileID: 2100000, guid: adec98dafa48b7a4aba2754809c95aae, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: 1Teeth
+    second: {fileID: 2100000, guid: d35aea5557a014e458e0e0b3dfcf68a1, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: 1Tongue
+    second: {fileID: 2100000, guid: 21c3667dcbabf2742a68511662a17ea2, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: 1Whiskers
+    second: {fileID: 2100000, guid: b3a96ccf74f81aa4ca122a0c47d839cd, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: 2FurBody
+    second: {fileID: 2100000, guid: 6d953d0324fdd744ba545908c058d2a0, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: 2HandsFeet
+    second: {fileID: 2100000, guid: 76182d0956bb1124f859972745ccd929, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: 2Tail
+    second: {fileID: 2100000, guid: d3dbeab81cc8d084f8f24db7a1a71f4d, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Back
+    second: {fileID: 2100000, guid: 20d9535d14ba0ea46ad788685f4be8f8, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Front
+    second: {fileID: 2100000, guid: db385ddb5b169bc42a6e17e5a30d2a25, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Inner
+    second: {fileID: 2100000, guid: 8eba1a6eef457d249a39e8255073e89b, type: 2}
   materials:
     materialImportMode: 1
     materialName: 0

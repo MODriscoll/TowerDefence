@@ -11,5 +11,19 @@ public class MonsterDeathScript : MonoBehaviourPun, IPunInstantiateMagicCallback
     {
         int boardId = (int)info.photonView.InstantiationData[0];
         SoundEffectsManager.playSoundEffect(m_sound, boardId);
+
+        float lifeSpan = 0.2f;
+        if (m_sound)
+            lifeSpan = m_sound.length;
+
+        Invoke("destroySelf", lifeSpan);
+    }
+
+    private void destroySelf()
+    {
+        if (PhotonNetwork.IsConnected && photonView.IsMine)
+            PhotonNetwork.Destroy(gameObject);
+        else if (!PhotonNetwork.IsConnected)
+            Destroy(gameObject);
     }
 }
