@@ -21,6 +21,7 @@ public enum TDWinCondition
     Tie                 // Scores are tied
 }
 
+[RequireComponent(typeof(GameManagerCosmetics))]
 public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
 {
     public static GameManager manager;      // Singleton access to the game manager
@@ -37,6 +38,10 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
 
     public delegate void OnMatchStateChanged(TDMatchState matchState);      // Delegate for when the state of a match has changed
     public OnMatchStateChanged onMatchStateChanged;                         // Event fired whenever the state of the match has changed
+
+    public delegate void OnWaveStateChange();                               // Delegate for when the state of a wave has changed
+    public OnWaveStateChange onWaveStart;                                   // Event fired whenever a wave starts
+    public OnWaveStateChange onWaveFinish;                                  // Event fired whenever a wave finishes
 
     private TDMatchState m_matchState = TDMatchState.PreMatch;      // Current state of the match
 
@@ -56,6 +61,8 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
     [Header("Testing")]
     [Min(0.01f)] public float m_gameSpeed = 1f;         // Game speed (used for testing in editor)
 #endif
+
+    private GameManagerCosmetics m_cosmetics;           // Cached cosmetics component
 
     void Awake()
     {
@@ -86,6 +93,10 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
             }
 
         }
+
+        m_cosmetics = GetComponentInChildren<GameManagerCosmetics>();
+        if (!m_cosmetics)
+            Debug.LogWarning("No cosmetics has been attached to game manager!");
 
         // Wait for all players to connect before starting,
         // this component will destroy itself once the match has started
@@ -288,6 +299,9 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
         if (m_waveSpawner)
             m_waveSpawner.initWave(waveId);
 
+        if (onWaveStart != null)
+            onWaveStart.Invoke();
+
         PlayerController.localPlayer.notifyWaveStarted(m_waveNum);
     }
 
@@ -339,6 +353,9 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
     [PunRPC]
     private void onWaveFinishedRPC()
     {
+        if (onWaveFinish != null)
+            onWaveFinish.Invoke();
+
         PlayerController.localPlayer.notifyWaveFinished(m_waveNum);
     }
 
@@ -415,5 +432,14 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
         }
 
         return true;
+    }
+
+    /// <summary>
+    /// Fast access to general game cosmetics
+    /// </summary>
+    /// <returns>Valid cosmetics script or null</returns>
+    public static GameManagerCosmetics getCosmetics()
+    {
+        return manager ? manager.m_cosmetics : null;
     }
 }

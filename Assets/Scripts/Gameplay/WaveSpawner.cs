@@ -23,7 +23,7 @@ public class WaveSpawner : MonoBehaviourPun
 
     // Monster to spawn
     [PhotonPrefab(typeof(MonsterBase))]
-    [SerializeField] private string m_monsterPrefab;         
+    [SerializeField] private string m_monsterPrefab;
 
     /// <summary>
     /// Initializes the wave. Needs to be called locally on all clients

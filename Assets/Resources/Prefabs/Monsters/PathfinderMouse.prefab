@@ -131,6 +131,7 @@ MonoBehaviour:
   m_damage: 5
   m_health: 80
   m_spawnSound: {fileID: 0}
+  m_deathScriptPrefab: Prefabs/Monsters/GeneralMonsterDeathScript
   m_renderer: {fileID: 6925401245502795444}
   m_cost: 50
   m_delay: 1

@@ -38,6 +38,17 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     public PlayerUI m_playerUIPrefab;       // UI to spawn for local player
     private PlayerUI m_playerUI = null;     // Instance of players UI   
 
+    [Header("Controls")]
+    public bool m_canBuildInBulldozeMode = false;       // If we can build towers while bulldoze mode is active
+#if UNITY_EDITOR
+    public bool m_useTouchControls = false;             // If touch controls should be used if possible while in editor
+#endif
+
+#if UNITY_EDITOR
+    [Header("Cheats (Editor Only)")]
+    public bool m_infGold = false;          // If we have infinite gold
+#endif
+
     void Awake()
     {
         if (!m_camera)
@@ -173,11 +184,10 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
                         giveGold(tower.m_cost / 2);
 
                         AnalyticsHelpers.reportTowerBulldozed(tower);
-
-                        TowerBase.destroyTower(tower);
+                        TowerBase.destroyTower(tower, true);
                     }
                 }
-                else
+                else if (m_canBuildInBulldozeMode || !m_canBulldoze)
                 {
                     // We call this as selectedPos is highly likely not to be
                     // the center of the tile, while this 100% will be
@@ -213,8 +223,15 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             }
 #endif
 
-        // Consider touch input
-        if (Input.touchSupported)
+        bool useTouchControls = Input.touchSupported;
+#if UNITY_EDITOR
+        // Possible for touch input to be tracked in editor.
+        // There may be cases where we don't want this
+        useTouchControls &= m_useTouchControls;
+#endif
+
+        // Prioritize touch controls
+        if (useTouchControls)
         {
             if (Input.touchCount > 0)
             {
@@ -226,7 +243,6 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
                 }
             }
         }
-#if UNITY_STANDALONE
         // Revert to normal PC bindings
         else
         {
@@ -236,7 +252,6 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
                 return true;
             }
         }
-#endif
 
         selectedPos = Vector3.zero;
         return false;
@@ -283,6 +298,10 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             int winnerId = PhotonNetwork.IsConnected ? remotePlayer.m_id : -1;
             GameManager.manager.finishMatch(TDWinCondition.OutOfHealth, winnerId);
         }
+        else
+        {
+            GameManagerCosmetics.playGoalHurtSound(m_id);
+        }
     }
 
     /// <summary>
@@ -309,12 +328,17 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     /// <param name="amount">Gold to consume. Needs to be a positive value</param>
     public void consumeGold(int amount)
     {
+#if UNITY_EDITOR
+        if (m_infGold)
+            return;
+#endif
+
         if (PhotonNetwork.IsConnected && !photonView.IsMine)
             return;
 
         if (amount <= 0)
         {
-            Debug.LogWarning(string.Format("Unable to consume negative gold! (Value = {0}", amount));
+            Debug.LogWarning(string.Format("Unable to consume negative gold! (Value = {0})", amount));
             return;
         }
 
@@ -328,6 +352,11 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     /// <returns>If player has required amount</returns>
     public bool canAfford(int amount)
     {
+#if UNITY_EDITOR
+        if (m_infGold)
+            return true;
+#endif
+
         return m_gold >= amount;
     }
 
