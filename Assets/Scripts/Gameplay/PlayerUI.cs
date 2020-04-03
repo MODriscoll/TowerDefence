@@ -51,7 +51,7 @@ public class PlayerUI : MonoBehaviour
                 {
                     PhotonView remoteView = PlayerController.remotePlayer.photonView;
                     if (remoteView.Owner != null)
-                        m_enemyHealthText.text = string.Format("{0} Health: {1}", remoteView.Owner.NickName, m_owner.Health);
+                        m_enemyHealthText.text = string.Format("{0} Health: {1}", remoteView.Owner.NickName, PlayerController.remotePlayer.Health);
                     else
                         m_enemyHealthText.text = string.Format("Enemy Health: {0}", m_owner.Health);
                 }

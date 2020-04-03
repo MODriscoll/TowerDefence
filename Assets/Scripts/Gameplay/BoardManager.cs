@@ -326,7 +326,11 @@ public class BoardManager : MonoBehaviourPun
 
         List<Vector3Int> path = m_paths.getPath(pathIndex);
         if (path == null || path.Count == 0)
+        {
+            Debug.LogError(string.Format("Path does not exist (or is empty). Board Name: {0}, Path Index: {1}",
+                gameObject.ToString(), pathIndex));
             return Vector3.zero;
+        }
 
         // Check if goal tile
         int curIndex = Mathf.FloorToInt(progress);
