@@ -212,8 +212,8 @@ MonoBehaviour:
   m_cost: 25
   m_health: 120
   m_maxHealth: 100
-  m_spawnSound: {fileID: 8300000, guid: b81a99987ffe5804ab95e2458490bcbd, type: 3}
-  m_destroyedSound: {fileID: 8300000, guid: 93f708f5366c0ce48a669c64b50e983f, type: 3}
+  m_spawnSound: {fileID: 8300000, guid: ccd199ac6f72dbd46b3e100b96133dd8, type: 3}
+  m_destroyedSound: {fileID: 8300000, guid: eefcaee6c811d6641b3f95f3a344aa9b, type: 3}
   m_bulldozedSound: {fileID: 8300000, guid: eefcaee6c811d6641b3f95f3a344aa9b, type: 3}
 --- !u!114 &-134496267488553184
 MonoBehaviour:
@@ -234,7 +234,7 @@ MonoBehaviour:
   m_damage: 5
   m_effectPrefab: {fileID: 1316818491492748565, guid: a4c3aeec307e34e4287fbf76b9258076,
     type: 3}
-  m_shootSound: {fileID: 8300000, guid: ce0882953dbf8884fa36979acb65642b, type: 3}
+  m_shootSound: {fileID: 8300000, guid: 928b7f06753c08b478af762ed1a88b78, type: 3}
 --- !u!114 &7581699381181694968
 MonoBehaviour:
   m_ObjectHideFlags: 0

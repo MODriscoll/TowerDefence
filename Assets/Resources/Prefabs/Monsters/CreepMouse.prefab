@@ -130,7 +130,8 @@ MonoBehaviour:
   m_reward: 2
   m_damage: 5
   m_health: 20
-  m_spawnSound: {fileID: 8300000, guid: 9b462527d37fd34499de357841602151, type: 3}
+  m_spawnSound: {fileID: 8300000, guid: 11a5b7af5e65c9247ba1c0097967372e, type: 3}
+  m_deathScriptPrefab: 
   m_renderer: {fileID: 6925401245502795444}
 --- !u!114 &6293389618481299608
 MonoBehaviour:

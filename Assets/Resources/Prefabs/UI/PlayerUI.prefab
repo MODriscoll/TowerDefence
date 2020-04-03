@@ -1300,7 +1300,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81af5adcc596ccc48bc528bea6c1e37d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ClickSound: {fileID: 8300000, guid: 32abb16e30296d24d9f9b508a3e157d7, type: 3}
+  ClickSound: {fileID: 8300000, guid: 4b362d728ca03cb418311f1102f030a3, type: 3}
 --- !u!1 &7699484532358828019
 GameObject:
   m_ObjectHideFlags: 0
@@ -1408,7 +1408,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: 3.1998901}
+  m_AnchoredPosition: {x: 0, y: 3.199829}
   m_SizeDelta: {x: 436.1, y: 138.4}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &500869350143775689
@@ -2954,6 +2954,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8294904708736720064}
     m_Modifications:
+    - target: {fileID: 116025461038474557, guid: 0adbf3ca4f6da964087fc3b3a0895f47,
+        type: 3}
+      propertyPath: ClickSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 4b362d728ca03cb418311f1102f030a3, type: 3}
     - target: {fileID: 5533963812841910517, guid: 0adbf3ca4f6da964087fc3b3a0895f47,
         type: 3}
       propertyPath: m_textInfo.characterCount
@@ -3505,6 +3510,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8294904708736720064}
     m_Modifications:
+    - target: {fileID: 116025461038474557, guid: 0adbf3ca4f6da964087fc3b3a0895f47,
+        type: 3}
+      propertyPath: ClickSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 4b362d728ca03cb418311f1102f030a3, type: 3}
     - target: {fileID: 5533963812841910517, guid: 0adbf3ca4f6da964087fc3b3a0895f47,
         type: 3}
       propertyPath: m_textInfo.characterCount
@@ -3756,6 +3766,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6694070512918010137}
     m_Modifications:
+    - target: {fileID: 116025461038474557, guid: 0adbf3ca4f6da964087fc3b3a0895f47,
+        type: 3}
+      propertyPath: ClickSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 4b362d728ca03cb418311f1102f030a3, type: 3}
     - target: {fileID: 5533963812841910517, guid: 0adbf3ca4f6da964087fc3b3a0895f47,
         type: 3}
       propertyPath: m_textInfo.characterCount
@@ -4029,6 +4044,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8294904708736720064}
     m_Modifications:
+    - target: {fileID: 116025461038474557, guid: 0adbf3ca4f6da964087fc3b3a0895f47,
+        type: 3}
+      propertyPath: ClickSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 4b362d728ca03cb418311f1102f030a3, type: 3}
     - target: {fileID: 5533963812841910517, guid: 0adbf3ca4f6da964087fc3b3a0895f47,
         type: 3}
       propertyPath: m_textInfo.characterCount

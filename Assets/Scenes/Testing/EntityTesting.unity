@@ -3702,7 +3702,7 @@ MonoBehaviour:
   m_enemyGoalHurtSound: {fileID: 8300000, guid: 29c07e4f50fe98841a02208b1254b47f,
     type: 3}
   m_waveSoundsSource: {fileID: 844908504}
-  m_waveStartSound: {fileID: 8300000, guid: 774abf729799e84459f866c03d391b98, type: 3}
+  m_waveStartSound: {fileID: 8300000, guid: 4470562b4185ae64ca5847825fd5f556, type: 3}
   m_waveFinishedSound: {fileID: 8300000, guid: 93f708f5366c0ce48a669c64b50e983f, type: 3}
 --- !u!1 &1894752345
 GameObject:
@@ -3911,7 +3911,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_audioClip
       value: 
-      objectReference: {fileID: 8300000, guid: 0b90cbf3d2955da48abaab8cd083eba0, type: 3}
+      objectReference: {fileID: 8300000, guid: 0164b53cb735e87409972a9b393b91eb, type: 3}
     - target: {fileID: 3701102011081854951, guid: 2fe832aef32c59a4490b13bc8b25a80f,
         type: 3}
       propertyPath: m_LocalPosition.x

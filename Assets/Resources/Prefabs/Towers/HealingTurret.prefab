@@ -294,6 +294,9 @@ MonoBehaviour:
   m_cost: 75
   m_health: 100
   m_maxHealth: 100
+  m_spawnSound: {fileID: 8300000, guid: ccd199ac6f72dbd46b3e100b96133dd8, type: 3}
+  m_destroyedSound: {fileID: 8300000, guid: eefcaee6c811d6641b3f95f3a344aa9b, type: 3}
+  m_bulldozedSound: {fileID: 0}
 --- !u!114 &3554308717398372796
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -313,7 +316,7 @@ MonoBehaviour:
   m_healPower: 10
   m_range: 2.5
   m_healSingleTower: 0
-  m_healPulseSound: {fileID: 0}
+  m_healPulseSound: {fileID: 8300000, guid: 73bad9a3dbbd9be4598b16a5faee2d87, type: 3}
   m_healPulseSource: {fileID: 8943195928620897109}
   m_pulseScale: {x: 17.5, y: 17.5, z: 1}
   m_pulseDuration: 0.5
