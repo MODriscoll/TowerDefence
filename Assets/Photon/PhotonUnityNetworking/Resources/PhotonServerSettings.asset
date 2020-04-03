@@ -46,4 +46,4 @@ MonoBehaviour:
   - spawnMonsterRPC
   - startNextWaveRPC
   DisableAutoOpenWizard: 1
-  ShowSettings: 0
+  ShowSettings: 1

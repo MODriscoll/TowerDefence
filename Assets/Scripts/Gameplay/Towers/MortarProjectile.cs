@@ -15,6 +15,7 @@ public class MortarProjectile : MonoBehaviourPun, IPunInstantiateMagicCallback
     [SerializeField] private MortarProjectileEffect m_effectPrefab;         // Prefab to play when we expire
     [SerializeField] private MortarTurretEffect m_turretEffectPrefab;       // Placing this here as we can avoid an RPC call
 
+    [SerializeField] private AudioClip m_spawnSound;            // Sound to play on spawn (this is basically MortarProjectile.m_shootSound)
     [SerializeField] private AudioClip m_hitSound;              // Sound to play when we hit something
     [SerializeField] private AudioClip m_expiredSound;          // Sound to play when we expire
 
@@ -40,10 +41,8 @@ public class MortarProjectile : MonoBehaviourPun, IPunInstantiateMagicCallback
         transform.position += m_cachedMoveDir * m_force * Time.deltaTime;    
     }
 
-    public void initProjectile(Vector3 eulerAngles, BoardManager board, TowerScript script)
+    public void initProjectile(BoardManager board, TowerScript script)
     {
-        setMovementDirection(eulerAngles);
-
         m_board = board;
         m_script = script;
         StartCoroutine(checkCollisionRoutine());
@@ -149,6 +148,9 @@ public class MortarProjectile : MonoBehaviourPun, IPunInstantiateMagicCallback
 
         float eulerZ = (float)info.photonView.InstantiationData[1];
         setMovementDirection(new Vector3(0f, 0f, eulerZ));
+
+        // Play here since this gets called after Start
+        SoundEffectsManager.playSoundEffect(m_spawnSound, m_board);
     }
 
 #if UNITY_EDITOR

@@ -116,6 +116,10 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
 
     void Update()
     {
+        // Do not update if match is over (no point)
+        if (matchState == TDMatchState.PostMatch)
+            return;
+
         float deltaTime = Time.deltaTime;
 #if UNITY_EDITOR
         deltaTime *= m_gameSpeed;
@@ -257,14 +261,20 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
         PlayerController.localPlayer.notifyMatchStarted();
     }
 
+    // TODO: clean up this function to be nicer
     [PunRPC]
     private void onMatchFinishedRPC(byte condAsByte, int winnerId)
     {
+        matchState = TDMatchState.PostMatch;
+
         TDWinCondition winCondition = (TDWinCondition)condAsByte;
 
         PlayerController.localPlayer.notifyMatchFinished(winCondition, winnerId);
 
-        if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient)
+        if (m_cosmetics)
+            m_cosmetics.playMatchEndSound(PlayerController.localPlayer.playerId == winnerId);
+
+        if (!PhotonNetwork.IsConnected || PhotonNetwork.IsMasterClient)
         {
             m_waveSpawner.onWaveFinished -= onWaveFinished;
             MonsterManager.onMonsterDestroyed -= onMonsterDestroyed;

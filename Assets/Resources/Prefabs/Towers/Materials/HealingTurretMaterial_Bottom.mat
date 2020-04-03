@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: TurretBottom
+  m_Name: HealingTurretMaterial_Bottom
   m_Shader: {fileID: 4800000, guid: 85b7957a73e7b7745b27e14e4f755586, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
@@ -40,7 +40,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 2e50cb1b495d6dd498f84ac0776fe62e, type: 3}
+        m_Texture: {fileID: 2800000, guid: aa40bf23d3fddf74fb6938f30b186ad1, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -67,10 +67,11 @@ Material:
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
-    - _RimAmount: 0.986
-    - _RimThreshold: 0.513
+    - _RimAmount: 1
+    - _RimThreshold: 0.5
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
+    - _SpecularPower: 0.3
     - _SrcBlend: 1
     - _UVSec: 0
     - _ZWrite: 1
@@ -79,5 +80,5 @@ Material:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _RimColor: {r: 0, g: 0, b: 0, a: 1}
-    - _SpecularColor: {r: 0.015574946, g: 0.1472758, b: 0.4716981, a: 1}
-    - _Tint: {r: 0.6933962, g: 1, b: 0.99012065, a: 1}
+    - _SpecularColor: {r: 1, g: 1, b: 1, a: 1}
+    - _Tint: {r: 0.27082923, g: 0.7264151, b: 0.12677999, a: 1}

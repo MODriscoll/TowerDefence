@@ -11,7 +11,9 @@ public class TowerScript : MonoBehaviourPun
     [SerializeField] protected float m_targetRadius = 2.5f;             // Radius which tower can see towers
     [SerializeField, Min(0.01f)] protected float m_fireRate = 1f;       // Rate at which the tower acts
 
-    protected float m_lastFireTime = -float.MaxValue;         // The last time the turret fired
+    [SerializeField] private Transform m_pivot;                 // The pivot to rotate when facing monsters
+
+    protected float m_lastFireTime = -float.MaxValue;           // The last time the turret fired
 
     public BoardManager Board { get { return m_tower ? m_tower.Board : null; } }
 
@@ -29,12 +31,18 @@ public class TowerScript : MonoBehaviourPun
             target = findTarget(m_targetRadius);
             if (target)
             {
+                Transform pivotTransform = transform;
+                if (m_pivot)
+                    pivotTransform = m_pivot;
+
                 // Direction to face
-                Vector2 dir = (target.transform.position - transform.position).normalized;
+                Vector2 dir = (target.transform.position - pivotTransform.position).normalized;
                 float rot = Mathf.Rad2Deg * Mathf.Atan2(dir.y, dir.x);
 
                 // Instantly rotate to face target
-                transform.eulerAngles = new Vector3(0f, 0f, rot);
+                pivotTransform.localEulerAngles = new Vector3(0f, -rot, 0f);
+
+                // Changes are to work with new model
             }
         }
 
