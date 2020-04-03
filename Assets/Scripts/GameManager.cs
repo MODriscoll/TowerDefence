@@ -265,6 +265,8 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
     [PunRPC]
     private void onMatchFinishedRPC(byte condAsByte, int winnerId)
     {
+        matchState = TDMatchState.PostMatch;
+
         TDWinCondition winCondition = (TDWinCondition)condAsByte;
 
         PlayerController.localPlayer.notifyMatchFinished(winCondition, winnerId);
