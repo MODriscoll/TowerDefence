@@ -243,6 +243,9 @@ MonoBehaviour:
   m_cost: 100
   m_health: 175
   m_maxHealth: 175
+  m_spawnSound: {fileID: 0}
+  m_destroyedSound: {fileID: 0}
+  m_bulldozedSound: {fileID: 0}
 --- !u!114 &-8430421423684404905
 MonoBehaviour:
   m_ObjectHideFlags: 0
