@@ -32,7 +32,10 @@ MonoBehaviour:
   - ClickRpc
   - DestroyRpc
   - DestroySpaceship
+  - destroyTowerRPC
   - Fire
+  - goalHurtRPC
+  - onExpired
   - onFired
   - onHealTowers
   - onMatchFinishedRPC
@@ -42,8 +45,5 @@ MonoBehaviour:
   - RespawnSpaceship
   - spawnMonsterRPC
   - startNextWaveRPC
-  - onExpired
-  - destroyTowerRPC
-  - goalHurtRPC
   DisableAutoOpenWizard: 1
-  ShowSettings: 0
+  ShowSettings: 1
