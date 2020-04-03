@@ -26,12 +26,15 @@ public class MortarTurret : TowerScript
             return;
 
         Transform spawnTransform = m_shootFrom ? m_shootFrom : transform;
-        Vector3 eulerAngles = m_shootFrom.eulerAngles;
+
+        // Direction to shoot
+        Vector2 dir = (target.transform.position - m_shootFrom.position).normalized;
+        float shootDir = Mathf.Rad2Deg * Mathf.Atan2(dir.y, dir.x);
 
         // Since game is 2D, we only need one axis of rotation
         object[] spawnData = new object[2];
         spawnData[0] = GameManager.manager.getPlayerIdFromBoard(Board);
-        spawnData[1] = eulerAngles.z;
+        spawnData[1] = shootDir;
 
         GameObject projectileObject = PhotonNetwork.Instantiate(m_projectilePrefab, m_shootFrom.position, Quaternion.identity, 0, spawnData);
         if (!projectileObject)
@@ -40,6 +43,6 @@ public class MortarTurret : TowerScript
         MortarProjectile projectile = projectileObject.GetComponent<MortarProjectile>();
         Assert.IsNotNull(projectile);
 
-        projectile.initProjectile(spawnTransform.eulerAngles, m_tower.Board, this);
+        projectile.initProjectile(m_tower.Board, this);
     }
 }

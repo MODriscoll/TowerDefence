@@ -55,6 +55,7 @@ MonoBehaviour:
     type: 3}
   m_turretEffectPrefab: {fileID: 7549472409064853672, guid: db998cf81d3e6dc45b357debc08e418a,
     type: 3}
+  m_spawnSound: {fileID: 0}
   m_hitSound: {fileID: 0}
   m_expiredSound: {fileID: 0}
 --- !u!114 &5994368317154419060

@@ -211,6 +211,21 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             remotePlayer = null;
     }
 
+    /// <summary>
+    /// Get a player controller based of a player Id
+    /// </summary>
+    /// <param name="playerId">Id of controller to get</param>
+    /// <returns>Valid controller or null</returns>
+    public static PlayerController getController(int playerId)
+    {
+        if (localPlayer && localPlayer.playerId == playerId)
+            return localPlayer;
+        else if (remotePlayer && remotePlayer.playerId == playerId)
+            return remotePlayer;
+
+        return null;
+    }
+
     protected bool tryGetBoardInput(out Vector3 selectedPos)
     {
 #if UNITY_EDITOR

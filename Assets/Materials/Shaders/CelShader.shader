@@ -4,6 +4,7 @@
     {
         _MainTex ("Texture", 2D) = "white" {}
         _Tint("Tint", Color) = (1, 0, 0, 1)
+        _SpecularPower("Specular Power", Range(0, 1)) = 0.3 
         _Glossiness("Glossiness", Float) = 32
         _RimAmount("Rim Amount", Range(0, 1)) = 0.7
         _RimThreshold("Rim Threshold", Range(0, 1)) = 0.3
@@ -46,13 +47,15 @@
             };
 
             sampler2D _MainTex;
-            float4 _Tint;
-            float _Glossiness;
-            float _RimAmount;
-            float _RimThreshold;
-            float4 _AmbientColor;
-            float4 _SpecularColor;
-            float4 _RimColor;
+            float4 _MainTex_ST;
+            half4 _Tint;
+            half _SpecularPower;
+            half _Glossiness;
+            half _RimAmount;
+            half _RimThreshold;
+            half4 _AmbientColor;
+            half4 _SpecularColor;
+            half4 _RimColor;
 
             v2f vert (appdata v)
             {
@@ -60,7 +63,7 @@
                 o.vertex = UnityObjectToClipPos(v.vertex);
                 o.normal = UnityObjectToWorldNormal(v.normal);
                 o.viewDir = WorldSpaceViewDir(v.vertex);
-                o.uv = v.uv;
+                o.uv = TRANSFORM_TEX(v.uv, _MainTex);
                 return o;
             }
 
@@ -90,7 +93,7 @@
 
                 // Apply smoothing similar to what we did for lighting
                 float specularIntensitySmooth = smoothstep(0.005, 0.01, intensityS);
-                float4 finalSpecular = _SpecularColor * intensityS;
+                float4 finalSpecular = _SpecularColor * intensityS * _SpecularPower;
 
                 // Effect to apply to the rim, we simply dot product against the camera,
                 // we inverse result so directions facing away from us (the camera) are highlighted

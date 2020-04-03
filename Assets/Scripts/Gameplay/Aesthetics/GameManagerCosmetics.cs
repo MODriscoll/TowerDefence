@@ -5,12 +5,18 @@ using Photon.Pun;
 
 public class GameManagerCosmetics : MonoBehaviourPun
 {
+    [SerializeField] private AudioSource m_generalSoundsSource;     // Audio source to use for playing global game sounds (that shouldn't overlap
+
     [SerializeField] private AudioClip m_friendlyGoalHurtSound;     // Sound to play when local players goal is reached by enemy
     [SerializeField] private AudioClip m_enemyGoalHurtSound;        // Sound to play when enemy players goal is reached by friendly
 
-    [SerializeField] private AudioSource m_waveSoundsSource;        // Audio source to use for playing wave sounds
+    [SerializeField] private AudioClip m_playerWinsSound;           // Sound to play when match ends in victory
+    [SerializeField] private AudioClip m_playerLoseSound;           // Sound to play when match ends in a draw or a lose
+
     [SerializeField] private AudioClip m_waveStartSound;            // Sound to play when the wave starts
-    [SerializeField] private AudioClip m_waveFinishedSound;         // Sound to play when the wave finishes
+
+    // Shh... Temp while we still don't have a sound (be sure to update onWaveFinished when uncommenting this)
+    /*[SerializeField]*/ private AudioClip m_waveFinishedSound;         // Sound to play when the wave finishes
 
     void Start()
     {
@@ -26,24 +32,18 @@ public class GameManagerCosmetics : MonoBehaviourPun
 
     private void onWaveStart()
     {
-        playWaveSound(m_waveStartSound);
+        playGeneralSound(m_waveStartSound);
     }
 
     private void onWaveFinished()
     {
-        playWaveSound(m_waveFinishedSound);
+        playGeneralSound(null/*m_waveFinishedSound*/);
     }
 
-    private void playWaveSound(AudioClip clip)
-    {
-        if (m_waveSoundsSource && clip)
-        {
-            m_waveSoundsSource.clip = clip;
-            m_waveSoundsSource.loop = false;
-            m_waveSoundsSource.Play();
-        }
-    }
-
+    /// <summary>
+    /// Easy access for playing a goal hurt sound for a specific board
+    /// </summary>
+    /// <param name="boardId"></param>
     public static void playGoalHurtSound(int boardId)
     {
         GameManagerCosmetics cosmetics = GameManager.getCosmetics();
@@ -59,14 +59,40 @@ public class GameManagerCosmetics : MonoBehaviourPun
     [PunRPC]
     private void goalHurtRPC(int boardId)
     {
-        BoardManager board = GameManager.manager.getBoardManager(boardId);
+        PlayerController controller = PlayerController.getController(boardId);
+        if (!controller)
+        {
+            Debug.LogError("Unable to play GoalHurt sound as player who was hurt was unable to be determined");
+            return;
+        }
 
-        AudioClip clipToPlay = null;
-        if (board == GameManager.manager.PlayersBoard)
-            clipToPlay = m_friendlyGoalHurtSound;
+        // We play a general sound for when local player is hurt,
+        // so no matter which board they are looking at they will hear the sound
+        if (controller == PlayerController.localPlayer)
+            playGeneralSound(m_friendlyGoalHurtSound);
+        else // Must be remote player
+            SoundEffectsManager.playSoundEffect(m_enemyGoalHurtSound, boardId);
+    }
+
+    /// <summary>
+    /// Quick function for playing a sound based on if match was one
+    /// </summary>
+    /// <param name="wonMatch">If local player won the match</param>
+    public void playMatchEndSound(bool wonMatch)
+    {
+        if (wonMatch)
+            playGeneralSound(m_playerWinsSound);
         else
-            clipToPlay = m_enemyGoalHurtSound;
+            playGeneralSound(m_playerLoseSound);
+    }
 
-        playWaveSound(clipToPlay);
+    private void playGeneralSound(AudioClip clip)
+    {
+        if (m_generalSoundsSource && clip)
+        {
+            m_generalSoundsSource.clip = clip;
+            m_generalSoundsSource.loop = false;
+            m_generalSoundsSource.Play();
+        }
     }
 }

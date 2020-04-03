@@ -257,6 +257,7 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
         PlayerController.localPlayer.notifyMatchStarted();
     }
 
+    // TODO: clean up this function to be nicer
     [PunRPC]
     private void onMatchFinishedRPC(byte condAsByte, int winnerId)
     {
@@ -264,7 +265,10 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
 
         PlayerController.localPlayer.notifyMatchFinished(winCondition, winnerId);
 
-        if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient)
+        if (m_cosmetics)
+            m_cosmetics.playMatchEndSound(PlayerController.localPlayer.playerId == winnerId);
+
+        if (!PhotonNetwork.IsConnected || PhotonNetwork.IsMasterClient)
         {
             m_waveSpawner.onWaveFinished -= onWaveFinished;
             MonsterManager.onMonsterDestroyed -= onMonsterDestroyed;
