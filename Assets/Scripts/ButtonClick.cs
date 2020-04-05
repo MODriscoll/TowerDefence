@@ -16,6 +16,8 @@ public class ButtonClick : MonoBehaviour
 
     public void PlaySound()
     {
+        if (audioSource == null)
+            audioSource = FindObjectOfType<AudioSource>();
         audioSource.PlayOneShot(ClickSound);
     }
 

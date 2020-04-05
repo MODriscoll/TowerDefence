@@ -2,15 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Photon.Pun;
+using TMPro;
 
 public class PlayerData : MonoBehaviour
 {
-    [SerializeField] private int playerCash;
-    public Text m_moneyText;
+    public TextMeshProUGUI m_moneyText;
 
     private int backgroundCost = 3000;
-
-    public Color[] backgroundColours;
 
     private void Start()
     {
@@ -20,33 +19,38 @@ public class PlayerData : MonoBehaviour
 
     public void Load()
     {
-        Camera.main.backgroundColor = backgroundColours[PlayerPrefs.GetInt("selectedBackground")];
-        playerCash = PlayerPrefs.GetInt("playerCash");
         SetPremiumCurrencyText();
     }
 
-    public void BuyBackground(int name)
+    public void BuyBackground(int BackgroundPattern)
     {
         // If the player hasn't bought it yet
-        if (PlayerPrefs.GetInt(name.ToString(), 0) == 0)
+        if (PlayerPrefs.GetInt(BackgroundPattern.ToString(), 0) == 0)
         {
             if (PlayerPrefs.HasKey("playerCash"))
             {
                 // If player has enough money
                 if (PlayerPrefs.GetInt("playerCash", 0) >= backgroundCost)
                 {
-                    PlayerPrefs.SetInt(name.ToString(), 1);
+                    // Save background as being "bought"
+                    PlayerPrefs.SetInt(BackgroundPattern.ToString(), 1);
+                    // Update and save player's currency
                     PlayerPrefs.SetInt("playerCash", PlayerPrefs.GetInt("playerCash") - backgroundCost);
                     SetPremiumCurrencyText();
-                    PlayerPrefs.SetInt("selectedBackground", name);
+                    // Set Background
+                    PlayerPrefs.SetInt("selectedBackground", BackgroundPattern);
+                }
+                // If player doesn't have enough money
+                else
+                {
+
                 }
             }
-
         }
         // If the player has bought it
-        else
+        else if(PlayerPrefs.GetInt(BackgroundPattern.ToString(), 0) == 1)
         {
-            PlayerPrefs.SetInt("selectedBackground", name);
+            PlayerPrefs.SetInt("selectedBackground", BackgroundPattern);
         }
     }
 
@@ -59,9 +63,9 @@ public class PlayerData : MonoBehaviour
     private void SetPremiumCurrencyText()
     {
         if (PlayerPrefs.GetInt("playerCash") > 999)
-            m_moneyText.text = "$" + PlayerPrefs.GetInt("playerCash").ToString("0,000");
+            m_moneyText.text = PlayerPrefs.GetInt("playerCash").ToString("0,000");
         else
-            m_moneyText.text = "$" + PlayerPrefs.GetInt("playerCash").ToString();
+            m_moneyText.text = PlayerPrefs.GetInt("playerCash").ToString();
     }
 
     private void ResetPlayerData()
