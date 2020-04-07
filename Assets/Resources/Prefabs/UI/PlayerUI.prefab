@@ -537,7 +537,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  m_IsOn: 1
+  m_IsOn: 0
 --- !u!1 &2713370754781408424
 GameObject:
   m_ObjectHideFlags: 0
@@ -663,6 +663,12 @@ MonoBehaviour:
   m_playerHealthText: {fileID: 7244335163646485831}
   m_enemyHealthText: {fileID: 1429321248502463870}
   m_swapView: {fileID: 4539774776585982303}
+  m_turret1: {fileID: 0}
+  m_turret2: {fileID: 0}
+  m_turret3: {fileID: 0}
+  m_mouse1: {fileID: 0}
+  m_mouse2: {fileID: 0}
+  m_mouse3: {fileID: 0}
   m_turretShop: {fileID: 438463681822667506}
   m_bulldoseButton: {fileID: 2691058457481669174}
   m_miceShop: {fileID: 7001569061427784253}
@@ -1590,7 +1596,7 @@ PrefabInstance:
     - target: {fileID: 5533963812841910517, guid: 0adbf3ca4f6da964087fc3b3a0895f47,
         type: 3}
       propertyPath: m_text
-      value: Tank Mouse
+      value: Tank Mouse\n(40c)
       objectReference: {fileID: 0}
     - target: {fileID: 5533963812841910517, guid: 0adbf3ca4f6da964087fc3b3a0895f47,
         type: 3}
@@ -1895,7 +1901,7 @@ PrefabInstance:
     - target: {fileID: 5533963812841910517, guid: 0adbf3ca4f6da964087fc3b3a0895f47,
         type: 3}
       propertyPath: m_text
-      value: Pathfinder Mouse
+      value: Pathfinder Mouse(50c)
       objectReference: {fileID: 0}
     - target: {fileID: 5533963812841910517, guid: 0adbf3ca4f6da964087fc3b3a0895f47,
         type: 3}
@@ -2962,17 +2968,17 @@ PrefabInstance:
     - target: {fileID: 5533963812841910517, guid: 0adbf3ca4f6da964087fc3b3a0895f47,
         type: 3}
       propertyPath: m_textInfo.characterCount
-      value: 15
+      value: 22
       objectReference: {fileID: 0}
     - target: {fileID: 5533963812841910517, guid: 0adbf3ca4f6da964087fc3b3a0895f47,
         type: 3}
       propertyPath: m_textInfo.wordCount
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 5533963812841910517, guid: 0adbf3ca4f6da964087fc3b3a0895f47,
         type: 3}
       propertyPath: m_textInfo.lineCount
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5533963812841910517, guid: 0adbf3ca4f6da964087fc3b3a0895f47,
         type: 3}
@@ -2982,7 +2988,7 @@ PrefabInstance:
     - target: {fileID: 5533963812841910517, guid: 0adbf3ca4f6da964087fc3b3a0895f47,
         type: 3}
       propertyPath: m_text
-      value: Piercing Turret
+      value: Piercing Turret\n(100c)
       objectReference: {fileID: 0}
     - target: {fileID: 5533963812841910517, guid: 0adbf3ca4f6da964087fc3b3a0895f47,
         type: 3}
@@ -2992,7 +2998,7 @@ PrefabInstance:
     - target: {fileID: 5533963812841910517, guid: 0adbf3ca4f6da964087fc3b3a0895f47,
         type: 3}
       propertyPath: m_textInfo.spaceCount
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5533963812841910517, guid: 0adbf3ca4f6da964087fc3b3a0895f47,
         type: 3}
@@ -3243,7 +3249,7 @@ PrefabInstance:
     - target: {fileID: 5533963812841910517, guid: 0adbf3ca4f6da964087fc3b3a0895f47,
         type: 3}
       propertyPath: m_text
-      value: Machine Gun Mouse
+      value: Machine Gun Mouse\n(30c)
       objectReference: {fileID: 0}
     - target: {fileID: 5533963812841910517, guid: 0adbf3ca4f6da964087fc3b3a0895f47,
         type: 3}
@@ -3518,17 +3524,17 @@ PrefabInstance:
     - target: {fileID: 5533963812841910517, guid: 0adbf3ca4f6da964087fc3b3a0895f47,
         type: 3}
       propertyPath: m_textInfo.characterCount
-      value: 11
+      value: 17
       objectReference: {fileID: 0}
     - target: {fileID: 5533963812841910517, guid: 0adbf3ca4f6da964087fc3b3a0895f47,
         type: 3}
       propertyPath: m_textInfo.wordCount
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 5533963812841910517, guid: 0adbf3ca4f6da964087fc3b3a0895f47,
         type: 3}
       propertyPath: m_textInfo.lineCount
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5533963812841910517, guid: 0adbf3ca4f6da964087fc3b3a0895f47,
         type: 3}
@@ -3538,12 +3544,12 @@ PrefabInstance:
     - target: {fileID: 5533963812841910517, guid: 0adbf3ca4f6da964087fc3b3a0895f47,
         type: 3}
       propertyPath: m_text
-      value: Heal Turret
+      value: Heal Turret\n(75c)
       objectReference: {fileID: 0}
     - target: {fileID: 5533963812841910517, guid: 0adbf3ca4f6da964087fc3b3a0895f47,
         type: 3}
       propertyPath: m_textInfo.spaceCount
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5533963812841910517, guid: 0adbf3ca4f6da964087fc3b3a0895f47,
         type: 3}
@@ -4052,17 +4058,17 @@ PrefabInstance:
     - target: {fileID: 5533963812841910517, guid: 0adbf3ca4f6da964087fc3b3a0895f47,
         type: 3}
       propertyPath: m_textInfo.characterCount
-      value: 12
+      value: 18
       objectReference: {fileID: 0}
     - target: {fileID: 5533963812841910517, guid: 0adbf3ca4f6da964087fc3b3a0895f47,
         type: 3}
       propertyPath: m_textInfo.wordCount
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 5533963812841910517, guid: 0adbf3ca4f6da964087fc3b3a0895f47,
         type: 3}
       propertyPath: m_textInfo.lineCount
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5533963812841910517, guid: 0adbf3ca4f6da964087fc3b3a0895f47,
         type: 3}
@@ -4072,7 +4078,7 @@ PrefabInstance:
     - target: {fileID: 5533963812841910517, guid: 0adbf3ca4f6da964087fc3b3a0895f47,
         type: 3}
       propertyPath: m_text
-      value: Basic Turret
+      value: Basic Turret\n(25c)
       objectReference: {fileID: 0}
     - target: {fileID: 5533963812841910517, guid: 0adbf3ca4f6da964087fc3b3a0895f47,
         type: 3}
@@ -4082,7 +4088,7 @@ PrefabInstance:
     - target: {fileID: 5533963812841910517, guid: 0adbf3ca4f6da964087fc3b3a0895f47,
         type: 3}
       propertyPath: m_textInfo.spaceCount
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5533963812841910517, guid: 0adbf3ca4f6da964087fc3b3a0895f47,
         type: 3}

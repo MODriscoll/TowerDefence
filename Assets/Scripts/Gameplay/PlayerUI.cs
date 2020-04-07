@@ -20,10 +20,19 @@ public class PlayerUI : MonoBehaviour
     public TextMeshProUGUI m_playerHealthText;
     public TextMeshProUGUI m_enemyHealthText;
     public Button m_swapView;
+    public TextMeshProUGUI m_turret1;
+    public TextMeshProUGUI m_turret2;
+    public TextMeshProUGUI m_turret3;
+    public TextMeshProUGUI m_mouse1;
+    public TextMeshProUGUI m_mouse2;
+    public TextMeshProUGUI m_mouse3;
+
 
     public GameObject m_turretShop;
     public GameObject m_bulldoseButton;
     public GameObject m_miceShop;
+
+
 
     void Start()
     {
@@ -166,5 +175,11 @@ public class PlayerUI : MonoBehaviour
     public void ToggleBulldose()
     {
         m_owner.toggleBulldozeTowers();
+    }
+
+    public void SetUnitButtonText()
+    {
+        Object turret1 = Resources.Load("Prefabs/Towers/BasicTurret.prefab");
+        //turret1.
     }
 }
