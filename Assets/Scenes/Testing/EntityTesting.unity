@@ -1909,7 +1909,7 @@ GameObject:
   - component: {fileID: 844908505}
   - component: {fileID: 844908504}
   m_Layer: 0
-  m_Name: GlobalWaveSounds
+  m_Name: GlobalSounds
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3978,11 +3978,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c9a7ea6f1fdef441a1056aa4b98dd4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_generalSoundsSource: {fileID: 0}
-  m_friendlyGoalHurtSound: {fileID: 8300000, guid: 29c07e4f50fe98841a02208b1254b47f,
-    type: 3}
-  m_enemyGoalHurtSound: {fileID: 8300000, guid: 29c07e4f50fe98841a02208b1254b47f,
-    type: 3}
+  m_generalSoundsSource: {fileID: 844908504}
+  m_friendlyGoalHurtSound: {fileID: 0}
+  m_enemyGoalHurtSound: {fileID: 0}
   m_playerWinsSound: {fileID: 8300000, guid: bab536cdfa6a12f43ac1e694cd5ec6fe, type: 3}
   m_playerLoseSound: {fileID: 8300000, guid: 12cdbb7896a4c234ea9c7bcd6edddfa6, type: 3}
   m_waveStartSound: {fileID: 8300000, guid: 4470562b4185ae64ca5847825fd5f556, type: 3}
