@@ -15,6 +15,13 @@ public class TowerScript : MonoBehaviourPun
 
     protected float m_lastFireTime = -float.MaxValue;           // The last time the turret fired
 
+    // Hack for dealing with rotation problems encountered with rotation of pivots.
+    // As of doing this, I'm not really in the headspace to properly think of how to use
+    // quats to achieve what we want, so I'm just going to set this in editor then scale the calulated rot with it
+    // BasicTurret uses (0f, -1f, 0f)
+    // MortarTurret uses (0f, 0f, 1f)
+    public Vector3 m_rotScaler = new Vector3(0f, 0f, 1f);
+
     public BoardManager Board { get { return m_tower ? m_tower.Board : null; } }
 
     void Awake()
@@ -39,10 +46,8 @@ public class TowerScript : MonoBehaviourPun
                 Vector2 dir = (target.transform.position - pivotTransform.position).normalized;
                 float rot = Mathf.Rad2Deg * Mathf.Atan2(dir.y, dir.x);
 
-                // Instantly rotate to face target
-                pivotTransform.localEulerAngles = new Vector3(0f, -rot, 0f);
-
-                // Changes are to work with new model
+                // Instantly rotate to face target (see comment for m_rotScaler)
+                pivotTransform.localEulerAngles = m_rotScaler * rot;
             }
         }
 
