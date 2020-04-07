@@ -54,3 +54,6 @@ TagManager:
   - name: Effects
     uniqueID: 3540238001
     locked: 0
+  - name: BoardUI
+    uniqueID: 2672579053
+    locked: 0

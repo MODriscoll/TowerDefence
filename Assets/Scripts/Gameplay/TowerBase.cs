@@ -9,6 +9,7 @@ public class TowerBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallback
     [Min(0)] public int m_cost = 10;                // The cost to build this tower (0 = free)
     public int m_health = 10;                       // How much health this tower has
     public int m_maxHealth = 10;                    // Max health this tower can have
+    public HealthUI healthBar;                      // Reference healthbar UI for Entity
 
     private int m_ownerId = -1;         // Id of player that owns this tower
     private BoardManager m_board;       // Cached board for fast access
@@ -25,6 +26,7 @@ public class TowerBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallback
     void Start()
     {
         m_spawnTime = Time.time;
+        healthBar.SetMaxHealth(m_health);   //Set Healthbar UI
     }
 
     void OnDestroy()
@@ -52,6 +54,7 @@ public class TowerBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallback
         }
 
         m_health = Mathf.Max(m_maxHealth, m_health + amount);
+        healthBar.SetHealth(m_health);  //Update Healthbar UI
     }
 
     public void takeDamage(int amount, Object instigator)
@@ -66,6 +69,7 @@ public class TowerBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallback
         }
 
         m_health = Mathf.Max(m_health - amount, 0);
+        healthBar.SetHealth(m_health);  //Update Healthbar UI
         if (m_health <= 0)
         {
             AnalyticsHelpers.reportTowerDestroyed(this, instigator ? instigator.name : "Unknown");

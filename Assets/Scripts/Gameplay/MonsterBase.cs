@@ -10,6 +10,7 @@ public class MonsterBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallba
     [Min(0)] public int m_reward = 10;                      // Reward to give player when we are killed
     [Min(1)] public int m_damage = 5;                       // The amount of damage this monster deals when reaching the Goal Tile
     public int m_health = 10;                               // How much health this monster has
+    public HealthUI healthBar;                              // Reference healthbar UI for Entity
 
     [SerializeField] private AudioClip m_spawnSound;        // This sound is played when we are spawned in
 
@@ -46,6 +47,8 @@ public class MonsterBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallba
             if (monsterManager)
                 monsterManager.addExternalMonster(this);
         }
+
+        healthBar.SetMaxHealth(m_health);   //Set Healthbar UI
     }
 
     void OnDestroy()
@@ -56,6 +59,7 @@ public class MonsterBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallba
             MonsterManager monsterManager = m_board.MonsterManager;
             if (monsterManager)
                 monsterManager.removeExternalMonster(this);
+
         }
     }
 
@@ -115,6 +119,7 @@ public class MonsterBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallba
         }
 
         m_health = Mathf.Max(m_health - amount, 0);
+        healthBar.SetHealth(m_health);  //Update Healthbar UI
         bool bKilled = m_health <= 0;
 
         // Execute events before potentially destroying ourselves
