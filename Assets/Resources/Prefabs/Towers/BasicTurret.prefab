@@ -102,6 +102,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 9196093534682404417}
     m_Modifications:
+    - target: {fileID: 911329284131855385, guid: 9bc9df8540a11164ba7cb3b3c91b9011,
+        type: 3}
+      propertyPath: m_Name
+      value: TurretBarrel
+      objectReference: {fileID: 0}
     - target: {fileID: 925689098118803379, guid: 9bc9df8540a11164ba7cb3b3c91b9011,
         type: 3}
       propertyPath: m_LocalRotation.x
@@ -142,10 +147,30 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 925689098118803379, guid: 9bc9df8540a11164ba7cb3b3c91b9011,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.0681
+      objectReference: {fileID: 0}
     - target: {fileID: 5940348922475394976, guid: 9bc9df8540a11164ba7cb3b3c91b9011,
         type: 3}
       propertyPath: m_Name
       value: Turret
+      objectReference: {fileID: 0}
+    - target: {fileID: 5967364240357186194, guid: 9bc9df8540a11164ba7cb3b3c91b9011,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.9
+      objectReference: {fileID: 0}
+    - target: {fileID: 6407758107919849522, guid: 9bc9df8540a11164ba7cb3b3c91b9011,
+        type: 3}
+      propertyPath: m_Name
+      value: BottomPlate
+      objectReference: {fileID: 0}
+    - target: {fileID: 9054349166438130982, guid: 9bc9df8540a11164ba7cb3b3c91b9011,
+        type: 3}
+      propertyPath: m_Name
+      value: ShootingGuard
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9bc9df8540a11164ba7cb3b3c91b9011, type: 3}
