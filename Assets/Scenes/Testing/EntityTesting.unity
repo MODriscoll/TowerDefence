@@ -1617,7 +1617,7 @@ PrefabInstance:
     - target: {fileID: 6809731435833692041, guid: ac5f02641f2792342800bf76bc4dc3ac,
         type: 3}
       propertyPath: m_Name
-      value: Cheese (1)
+      value: CheeseP2
       objectReference: {fileID: 0}
     - target: {fileID: 7555456267011718554, guid: ac5f02641f2792342800bf76bc4dc3ac,
         type: 3}
@@ -2065,7 +2065,7 @@ PrefabInstance:
     - target: {fileID: 6809731435833692041, guid: ac5f02641f2792342800bf76bc4dc3ac,
         type: 3}
       propertyPath: m_Name
-      value: Cheese
+      value: CheeseP1
       objectReference: {fileID: 0}
     - target: {fileID: 7555456267011718554, guid: ac5f02641f2792342800bf76bc4dc3ac,
         type: 3}
