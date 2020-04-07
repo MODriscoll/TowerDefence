@@ -6,6 +6,8 @@ using UnityEngine.UI;
 public class HealthUI : MonoBehaviour
 {
 
+    // This Script is used to control a UI element after assigning it to a public variable on a player health manager.
+
     public Slider slider;
     public Gradient gradient;
     public Image fill;
