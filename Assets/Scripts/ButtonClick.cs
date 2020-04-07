@@ -17,7 +17,10 @@ public class ButtonClick : MonoBehaviour
     public void PlaySound()
     {
         if (audioSource == null)
+        {
+            Debug.Log("No AudioSource found, relocating...");
             audioSource = FindObjectOfType<AudioSource>();
+        }
         audioSource.PlayOneShot(ClickSound);
     }
 
