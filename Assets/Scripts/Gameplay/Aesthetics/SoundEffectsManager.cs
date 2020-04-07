@@ -17,7 +17,7 @@ public class SoundEffectsManager : MonoBehaviour
         // All sounds effects playing a certain clip that are active
         private Dictionary<AudioClip, List<SoundEffectHandler>> m_activeSoundEffects = new Dictionary<AudioClip, List<SoundEffectHandler>>();
 
-        public void playInstance(AudioClip clip, bool restartActive, bool startMuted = false)
+        public void playInstance(AudioClip clip, int maxActive, bool startMuted = false)
         {
             if (!clip)
                 return;
@@ -25,18 +25,21 @@ public class SoundEffectsManager : MonoBehaviour
             List<SoundEffectHandler> handlerList = getHandlerList(clip, true);
             Assert.IsNotNull(handlerList);
 
+            // Recycle an existing handler if we have already passed max amount of effects.
+            // We grab the oldest one and use that (it later gets added to the back again)
             SoundEffectHandler handler = null;
-            if (restartActive)
-                if (handlerList.Count > 0)
-                    handler = handlerList[0];
-
-            if (!handler)
+            if (handlerList.Count >= maxActive)
             {
-                handler = spawnHandler();
-                handlerList.Add(handler);
+                handler = handlerList[0];
+                handlerList.RemoveAt(0);
             }
 
+            if (!handler)
+                handler = spawnHandler();
+               
             Assert.IsNotNull(handler);
+            handlerList.Add(handler);
+
             handler.playClip(clip, startMuted);
         }
 
@@ -106,6 +109,9 @@ public class SoundEffectsManager : MonoBehaviour
     // restart that sound effect as opposed to creating a new one?
     public bool m_restartActiveEffects = false;
 
+    // Max amount of effects that can be played per effect type. Minimum is once
+    public int m_maxAmountEffects = 5;
+
     [SerializeField] private SoundEffectHandler m_effectPrefab;     // Prefab to use to instantiate instead of creating new objects
 
     private Dictionary<int, SingleManager> m_groups = new Dictionary<int, SingleManager>();     // Managers per group, created when needed
@@ -171,8 +177,14 @@ public class SoundEffectsManager : MonoBehaviour
         else
             manager = createManager(groupId);
 
+        int maxActive = m_maxAmountEffects;
+        if (m_restartActiveEffects)
+            maxActive = 1;
+        else
+            maxActive = Mathf.Max(1, maxActive);
+
         bool startMuted = groupId != m_activeGroup;
-        manager.playInstance(clip, m_restartActiveEffects, startMuted);
+        manager.playInstance(clip, maxActive, startMuted);
     }
 
     private void setActiveGroupImpl(int groupId)
