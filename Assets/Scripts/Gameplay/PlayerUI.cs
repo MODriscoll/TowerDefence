@@ -47,7 +47,7 @@ public class PlayerUI : MonoBehaviour
             return;
 
         if (m_moneyText)
-            m_moneyText.text = string.Format("${0}", m_owner.Gold);
+            m_moneyText.text = string.Format("{0}", m_owner.Gold);
 
         if (PhotonNetwork.IsConnected)
         {

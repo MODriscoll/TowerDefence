@@ -30,7 +30,7 @@ public class BackgroundLoader : MonoBehaviour
     {
 
         // Set background to default
-        int background = 0;
+        int background = 1;
         int playerID = playerController.playerId;
         if (player.CustomProperties.ContainsKey("Background"))
         {
