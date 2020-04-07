@@ -3892,8 +3892,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_generalSoundsSource: {fileID: 844908504}
-  m_friendlyGoalHurtSound: {fileID: 0}
-  m_enemyGoalHurtSound: {fileID: 0}
+  m_friendlyGoalHurtSound: {fileID: 8300000, guid: 7ee3f4ae5db318e4bac948defa8ef836,
+    type: 3}
+  m_enemyGoalHurtSound: {fileID: 8300000, guid: 7ee3f4ae5db318e4bac948defa8ef836,
+    type: 3}
   m_playerWinsSound: {fileID: 8300000, guid: bab536cdfa6a12f43ac1e694cd5ec6fe, type: 3}
   m_playerLoseSound: {fileID: 8300000, guid: 12cdbb7896a4c234ea9c7bcd6edddfa6, type: 3}
   m_waveStartSound: {fileID: 8300000, guid: 4470562b4185ae64ca5847825fd5f556, type: 3}
