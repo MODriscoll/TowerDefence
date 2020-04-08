@@ -53,6 +53,18 @@ public class TowerBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallback
             return;
         }
 
+        if (PhotonNetwork.IsConnected)
+            photonView.RPC("HealTowerRPC", RpcTarget.All, amount);
+        else
+            HealTowerRPC(amount);
+
+        healthBar.SetHealth(m_health);  //Update Healthbar UI
+
+    }
+
+    [PunRPC]
+    private void HealTowerRPC(int amount)
+    {
         m_health = Mathf.Max(m_maxHealth, m_health + amount);
         healthBar.SetHealth(m_health);  //Update Healthbar UI
     }
@@ -68,13 +80,25 @@ public class TowerBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallback
             return;
         }
 
-        m_health = Mathf.Max(m_health - amount, 0);
+        if (PhotonNetwork.IsConnected)
+            photonView.RPC("TakeDamageRPC", RpcTarget.All, amount);
+        else
+            TakeDamageRPC(amount);
+
         healthBar.SetHealth(m_health);  //Update Healthbar UI
+
         if (m_health <= 0)
         {
             AnalyticsHelpers.reportTowerDestroyed(this, instigator ? instigator.name : "Unknown");
             destroyTower(this);
         }
+    }
+
+    [PunRPC]
+    private void TakeDamageRPC(int amount)
+    {
+        m_health = Mathf.Max(m_health - amount, 0);
+        healthBar.SetHealth(m_health);  //Update Healthbar UI
     }
 
     public static TowerBase spawnTower(string prefabId, int playerId, Vector3Int tileIndex, Vector3 spawnPos)
