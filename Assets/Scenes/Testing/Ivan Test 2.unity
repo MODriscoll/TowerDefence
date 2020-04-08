@@ -3827,6 +3827,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_restartActiveEffects: 0
+  m_maxAmountEffects: 5
   m_effectPrefab: {fileID: 0}
 --- !u!114 &1752449132
 MonoBehaviour:
