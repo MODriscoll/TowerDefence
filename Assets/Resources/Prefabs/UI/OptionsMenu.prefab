@@ -941,10 +941,21 @@ MonoBehaviour:
   m_MinValue: 0
   m_MaxValue: 1
   m_WholeNumbers: 0
-  m_Value: 0
+  m_Value: 0.5
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1193164875698397863}
+        m_MethodName: UpdateSFXVolume
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &5316708697430877833
 GameObject:
   m_ObjectHideFlags: 0
@@ -1105,10 +1116,21 @@ MonoBehaviour:
   m_MinValue: 0
   m_MaxValue: 1
   m_WholeNumbers: 0
-  m_Value: 0
+  m_Value: 0.5
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1193164875698397863}
+        m_MethodName: UpdateMusicVolume
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &5316708697546797845
 GameObject:
   m_ObjectHideFlags: 0
@@ -1486,7 +1508,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ClickSound: {fileID: 8300000, guid: 33210875bb187d44c969529ecb00eca8, type: 3}
-  audiosource: {fileID: 0}
 --- !u!1 &5316708697938596625
 GameObject:
   m_ObjectHideFlags: 0
@@ -1894,7 +1915,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ClickSound: {fileID: 8300000, guid: 33210875bb187d44c969529ecb00eca8, type: 3}
-  audiosource: {fileID: 0}
 --- !u!1 &5316708698200089707
 GameObject:
   m_ObjectHideFlags: 0
@@ -1981,6 +2001,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5316708698321743238}
+  - component: {fileID: 1193164875698397863}
   m_Layer: 5
   m_Name: OptionsMenu
   m_TagString: Untagged
@@ -2009,6 +2030,24 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1193164875698397863
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5316708698321743239}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea888f3f409d8f146ae1d0fa50601ad6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_masterVolume: 0.5
+  m_musicVolume: 0.5
+  m_sfxVolume: 0.5
+  masterSlider: {fileID: 5316708697525084603}
+  musicSlider: {fileID: 5316708697525084603}
+  sfxSlider: {fileID: 5316708697362902295}
 --- !u!1 &5316708698411813249
 GameObject:
   m_ObjectHideFlags: 0
@@ -2169,10 +2208,21 @@ MonoBehaviour:
   m_MinValue: 0
   m_MaxValue: 1
   m_WholeNumbers: 0
-  m_Value: 0
+  m_Value: 0.5
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1193164875698397863}
+        m_MethodName: UpdateMasterVolume
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &5316708698599928031
 GameObject:
   m_ObjectHideFlags: 0
@@ -2581,7 +2631,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ClickSound: {fileID: 8300000, guid: 33210875bb187d44c969529ecb00eca8, type: 3}
-  audiosource: {fileID: 0}
 --- !u!1 &5316708698808939401
 GameObject:
   m_ObjectHideFlags: 0
@@ -2801,7 +2850,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ClickSound: {fileID: 8300000, guid: 33210875bb187d44c969529ecb00eca8, type: 3}
-  audiosource: {fileID: 0}
 --- !u!1 &5316708698878475402
 GameObject:
   m_ObjectHideFlags: 0
