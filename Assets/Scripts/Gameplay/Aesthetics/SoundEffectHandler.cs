@@ -39,8 +39,9 @@ public class SoundEffectHandler : MonoBehaviour
     /// Plays the sound clip from beginning
     /// </summary>
     /// <param name="clip">Audio to play</param>
+    /// <param name="volume">Volume to play the clip at</param>
     /// <param name="startMuted">If clip should play but initially be muted</param>
-    public void playClip(AudioClip clip, bool startMuted = false)
+    public void playClip(AudioClip clip, float volume, bool startMuted = false)
     {
         CancelInvoke("onAudioFinished");
 
@@ -49,10 +50,10 @@ public class SoundEffectHandler : MonoBehaviour
             m_audioSource = gameObject.AddComponent<AudioSource>();
             m_audioSource.spatialize = false;
         }
-        m_audioSource.volume = m_volumeManager.m_sfxVolume;   // Set volume of audio source to saved volume level
 
         m_audioSource.clip = clip;
         m_audioSource.mute = startMuted;
+        m_audioSource.volume = volume;
         m_audioSource.Play();
 
         enabled = true;

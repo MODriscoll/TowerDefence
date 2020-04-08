@@ -17,7 +17,7 @@ public class SoundEffectsManager : MonoBehaviour
         // All sounds effects playing a certain clip that are active
         private Dictionary<AudioClip, List<SoundEffectHandler>> m_activeSoundEffects = new Dictionary<AudioClip, List<SoundEffectHandler>>();
 
-        public void playInstance(AudioClip clip, int maxActive, bool startMuted = false)
+        public void playInstance(AudioClip clip, int maxActive, float volume, bool startMuted = false)
         {
             if (!clip)
                 return;
@@ -40,7 +40,7 @@ public class SoundEffectsManager : MonoBehaviour
             Assert.IsNotNull(handler);
             handlerList.Add(handler);
 
-            handler.playClip(clip, startMuted);
+            handler.playClip(clip, volume, startMuted);
         }
 
         public void muteGroup(bool mute)
@@ -112,6 +112,7 @@ public class SoundEffectsManager : MonoBehaviour
     // Max amount of effects that can be played per effect type. Minimum is once
     public int m_maxAmountEffects = 5;
 
+    [SerializeField] private VolumeManager m_volumeManager;         // Manager used for setting volume of clips when spawned
     [SerializeField] private SoundEffectHandler m_effectPrefab;     // Prefab to use to instantiate instead of creating new objects
 
     private Dictionary<int, SingleManager> m_groups = new Dictionary<int, SingleManager>();     // Managers per group, created when needed
@@ -126,6 +127,12 @@ public class SoundEffectsManager : MonoBehaviour
         }
 
         instance = this;
+
+        if (!m_volumeManager)
+            m_volumeManager = GetComponentInChildren<VolumeManager>();
+
+        if (!m_volumeManager)
+            Debug.LogWarning("Could not find volume manager for sound effects manager. All clips will be played at default volume 1");
     }
 
     void OnDestroy()
@@ -177,14 +184,20 @@ public class SoundEffectsManager : MonoBehaviour
         else
             manager = createManager(groupId);
 
+        // How many effects can be played at once
         int maxActive = m_maxAmountEffects;
         if (m_restartActiveEffects)
             maxActive = 1;
         else
             maxActive = Mathf.Max(1, maxActive);
 
+        // Volume of the clip
+        float volume = 1f;
+        if (m_volumeManager)
+            volume = m_volumeManager.m_sfxVolume;
+
         bool startMuted = groupId != m_activeGroup;
-        manager.playInstance(clip, maxActive, startMuted);
+        manager.playInstance(clip, maxActive, volume, startMuted);
     }
 
     private void setActiveGroupImpl(int groupId)
