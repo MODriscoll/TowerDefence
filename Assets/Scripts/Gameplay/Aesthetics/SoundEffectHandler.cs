@@ -10,6 +10,8 @@ public class SoundEffectHandler : MonoBehaviour
 
     public AudioClip clip { get { return m_audioSource ? m_audioSource.clip : null; } }     // The sound effect we are playing
 
+    private VolumeManager m_volumeManager;      // The controller which stores the sfx's volume
+
     // Tf this effect should be muted
     public bool Mute
     {
@@ -47,6 +49,7 @@ public class SoundEffectHandler : MonoBehaviour
             m_audioSource = gameObject.AddComponent<AudioSource>();
             m_audioSource.spatialize = false;
         }
+        m_audioSource.volume = m_volumeManager.m_sfxVolume;   // Set volume of audio source to saved volume level
 
         m_audioSource.clip = clip;
         m_audioSource.mute = startMuted;

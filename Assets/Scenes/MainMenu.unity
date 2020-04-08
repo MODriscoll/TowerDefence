@@ -2168,12 +2168,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 669377429}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 65c9546981d796343936004a1ef9f3ab, type: 3}
+  m_Script: {fileID: 11500000, guid: 868ee457e81fbb34c96aee967930e215, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_prefKey: room code
+  m_prefKey: PlayerRoom
 --- !u!114 &669377432
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2229,7 +2229,18 @@ MonoBehaviour:
       m_Calls: []
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 669377431}
+        m_MethodName: setKeyValue
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_CaretColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
   m_CustomCaretColor: 0
   m_SelectionColor: {r: 0.65882355, g: 0.80784315, b: 1, a: 0.7529412}
@@ -5152,7 +5163,7 @@ PrefabInstance:
     - target: {fileID: 5533963814143348669, guid: 0adbf3ca4f6da964087fc3b3a0895f47,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5533963814143348669, guid: 0adbf3ca4f6da964087fc3b3a0895f47,
         type: 3}
@@ -5178,6 +5189,31 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5533963814143348669, guid: 0adbf3ca4f6da964087fc3b3a0895f47,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5533963814143348669, guid: 0adbf3ca4f6da964087fc3b3a0895f47,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5533963814143348669, guid: 0adbf3ca4f6da964087fc3b3a0895f47,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 682894514}
+    - target: {fileID: 5533963814143348669, guid: 0adbf3ca4f6da964087fc3b3a0895f47,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: ConnectRandom
+      objectReference: {fileID: 0}
+    - target: {fileID: 5533963814143348669, guid: 0adbf3ca4f6da964087fc3b3a0895f47,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 5533963814143348670, guid: 0adbf3ca4f6da964087fc3b3a0895f47,
         type: 3}
@@ -6339,7 +6375,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65c9546981d796343936004a1ef9f3ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_prefKey: 
+  m_prefKey: PlayerName
 --- !u!114 &1576957688
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6398,13 +6434,13 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1576957687}
         m_MethodName: setKeyValue
-        m_Mode: 5
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: nickname
+          m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
   m_CaretColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}

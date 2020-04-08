@@ -53,6 +53,10 @@ public class TowerBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallback
             return;
         }
 
+        // No point in healing if already at max health
+        if (m_health >= m_maxHealth)
+            return;
+
         if (PhotonNetwork.IsConnected)
             photonView.RPC("HealTowerRPC", RpcTarget.All, amount);
         else
@@ -65,7 +69,7 @@ public class TowerBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallback
     [PunRPC]
     private void HealTowerRPC(int amount)
     {
-        m_health = Mathf.Max(m_maxHealth, m_health + amount);
+        m_health = Mathf.Min(m_maxHealth, m_health + amount);
         healthBar.SetHealth(m_health);  //Update Healthbar UI
     }
 

@@ -56,7 +56,7 @@ public class Launcher : MonoBehaviourPunCallbacks
     }
 
     /// <summary>
-    /// Connects to a random room
+    /// Connects to a room by creating one or joining one
     /// </summary>
     public void Connect()
     {
@@ -67,8 +67,16 @@ public class Launcher : MonoBehaviourPunCallbacks
 
         if (PhotonNetwork.IsConnected)
         {
-            // If room name has been set, use that instead
+            string roomName = null;
             if (PlayerPrefs.HasKey("PlayerRoom"))
+                roomName = PlayerPrefs.GetString("PlayerRoom");
+
+            // Possible that room name has been set to nothing, in
+            // that case fall back to joining a random room
+            if (roomName.Length == 0)
+                roomName = null;
+
+            if (roomName != null)
                 PhotonNetwork.JoinOrCreateRoom(PlayerPrefs.GetString("PlayerRoom"), getDefaultRoomOptions(), TypedLobby.Default);
             else
                 PhotonNetwork.JoinRandomRoom();
@@ -77,6 +85,23 @@ public class Launcher : MonoBehaviourPunCallbacks
         {
             m_bIsConnecting = false;
         }
+    }
+
+    /// <summary>
+    /// Tries to connect to a random room.
+    /// Will create a room if no room is found
+    /// </summary>
+    public void ConnectRandom()
+    {
+        if (m_bIsConnecting)
+            return;
+
+        m_bIsConnecting = true;
+
+        if (PhotonNetwork.IsConnected)
+            PhotonNetwork.JoinRandomRoom();
+        else
+            m_bIsConnecting = false;
     }
 
     private RoomOptions getDefaultRoomOptions()
