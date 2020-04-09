@@ -259,8 +259,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_tower: {fileID: 9196093534682404416}
   m_targetsMonsters: 0
-  m_targetRadius: 2
-  m_fireRate: 5
+  m_targetRadius: 1
+  m_fireRate: 3.5
   m_pivot: {fileID: 0}
   m_rotScaler: {x: 0, y: 0, z: 1}
   m_healPower: 10

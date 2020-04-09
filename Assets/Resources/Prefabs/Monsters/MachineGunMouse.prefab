@@ -2812,7 +2812,7 @@ MonoBehaviour:
   m_fireRate: 1
   m_damage: 20
   m_effectPrefab: {fileID: 0}
-  m_shootSound: {fileID: 8300000, guid: 70f5ba29267cfa34ab00bcb26dcc0171, type: 3}
+  m_shootSound: {fileID: 8300000, guid: d4791d9c7f3e60340be15346866f2dea, type: 3}
 --- !u!114 &-5622797506343020279
 MonoBehaviour:
   m_ObjectHideFlags: 0
