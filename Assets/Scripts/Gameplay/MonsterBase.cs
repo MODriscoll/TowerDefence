@@ -20,8 +20,6 @@ public class MonsterBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallba
 
     protected BoardManager m_board;                 // The board we are active on
 
-    //private int newHealth = 0;              // How much health enemy monsters have
-
     private float m_progress = 0f;          // Progress along current path. Is used by board manager to find where we are
     private int m_pathIndex = -1;           // Index of the path we are following
     private bool m_canBeDamaged = true;     // If this monster can be damaged
@@ -122,9 +120,6 @@ public class MonsterBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallba
 
 
         m_health = Mathf.Max(m_health - amount, 0);
-
-        healthBar.SetHealth(m_health);  //Update Healthbar UI
-
         bool bKilled = m_health <= 0;
 
         // Execute events before potentially destroying ourselves
@@ -133,7 +128,10 @@ public class MonsterBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallba
 
         // Nothing more needs to be done if still alive
         if (m_health > 0)
+        {
+            healthBar.SetHealth(m_health); 
             return false;
+        }
 
         AnalyticsHelpers.reportMonsterDeath(this, instigator ? instigator.name : "unknown");
 
@@ -151,7 +149,6 @@ public class MonsterBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallba
         MonsterManager.destroyMonster(this);
         return true;
     }
-
 
     public void setCanBeDamaged(bool bCanDamage)
     {
@@ -200,16 +197,23 @@ public class MonsterBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallba
             m_networkProgress = (float)stream.ReceiveNext();
             m_canBeDamaged = (bool)stream.ReceiveNext();
 
-            m_health = (int)stream.ReceiveNext();
-            healthBar.SetHealth(m_health);  //Update Healthbar UI
-
-
             m_progressDelta = m_networkProgress - m_progress;
+
+            int newHealth = (int)stream.ReceiveNext();
+            if (newHealth != m_health)
+            {
+                m_health = newHealth;
+                healthBar.SetHealth(m_health);  //Update Healthbar UI
+            }
         }
-
-
-
     }
 
-
+    void OnDrawGizmos()
+    {
+        if (m_renderer)
+        {
+            Gizmos.color = Color.magenta;
+            Gizmos.DrawCube(transform.position, Bounds.size);
+        }
+    }
 }

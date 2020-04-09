@@ -5,6 +5,9 @@ using Photon.Pun;
 
 public class MortarProjectile : MonoBehaviourPun, IPunInstantiateMagicCallback
 {
+    // HACK: This is here to easily allow for the TankMonster to easily check for overlaps when shield is active
+    static private List<MortarProjectile> projectilesList = new List<MortarProjectile>();
+
     [SerializeField, Min(1)] private int m_damage = 10;         // How much damage this projectile does
     [SerializeField] private float m_speed = 1f;                // Speed at which projectile flies
     [SerializeField] private float m_lifespan = 3f;             // How long this projectile lasts
@@ -23,13 +26,28 @@ public class MortarProjectile : MonoBehaviourPun, IPunInstantiateMagicCallback
     private BoardManager m_board;                                               // The board to check monsters for
     private TowerScript m_script;                                               // The script that instigated this projectile
 
+    public float Radius { get { return m_radius; } }            // The radius of this projectile
+
     private Vector3 m_cachedMoveDir = Vector3.zero;     // Cached direction to move in
     private float m_force = 0f;                         // Force of projectile
 
     void Start()
     {
+        // This will only add projectiles that are being simulated
+        // by the board this client controls. 
+        if (!PhotonNetwork.IsConnected || photonView.IsMine)
+            projectilesList.Add(this);
+
         if (m_turretEffectPrefab)
             Instantiate(m_turretEffectPrefab, transform.position, Quaternion.identity);
+    }
+
+    void OnDestroy()
+    {
+        // See Start(), this is basically here to save a little
+        // processing times on the client that doesn't own this
+        if (!PhotonNetwork.IsConnected || photonView.IsMine)
+            projectilesList.Remove(this);
     }
 
     void Update()
@@ -99,6 +117,12 @@ public class MortarProjectile : MonoBehaviourPun, IPunInstantiateMagicCallback
         }
     }
 
+    public static void destroyProjectile(MortarProjectile projectile)
+    {
+        if (projectile)
+            projectile.destroySelf();
+    }
+
     private void destroySelf()
     {
         if (PhotonNetwork.IsConnected)
@@ -139,6 +163,30 @@ public class MortarProjectile : MonoBehaviourPun, IPunInstantiateMagicCallback
 
         // This handles case where we might not be owner
         destroySelf();
+    }
+
+    /// <summary>
+    /// Get all projectiles with circle
+    /// </summary>
+    /// <param name="position">Position of the circle</param>
+    /// <param name="radius">Radius of the circle</param>
+    /// <param name="outProjectiles">List to place collided projectiles into</param>
+    /// <returns>If at least one projectile was collided with</returns>
+    public static bool getProjectilesInRadius(Vector2 position, float radius, ref List<MortarProjectile> outProjectiles)
+    {
+        outProjectiles.Clear();
+
+        foreach (MortarProjectile projectile in projectilesList)
+        {
+            float length = radius + projectile.Radius;
+            float sqrLength = length * length;
+
+            Vector2 projPos = projectile.transform.position;
+            if ((position - projPos).sqrMagnitude <= sqrLength)
+                outProjectiles.Add(projectile);
+        }
+
+        return outProjectiles.Count > 0;
     }
 
     void IPunInstantiateMagicCallback.OnPhotonInstantiate(PhotonMessageInfo info)
