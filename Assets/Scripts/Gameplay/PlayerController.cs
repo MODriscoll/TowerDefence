@@ -293,6 +293,10 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         // Possible for touch input to be tracked in editor.
         // There may be cases where we don't want this
         useTouchControls &= m_useTouchControls;
+#elif UNITY_WEBGL
+        // For WebGL, touch controls seem to be supported by default,
+        // thus it will overwrite the mouse input when playing in a normal browser
+        useTouchControls = !Input.mousePresent;
 #endif
 
         // Prioritize touch controls
