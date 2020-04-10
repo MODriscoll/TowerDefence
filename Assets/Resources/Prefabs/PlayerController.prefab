@@ -133,7 +133,7 @@ MonoBehaviour:
   m_camera: {fileID: 1674025923139972484}
   m_towersList: {fileID: 299274198644012295}
   m_monsterList: {fileID: -9199565851451362920}
-  m_health: 100
+  m_health: 111
   m_gold: 100
   m_maxGold: 1000
   m_playerUIPrefab: {fileID: 5526208262564350979, guid: 726dd88ef37d4aa4aa4724e914e02e55,

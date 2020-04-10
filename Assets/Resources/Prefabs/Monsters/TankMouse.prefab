@@ -2706,7 +2706,7 @@ MonoBehaviour:
   m_renderer: {fileID: 8315560166380164857}
   debugMode: 0
   m_cost: 40
-  m_delay: 1
+  m_delay: 0.75
 --- !u!114 &5090008550584579975
 MonoBehaviour:
   m_ObjectHideFlags: 0
