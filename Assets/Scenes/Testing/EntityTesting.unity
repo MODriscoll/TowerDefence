@@ -4033,16 +4033,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_waves:
-  - m_count: 5
-    m_spawnInterval: 2
   - m_count: 10
     m_spawnInterval: 1
+  - m_count: 15
+    m_spawnInterval: 1
   - m_count: 20
-    m_spawnInterval: 1
+    m_spawnInterval: 0.5
   - m_count: 35
-    m_spawnInterval: 1
+    m_spawnInterval: 0.5
   - m_count: 50
-    m_spawnInterval: 1
+    m_spawnInterval: 0.5
   m_monsterPrefab: Prefabs/Monsters/CreepMouse
 --- !u!114 &1752449130
 MonoBehaviour:

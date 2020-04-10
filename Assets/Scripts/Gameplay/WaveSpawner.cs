@@ -7,7 +7,7 @@ using Photon.Pun;
 public struct WaveSpawnInfo
 {
     public int m_count;             // Amount of common monsters to spawn
-    public int m_spawnInterval;     // Interval for spawning a new monster
+    public float m_spawnInterval;     // Interval for spawning a new monster
 }
 
 public class WaveSpawner : MonoBehaviourPun

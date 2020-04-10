@@ -47,8 +47,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5ad7eb2ff3a0d841a35b2e81e15f432, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_cost: 25
-  m_health: 120
+  m_cost: 30
+  m_health: 100
   m_maxHealth: 100
   healthBar: {fileID: 7074591508459189737}
   m_spawnSound: {fileID: 8300000, guid: ccd199ac6f72dbd46b3e100b96133dd8, type: 3}

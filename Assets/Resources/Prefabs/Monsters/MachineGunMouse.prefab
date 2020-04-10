@@ -2793,8 +2793,8 @@ MonoBehaviour:
   m_spawnSound: {fileID: 8300000, guid: 11a5b7af5e65c9247ba1c0097967372e, type: 3}
   m_deathScriptPrefab: Prefabs/Monsters/GeneralMonsterDeathScript
   m_renderer: {fileID: 6200519861259913905}
-  m_cost: 30
-  m_delay: 1
+  m_cost: 25
+  m_delay: 0.75
 --- !u!114 &-7273443016193421173
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2810,7 +2810,7 @@ MonoBehaviour:
   m_monster: {fileID: 5171284587749281140}
   m_targetRadius: 2
   m_fireRate: 1
-  m_damage: 20
+  m_damage: 15
   m_effectPrefab: {fileID: 0}
   m_shootSound: {fileID: 8300000, guid: d4791d9c7f3e60340be15346866f2dea, type: 3}
 --- !u!114 &-5622797506343020279
