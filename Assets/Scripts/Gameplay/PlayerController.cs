@@ -32,6 +32,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
 
     private bool m_canPlaceTowers = false;          // If we can place towers (controlled by MasterClient)
     private bool m_canSpawnMonsters = false;        // If we can spawn monsters (controlled by MasterClient)
+    private bool m_canUseAbilities = false;         // If we can use abilities (controlled by MasterClient)
     private bool m_monsterSpawnLocked = false;      // If we are locked from spawning monsters (delay is active)
     private bool m_canBulldoze = false;             // If clicking on a tile with a tower will destroy it (only when delay isn't active)
 
@@ -163,18 +164,50 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
 #endif
 
         Vector3 selectedPos;
-        if (tryGetBoardInput(out selectedPos))
-        {
-            if (m_canPlaceTowers)
-            {
-                // Convert from screen space to world space
-                selectedPos = m_camera.ScreenToWorldPoint(selectedPos);
+        bool rightClick;
+        if (tryGetBoardInput(out selectedPos, out rightClick))
+            handleSelection(selectedPos, rightClick);
+    }
 
-                Vector3Int tileIndex = Board.positionToIndex(selectedPos);
-                if (!m_board.isPlaceableTile(tileIndex))
+    void OnDestroy()
+    {
+        if (localPlayer == this)
+            localPlayer = null;
+        if (remotePlayer == this)
+            remotePlayer = null;
+    }
+
+    /// <summary>
+    /// Handles a selection input based on current board player is viewing.
+    /// This should only be called on the owning clients player controller
+    /// </summary>
+    /// <param name="screenPos">Screen position of selection</param>
+    /// <param name="rightClick">If selection was made using right click</param>
+    private void handleSelection(Vector3 screenPos, bool rightClick)
+    {
+        // Right click is being used to activate abilities while in editor,
+        // in actual games (where we are connected), we want to ignore this
+        if (PhotonNetwork.IsConnected && rightClick)
+            return;
+
+        if (m_canPlaceTowers)
+        {
+            // Convert from screen space to world space
+            Vector3 worldPos = m_camera.ScreenToWorldPoint(screenPos);
+
+            BoardManager viewedBoard = getViewedBoardManager();
+            if (!viewedBoard)
+                return;
+            
+            Vector3Int tileIndex = viewedBoard.positionToIndex(worldPos);
+
+            // Board is our board, we are able to place towers
+            if (viewedBoard == Board && !rightClick)
+            {
+                if (!viewedBoard.isPlaceableTile(tileIndex))
                     return;
 
-                TowerBase tower = m_board.getTowerOnTile(tileIndex);
+                TowerBase tower = viewedBoard.getTowerOnTile(tileIndex);
                 if (tower)
                 {
                     // Try destroying the tower if player has bulldozing active
@@ -191,7 +224,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
                 {
                     // We call this as selectedPos is highly likely not to be
                     // the center of the tile, while this 100% will be
-                    Vector3 spawnPos = m_board.indexToPosition(tileIndex);
+                    Vector3 spawnPos = viewedBoard.indexToPosition(tileIndex);
 
                     // Spawn tower on the server (replicates back to us if not master client)
                     string prefabName;
@@ -201,14 +234,23 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
                 }
             }
         }
-    }
 
-    void OnDestroy()
-    {
-        if (localPlayer == this)
-            localPlayer = null;
-        if (remotePlayer == this)
-            remotePlayer = null;
+        if (m_canUseAbilities)
+        {
+            // Right click is for using abilities while in editor
+            if (!PhotonNetwork.IsConnected && !rightClick)
+                return;
+
+            BoardManager viewedBoard = getViewedBoardManager();
+            if (!viewedBoard)
+                return;
+
+            // We can use abilities while looking at the enemies board
+            if (viewedBoard != Board || rightClick)
+            {
+                Debug.LogError("Activate Ability!");
+            }
+        }
     }
 
     /// <summary>
@@ -225,9 +267,17 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
 
         return null;
     }
-
-    protected bool tryGetBoardInput(out Vector3 selectedPos)
+    
+    /// <summary>
+    /// Gets current input of player
+    /// </summary>
+    /// <param name="selectedPos">Screen space position of input</param>
+    /// <param name="rightClick">If Keyboard is available, was input from a right click</param>
+    /// <returns>If player made input, otherwise false</returns>
+    protected bool tryGetBoardInput(out Vector3 selectedPos, out bool rightClick)
     {
+        rightClick = false;
+
 #if UNITY_EDITOR
         // If playing in editor, only accept input for first player
         if (Application.isEditor)
@@ -264,6 +314,12 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             if (Input.GetMouseButtonDown(0))
             {
                 selectedPos = Input.mousePosition;
+                return true;
+            }
+            else if (Input.GetMouseButtonDown(1))
+            {
+                selectedPos = Input.mousePosition;
+                rightClick = true;
                 return true;
             }
         }
@@ -307,6 +363,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         if (m_health <= 0)
         {
             m_canSpawnMonsters = false;
+            m_canUseAbilities = false;
 
             // We lost all our health. The opponent wins!
             // TODO: Call function for master client to handle
@@ -454,7 +511,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     {
         // If offline (play in editor) there is no second board
         if (!PhotonNetwork.IsConnected)
-            boardId = 0;
+            boardId = m_id;
 
         if (m_viewBoard != boardId)
         {
@@ -472,6 +529,15 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         }
     }
 
+    /// <summary>
+    /// Get the board we are viewing
+    /// </summary>
+    /// <returns>Valid board or null</returns>
+    private BoardManager getViewedBoardManager()
+    {
+        return GameManager.manager.getBoardManager(m_viewBoard);
+    }
+
     public void notifyMatchStarted()
     {
         // Allow players to start placing towers now
@@ -485,6 +551,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     {
         m_canPlaceTowers = false;
         m_canSpawnMonsters = false;
+        m_canUseAbilities = false;
 
         bool bIsWinner = winnerId == m_id;
 
@@ -503,6 +570,8 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     {
         m_canPlaceTowers = true;
         m_canSpawnMonsters = true;
+        m_canUseAbilities = true;
+
         m_monsterSpawnLocked = false;
 
         if (m_playerUI)
@@ -516,6 +585,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     public void notifyWaveFinished(int waveNum)
     {
         m_canSpawnMonsters = false;
+        m_canUseAbilities = false;
 
         if (m_playerUI)
             m_playerUI.notifyWaveFinished(waveNum);
