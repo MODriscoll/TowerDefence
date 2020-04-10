@@ -2779,9 +2779,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_travelDuration: 0.5
-  m_reward: 12
-  m_damage: 5
-  m_health: 15
+  m_reward: 4
+  m_damage: 10
+  m_health: 25
   healthBar: {fileID: 8839750124713612891}
   m_spawnSound: {fileID: 8300000, guid: 11a5b7af5e65c9247ba1c0097967372e, type: 3}
   m_deathScriptPrefab: Prefabs/Monsters/GeneralMonsterDeathScript
