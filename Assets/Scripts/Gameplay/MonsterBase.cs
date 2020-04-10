@@ -31,7 +31,7 @@ public class MonsterBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallba
     public OnTakeDamage OnMonsterTakenDamage;
 
     [SerializeField] private Renderer m_renderer;       // This monsters renderer. Is used for collision checks
-
+    public bool debugMode = false;
     public BoardManager Board { get { return m_board; } }
     public float TilesTravelled { get { return m_progress; } }
 
@@ -210,7 +210,7 @@ public class MonsterBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallba
 
     void OnDrawGizmos()
     {
-        if (m_renderer)
+        if (m_renderer && debugMode)
         {
             Gizmos.color = Color.magenta;
             Gizmos.DrawCube(transform.position, Bounds.size);
