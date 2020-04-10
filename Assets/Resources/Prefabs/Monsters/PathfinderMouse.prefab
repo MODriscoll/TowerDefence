@@ -2756,8 +2756,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7597932220477736506}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: 0.6534437, y: -0, z: -0, w: 0.7569752}
+  m_LocalPosition: {x: 0, y: -0.29618025, z: -0.52984697}
   m_LocalScale: {x: 0.85, y: 0.85, z: 0.85}
   m_Children:
   - {fileID: 4203837551606922770}
@@ -2765,7 +2765,7 @@ Transform:
   - {fileID: 4540173135191967775}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 81.604004, y: 0, z: 0}
 --- !u!114 &5517096975655646799
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2786,6 +2786,7 @@ MonoBehaviour:
   m_spawnSound: {fileID: 8300000, guid: 11a5b7af5e65c9247ba1c0097967372e, type: 3}
   m_deathScriptPrefab: Prefabs/Monsters/GeneralMonsterDeathScript
   m_renderer: {fileID: 7099630152254138813}
+  debugMode: 0
   m_cost: 40
   m_delay: 1
 --- !u!114 &6293389618481299608

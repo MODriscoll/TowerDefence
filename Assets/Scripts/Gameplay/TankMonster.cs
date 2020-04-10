@@ -18,6 +18,8 @@ public class TankMonster : MonoBehaviourPun, IPunObservable
     private bool m_shieldActive = false;            // If shield is currently active
     private bool m_cooldownActive = false;          // If shield cooldown is active
     private Coroutine m_collisionRoutine = null;    // Coroutine running to check collisions
+
+    public bool debugMode = false;
     void Awake()
     {
         if (m_shieldObject)
@@ -134,7 +136,10 @@ public class TankMonster : MonoBehaviourPun, IPunObservable
 
     void OnDrawGizmos()
     {
-        Gizmos.color = Color.green;
-        Gizmos.DrawSphere(transform.position, m_shieldRadius);
+        if (debugMode)
+        {
+            Gizmos.color = Color.green;
+            Gizmos.DrawSphere(transform.position, m_shieldRadius);
+        }
     }
 }

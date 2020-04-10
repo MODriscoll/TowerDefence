@@ -2677,7 +2677,7 @@ Transform:
   m_Children:
   - {fileID: 3675769415858211318}
   - {fileID: 4203837551606922770}
-  - {fileID: 3865438071683250624}
+  - {fileID: 6481262131852254826}
   - {fileID: 8258280753367502674}
   - {fileID: 5181220240589853727}
   - {fileID: 2056737507270402747}
@@ -2700,10 +2700,11 @@ MonoBehaviour:
   m_reward: 9
   m_damage: 5
   m_health: 75
-  healthBar: {fileID: 3865438071683250399}
+  healthBar: {fileID: 344072010013717678}
   m_spawnSound: {fileID: 8300000, guid: 11a5b7af5e65c9247ba1c0097967372e, type: 3}
   m_deathScriptPrefab: Prefabs/Monsters/GeneralMonsterDeathScript
   m_renderer: {fileID: 8315560166380164857}
+  debugMode: 0
   m_cost: 40
   m_delay: 1
 --- !u!114 &5090008550584579975
@@ -2726,6 +2727,7 @@ MonoBehaviour:
   m_tickRate: 0.2
   m_activeSound: {fileID: 0}
   m_deactiveSound: {fileID: 0}
+  debugMode: 0
 --- !u!114 &-5622797506343020279
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3409,7 +3411,7 @@ PrefabInstance:
     - target: {fileID: 7806667676390911409, guid: ddcc5a60615ffa346a38c14dfff03745,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.984
+      value: -1.14
       objectReference: {fileID: 0}
     - target: {fileID: 7806667676390911409, guid: ddcc5a60615ffa346a38c14dfff03745,
         type: 3}
@@ -3459,7 +3461,7 @@ PrefabInstance:
     - target: {fileID: 7806667676390911409, guid: ddcc5a60615ffa346a38c14dfff03745,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.347
+      value: 0.507
       objectReference: {fileID: 0}
     - target: {fileID: 7806667676390911409, guid: ddcc5a60615ffa346a38c14dfff03745,
         type: 3}
@@ -3528,7 +3530,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ddcc5a60615ffa346a38c14dfff03745, type: 3}
---- !u!114 &3865438071683250399 stripped
+--- !u!114 &344072010013717678 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3558592308590331765, guid: ddcc5a60615ffa346a38c14dfff03745,
     type: 3}
@@ -3540,7 +3542,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4d8c192e4588374184771158765e3db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!224 &3865438071683250624 stripped
+--- !u!224 &6481262131852254826 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7806667676390911409, guid: ddcc5a60615ffa346a38c14dfff03745,
     type: 3}
