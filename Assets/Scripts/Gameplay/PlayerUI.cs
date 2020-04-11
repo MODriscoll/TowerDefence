@@ -52,7 +52,7 @@ public class PlayerUI : MonoBehaviour
         if (PhotonNetwork.IsConnected)
         {
             if (m_playerHealthText)
-                m_playerHealthText.text = string.Format("{0} Cheese: {1}", PhotonNetwork.NickName, m_owner.Health);
+                m_playerHealthText.text = string.Format("{0} : {1}", PhotonNetwork.NickName, m_owner.Health);
 
             if (m_enemyHealthText)
             {
@@ -60,20 +60,20 @@ public class PlayerUI : MonoBehaviour
                 {
                     PhotonView remoteView = PlayerController.remotePlayer.photonView;
                     if (remoteView.Owner != null)
-                        m_enemyHealthText.text = string.Format("{0} Cheese: {1}", remoteView.Owner.NickName, PlayerController.remotePlayer.Health);
+                        m_enemyHealthText.text = string.Format("{0} : {1}", remoteView.Owner.NickName, PlayerController.remotePlayer.Health);
                     else
-                        m_enemyHealthText.text = string.Format("Enemy Cheese: {0}", m_owner.Health);
+                        m_enemyHealthText.text = string.Format("Enemy : {0}", m_owner.Health);
                 }
                 else
                 {
-                    m_enemyHealthText.text = string.Format("Enemy Cheese: -1");
+                    m_enemyHealthText.text = string.Format("Enemy : -1");
                 }
             }
         }
         else
         {
             if (m_playerHealthText)
-                m_playerHealthText.text = string.Format("P1 Cheese: {0}", m_owner.Health);
+                m_playerHealthText.text = string.Format("P1 : {0}", m_owner.Health);
 
             // Most likely playing in editor (only one player is supported)
             if (m_enemyHealthText)
