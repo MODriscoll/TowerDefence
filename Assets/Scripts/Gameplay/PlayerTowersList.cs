@@ -4,16 +4,25 @@ using UnityEngine;
 
 public class PlayerTowersList : MonoBehaviour
 {
+    public struct ActiveTowersInfo
+    {
+        public int m_count;             // Number of towers that have been built
+        public AbilityBase m_ability;   // Ability that has been unlocked by building this tower
+    }
+
     // Prefabs for towers that can be spawned
     [PhotonPrefab(typeof(TowerBase))]
     [SerializeField] private List<string> m_towers = new List<string>();
 
-    private int m_selectedTower = -1;           // Tower player has selected
+    private int m_selectedTower = -1;                                           // Tower player has selected
+    private Dictionary<System.Type, ActiveTowersInfo> m_activeTowerInfos;       // Info about towers player has built per type
 
     public bool hasSelectedTower { get { return m_selectedTower != -1; } }      // If a tower has been selected by the player
 
     void Start()
     {
+        m_activeTowerInfos = new Dictionary<System.Type, ActiveTowersInfo>();
+
         // Load in each resource now
         foreach (string prefab in m_towers)
             Resources.Load(prefab);
