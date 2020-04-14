@@ -36,6 +36,8 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     private bool m_monsterSpawnLocked = false;      // If we are locked from spawning monsters (delay is active)
     private bool m_canBulldoze = false;             // If clicking on a tile with a tower will destroy it (only when delay isn't active)
 
+    private bool m_useAbilities = false;            // If viewing opponents board and we click, should we try to activate an ability
+
     public PlayerUI m_playerUIPrefab;       // UI to spawn for local player
     private PlayerUI m_playerUI = null;     // Instance of players UI   
 
@@ -190,66 +192,64 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         if (PhotonNetwork.IsConnected && rightClick)
             return;
 
-        if (m_canPlaceTowers)
-        {
-            // Convert from screen space to world space
-            Vector3 worldPos = m_camera.ScreenToWorldPoint(screenPos);
+        // Convert from screen space to world space
+        Vector3 worldPos = m_camera.ScreenToWorldPoint(screenPos);
 
-            BoardManager viewedBoard = getViewedBoardManager();
-            if (!viewedBoard)
+        BoardManager viewedBoard = getViewedBoardManager();
+        if (!viewedBoard)
+            return;
+
+        if (viewedBoard == Board)
+        {
+            if (!m_canPlaceTowers || rightClick)
                 return;
-            
+
             Vector3Int tileIndex = viewedBoard.positionToIndex(worldPos);
 
-            // Board is our board, we are able to place towers
-            if (viewedBoard == Board && !rightClick)
+            if (!viewedBoard.isPlaceableTile(tileIndex))
+                return;
+
+            TowerBase tower = viewedBoard.getTowerOnTile(tileIndex);
+            if (tower)
             {
-                if (!viewedBoard.isPlaceableTile(tileIndex))
-                    return;
-
-                TowerBase tower = viewedBoard.getTowerOnTile(tileIndex);
-                if (tower)
+                // Try destroying the tower if player has bulldozing active
+                if (m_canBulldoze)
                 {
-                    // Try destroying the tower if player has bulldozing active
-                    if (m_canBulldoze)
-                    {
-                        // Refund half of a cost of the tower
-                        giveGold(tower.m_cost / 2);
+                    // Refund half of a cost of the tower
+                    giveGold(tower.m_cost / 2);
 
-                        AnalyticsHelpers.reportTowerBulldozed(tower);
-                        TowerBase.destroyTower(tower, true);
-                    }
-                }
-                else if (m_canBuildInBulldozeMode || !m_canBulldoze)
-                {
-                    // We call this as selectedPos is highly likely not to be
-                    // the center of the tile, while this 100% will be
-                    Vector3 spawnPos = viewedBoard.indexToPosition(tileIndex);
-
-                    // Spawn tower on the server (replicates back to us if not master client)
-                    string prefabName;
-                    TowerBase towerPrefab = m_towersList.getSelectedTower(out prefabName);
-                    if (towerPrefab && canAfford(towerPrefab.m_cost))
-                        placeTowerAt(towerPrefab, prefabName, tileIndex, spawnPos);
+                    AnalyticsHelpers.reportTowerBulldozed(tower);
+                    TowerBase.destroyTower(tower, true);
                 }
             }
-        }
+            else if (m_canBuildInBulldozeMode || !m_canBulldoze)
+            {
+                // We call this as selectedPos is highly likely not to be
+                // the center of the tile, while this 100% will be
+                Vector3 spawnPos = viewedBoard.indexToPosition(tileIndex);
 
-        if (m_canUseAbilities)
+                // Spawn tower on the server (replicates back to us if not master client)
+                string prefabName;
+                TowerBase towerPrefab = m_towersList.getSelectedTower(out prefabName);
+                if (towerPrefab && canAfford(towerPrefab.m_cost))
+                    placeTowerAt(towerPrefab, prefabName, tileIndex, spawnPos);
+            }
+        }
+        else
         {
             // Right click is for using abilities while in editor
             if (!PhotonNetwork.IsConnected && !rightClick)
                 return;
 
-            BoardManager viewedBoard = getViewedBoardManager();
-            if (!viewedBoard)
+            AbilityBase ability = m_towersList.getSelectedAbility();
+            if (!canUseAbility(ability))
                 return;
 
-            // We can use abilities while looking at the enemies board
-            if (viewedBoard != Board || rightClick)
-            {
-                Debug.LogError("Activate Ability!");
-            }
+            Vector3Int tileIndex = viewedBoard.positionToIndex(worldPos);
+
+            // Check if this ability would allow us to select this position
+            if (!ability.canUseAbilityHere(viewedBoard, worldPos, tileIndex))
+                return false;
         }
     }
 
@@ -343,9 +343,23 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     public void placeTowerAt(TowerBase towerPrefab, string prefabName, Vector3Int tileIndex, Vector3 spawnPos)
     {
         consumeGold(towerPrefab.m_cost);
-        
+
         // Finally spawn the tower (this will eventually lead to actually placing tile on the map)
         TowerBase.spawnTower(prefabName, m_id, tileIndex, spawnPos);
+    }
+
+    // Internal, do not call directly
+    public void onTowerBuilt(TowerBase tower)
+    {
+        if (m_towersList)
+            m_towersList.notifyTowerBuilt(tower);
+    }
+
+    // Internal, do not call directly
+    public void onTowerDestroyed(TowerBase tower)
+    {
+        if (m_towersList)
+            m_towersList.notifyTowerDestroyed(tower);
     }
 
     /// <summary>
@@ -484,6 +498,19 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     }
 
     /// <summary>
+    /// Checks if we are able to activate an ability
+    /// </summary>
+    /// <param name="ability">The ability to try and activate</param>
+    /// <returns>If ability can be used</returns>
+    private bool canUseAbility(AbilityBase ability)
+    {
+        if (!ability)
+            return false;
+
+        return m_canUseAbilities && m_useAbilities;
+    }
+
+    /// <summary>
     /// Callback after delay for spawning special monster is done
     /// </summary>
     private void unlockMonsterSpawn()
@@ -497,6 +524,24 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     public void toggleBulldozeTowers()
     {
         m_canBulldoze = !m_canBulldoze;
+    }
+
+    public void setBulldozeTowers(bool canBulldoze)
+    {
+        m_canBulldoze = !m_canBulldoze;
+    }
+
+    /// <summary>
+    /// Toggles if player will use abilities when clicking on opponents board
+    /// </summary>
+    public void toggleUseAbilities()
+    {
+        m_useAbilities = !m_useAbilities;
+    }
+
+    public void setUseAbilities(bool canUse)
+    {
+        m_useAbilities = canUse;
     }
 
     /// <summary>

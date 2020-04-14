@@ -29,6 +29,8 @@ public class TowerBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallback
 
     public BoardManager Board { get { return m_board; } }
 
+    public AbilityBase Ability { get { return m_ability; } }
+
     void Start()
     {
         // Only need this for locally controlled player
@@ -135,6 +137,10 @@ public class TowerBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallback
         TowerBase tower = towerObj.GetComponent<TowerBase>();
         Assert.IsNotNull(tower);
 
+        PlayerController controller = PlayerController.getController(playerId);
+        if (controller)
+            controller.onTowerBuilt(tower);
+
         // This only gets called once per server
         AnalyticsHelpers.reportTowerPlaced(tower, tileIndex);
 
@@ -149,6 +155,10 @@ public class TowerBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallback
 
         if (tower.m_board)
             tower.m_board.removeTower(tower);
+
+        PlayerController controller = PlayerController.getController(tower.m_ownerId);
+        if (controller)
+            controller.onTowerDestroyed(tower);
 
         if (PhotonNetwork.IsConnected)
             tower.photonView.RPC("destroyTowerRPC", RpcTarget.All, bulldozed);
