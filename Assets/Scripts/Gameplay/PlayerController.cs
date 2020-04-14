@@ -246,10 +246,13 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
                 return;
 
             Vector3Int tileIndex = viewedBoard.positionToIndex(worldPos);
+            // TODO: check if index is valid
 
             // Check if this ability would allow us to select this position
-            if (!ability.canUseAbilityHere(viewedBoard, worldPos, tileIndex))
-                return false;
+            if (!ability.canUseAbilityHere(this, viewedBoard, worldPos, tileIndex))
+                return;
+
+            // TODO: Activate new ability instance
         }
     }
 
