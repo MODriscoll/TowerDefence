@@ -12,7 +12,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     private int m_id = -1;                                          // Id of player
     [SerializeField] private Camera m_camera;                       // Players viewport of the scene
     [SerializeField] private PlayerTowersList m_towersList;         // List of all the towers the player can place
-    [SerializeField] public PlayerMonstersList m_monsterList;       // List of all the monsters the player can deploy
+    [SerializeField] private PlayerMonstersList m_monsterList;       // List of all the monsters the player can deploy
    
     public int playerId { get { return m_id; } }        // The id of this player, is set in start
 
@@ -199,9 +199,9 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         if (!viewedBoard)
             return;
 
-        if (viewedBoard == Board)
+        if (viewedBoard == Board && !rightClick)
         {
-            if (!m_canPlaceTowers || rightClick)
+            if (!m_canPlaceTowers)
                 return;
 
             Vector3Int tileIndex = viewedBoard.positionToIndex(worldPos);
@@ -245,8 +245,10 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             if (!canUseAbility(ability))
                 return;
 
+            // Make sure we have actually clicked on the board 
             Vector3Int tileIndex = viewedBoard.positionToIndex(worldPos);
-            // TODO: check if index is valid
+            if (!viewedBoard.isValidTile(tileIndex))
+                return;
 
             // Check if this ability would allow us to select this position
             if (!ability.canUseAbilityHere(this, viewedBoard, worldPos, tileIndex))
@@ -510,7 +512,11 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         if (!ability)
             return false;
 
-        return m_canUseAbilities && m_useAbilities;
+        if (m_canUseAbilities && m_useAbilities)
+            if (ability.canUseAbilityNow())
+                return true;
+
+        return false;
     }
 
     /// <summary>

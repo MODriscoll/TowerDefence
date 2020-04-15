@@ -307,6 +307,14 @@ public class BoardManager : MonoBehaviourPun
         return false;
     }
 
+    public bool isValidTile(Vector3Int tileIndex)
+    {
+        if (m_tileMap)
+            return m_tileMap.cellBounds.Contains(tileIndex);
+
+        return false;
+    }
+
     public int getRandomPathToFollow()
     {
         return m_paths.getRandomPathIndex();

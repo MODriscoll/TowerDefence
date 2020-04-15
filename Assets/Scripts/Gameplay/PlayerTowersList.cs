@@ -17,6 +17,7 @@ public class PlayerTowersList : MonoBehaviour
     private int m_selectedTower = -1;                                           // Tower player has selected
     private Dictionary<System.Type, ActiveTowersInfo> m_activeTowerInfos;       // Info about towers player has built per type
     private List<AbilityBase> m_availableAbilities;                             // List of abilities available for use
+    private int m_selectedAbility = -1;                                         // Ability player has selected (this will be abilities Id)
 
     public bool hasSelectedTower { get { return m_selectedTower != -1; } }      // If a tower has been selected by the player
 
@@ -53,9 +54,29 @@ public class PlayerTowersList : MonoBehaviour
         m_selectedTower = -1;
     }
 
+    public AbilityBase selectAbility(int id)
+    {
+        AbilityBase ability = findAbilityById(id);
+        if (ability != null)
+            m_selectedAbility = id;
+
+        return ability;
+    }
+
+    public void unselectAbility()
+    {
+        m_selectedAbility = -1;
+    }
+
     public TowerBase getSelectedTower(out string prefabName)
     {
         return getTower(m_selectedTower, out prefabName);
+    }
+
+    public AbilityBase getSelectedAbility()
+    {
+        // We search using Id, as the available abilities could have possibly changed
+        return findAbilityById(m_selectedAbility);
     }
 
     public TowerBase getTower(int index, out string prefabName)
@@ -81,24 +102,26 @@ public class PlayerTowersList : MonoBehaviour
         ActiveTowersInfo info = null;
         if (!m_activeTowerInfos.TryGetValue(type, out info))
         {
+            // Returning null here, this will keep getting called but
+            // will never create a towers info for this tower
+            AbilityBase abilityInstance = Instantiate(tower.Ability);
+            if (!abilityInstance)
+                return;
+
+
+#if UNITY_EDITOR
+            abilityInstance.gameObject.hideFlags = HideFlags.HideInHierarchy | HideFlags.HideInInspector;
+#endif
+
             info = new ActiveTowersInfo();
             info.m_count = 0;
-            info.m_ability = tower.Ability;
+            info.m_ability = abilityInstance;
 
             m_activeTowerInfos.Add(type, info);
             m_availableAbilities.Add(info.m_ability);
         }
 
         ++info.m_count;
-    }
-
-    public AbilityBase getSelectedAbility()
-    {
-        // Haven't decided how setting active ability works just yet
-        if (m_activeTowerInfos.Count > 0)
-            return m_activeTowerInfos.Values.GetEnumerator().Current.m_ability;
-        else
-            return null;
     }
 
     public void notifyTowerDestroyed(TowerBase tower)
@@ -111,8 +134,17 @@ public class PlayerTowersList : MonoBehaviour
             --info.m_count;
             if (info.m_count <= 0)
             {
-                m_availableAbilities.Remove(info.m_ability);
+                AbilityBase abilityInstance = info.m_ability;
+
+                // Be sure to unselect this if not available anymore
+                if (m_selectedAbility == abilityInstance.abilityId)
+                    unselectAbility();
+
+                m_availableAbilities.Remove(abilityInstance);
                 m_activeTowerInfos.Remove(type);
+
+                // This game object only exists locally
+                Destroy(abilityInstance.gameObject);
             }
         }
     }
@@ -124,5 +156,19 @@ public class PlayerTowersList : MonoBehaviour
                 return true;
 
         return false;
+    }
+
+    private AbilityBase findAbilityById(int id)
+    {
+        AbilityBase foundAbility = null;
+
+        foreach (AbilityBase ability in m_availableAbilities)
+            if (ability && ability.abilityId == id)
+                foundAbility = ability;
+
+        if (foundAbility && !foundAbility.hasValidId)
+            foundAbility = null;
+
+        return foundAbility;
     }
 }

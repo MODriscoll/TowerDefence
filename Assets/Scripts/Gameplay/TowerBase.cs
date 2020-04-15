@@ -15,11 +15,7 @@ public class TowerBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallback
     private BoardManager m_board;       // Cached board for fast access
     private float m_spawnTime = -1f;    // Time when we were spawned
 
-    // The ability this tower provides 
-    [PhotonPrefab]
-    [SerializeField] private string m_abilityPrefab;
-
-    private AbilityBase m_ability;      // Loaded in ability prefab (set in Start)
+    [SerializeField] private AbilityBase m_ability;        // Ability that is unlocked for building this type of tower
 
     [SerializeField] private AudioClip m_spawnSound;        // Sound to play when spawned
     [SerializeField] private AudioClip m_destroyedSound;    // Sound to play when destroyed
@@ -33,17 +29,6 @@ public class TowerBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallback
 
     void Start()
     {
-        // Only need this for locally controlled player
-        if (!PhotonNetwork.IsConnected || photonView.IsMine)
-        {
-            if (!string.IsNullOrEmpty(m_abilityPrefab))
-            {
-                m_ability = Resources.Load<GameObject>(m_abilityPrefab).GetComponent<AbilityBase>();
-                if (!m_ability)
-                    Debug.LogError(string.Format("Ability Prefab {0} does not have the AbilityBase component", m_abilityPrefab));
-            }
-        }
-
         m_spawnTime = Time.time;
         healthBar.SetMaxHealth(m_health);   //Set Healthbar UI
     }

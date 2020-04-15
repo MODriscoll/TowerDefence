@@ -169,7 +169,7 @@ public class PlayerUI : MonoBehaviour
     public void spawnMouse(int i)
     {
         string prefabName;
-        m_owner.spawnSpecialMonster(m_owner.m_monsterList.getMonster(i, out prefabName), prefabName);
+        m_owner.spawnSpecialMonster(m_owner.monsterList.getMonster(i, out prefabName), prefabName);
     }
 
     public void ToggleBulldose()
