@@ -9,6 +9,9 @@ public class TowerBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallback
     [Min(0)] public int m_cost = 10;                // The cost to build this tower (0 = free)
     public int m_health = 10;                       // How much health this tower has
     public int m_maxHealth = 10;                    // Max health this tower can have
+    public float destroyedShakeIntensity;           // How intense the shaking will be
+    public float destroyedShakeRotation;            // If there will be rotation shake and how much
+    public float destroyedShakeDuration;            // How long the shake effect will last for
     public HealthUI healthBar;                      // Reference healthbar UI for Entity
 
     private int m_ownerId = -1;         // Id of player that owns this tower
@@ -98,6 +101,7 @@ public class TowerBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallback
         if (m_health <= 0)
         {
             AnalyticsHelpers.reportTowerDestroyed(this, instigator ? instigator.name : "Unknown");
+            CameraEffectsController.instance.CameraShake(destroyedShakeIntensity, destroyedShakeDuration, destroyedShakeRotation);
             destroyTower(this);
         }
     }

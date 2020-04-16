@@ -242,6 +242,7 @@ MonoBehaviour:
   m_health: 75
   m_maxHealth: 75
   healthBar: {fileID: 7983060048217465689}
+  m_ability: {fileID: 0}
   m_spawnSound: {fileID: 8300000, guid: ccd199ac6f72dbd46b3e100b96133dd8, type: 3}
   m_destroyedSound: {fileID: 0}
   m_bulldozedSound: {fileID: 8300000, guid: eefcaee6c811d6641b3f95f3a344aa9b, type: 3}
