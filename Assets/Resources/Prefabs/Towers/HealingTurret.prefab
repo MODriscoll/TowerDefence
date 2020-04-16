@@ -221,7 +221,7 @@ Transform:
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children:
   - {fileID: 7261377726089398871}
-  - {fileID: 6893654270532103829}
+  - {fileID: 3746419755425614237}
   - {fileID: 6788269959824993309}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -242,9 +242,9 @@ MonoBehaviour:
   m_health: 75
   m_maxHealth: 75
   destroyedShakeIntensity: 0.5
-  destroyedShakeRotation: 0
-  destroyedShakeDuration: 0
-  healthBar: {fileID: 6893654270532104088}
+  destroyedShakeRotation: 5
+  destroyedShakeDuration: 0.2
+  healthBar: {fileID: 7983060048217465689}
   m_ability: {fileID: 0}
   m_spawnSound: {fileID: 8300000, guid: ccd199ac6f72dbd46b3e100b96133dd8, type: 3}
   m_destroyedSound: {fileID: 0}
@@ -533,13 +533,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ddcc5a60615ffa346a38c14dfff03745, type: 3}
---- !u!224 &6893654270532103829 stripped
+--- !u!224 &3746419755425614237 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7806667676390911409, guid: ddcc5a60615ffa346a38c14dfff03745,
     type: 3}
   m_PrefabInstance: {fileID: 6893654270532101164}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &6893654270532104088 stripped
+--- !u!114 &7983060048217465689 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3558592308590331765, guid: ddcc5a60615ffa346a38c14dfff03745,
     type: 3}
