@@ -101,7 +101,12 @@ public class TowerBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallback
         if (m_health <= 0)
         {
             AnalyticsHelpers.reportTowerDestroyed(this, instigator ? instigator.name : "Unknown");
-            CameraEffectsController.instance.CameraShake(destroyedShakeIntensity, destroyedShakeDuration, destroyedShakeRotation);
+
+            if (CameraEffectsController.instance)
+            {
+                CameraEffectsController.instance.CameraShake(destroyedShakeIntensity, destroyedShakeDuration, destroyedShakeRotation);
+            }
+            
             destroyTower(this);
         }
     }

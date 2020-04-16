@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 3583425174998500485}
   - component: {fileID: 1820756839613272316}
   - component: {fileID: 4445929654500059918}
-  - component: {fileID: -5821607350531710767}
   m_Layer: 11
   m_Name: Camera
   m_TagString: MainCamera
@@ -185,15 +184,3 @@ MonoBehaviour:
   cameraClearFlags: 2
   background: {r: 1, g: 1, b: 1, a: 1}
   targetTexture: _CameraNormalsTexture
---- !u!114 &-5821607350531710767
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8444439302127086808}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 756409ba3ee38994aa38d7862760b35b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

@@ -88,6 +88,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
                 // View game through this camera
                 if (m_camera)
                     m_camera.tag = "MainCamera";
+                    m_camera.gameObject.AddComponent<CameraEffectsController>();
             }
             else
             {
@@ -121,7 +122,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             m_playerUI = Instantiate(m_playerUIPrefab, transform, false);
             if (m_playerUI)
                 m_playerUI.m_owner = this;
-
+            m_camera.gameObject.AddComponent<CameraEffectsController>();
             m_board = GameManager.manager.getBoardManager(m_id);
 
             // Also set ourselves as remote player when playing offline

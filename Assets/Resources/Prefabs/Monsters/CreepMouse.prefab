@@ -2520,7 +2520,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 7423166414591747088}
+  - {fileID: 815917229132743448}
   - {fileID: 4203837551606922770}
   - {fileID: 3209273544111069227}
   m_Father: {fileID: 0}
@@ -2542,7 +2542,7 @@ MonoBehaviour:
   m_reward: 3
   m_damage: 5
   m_health: 30
-  healthBar: {fileID: 4192869653080624852}
+  healthBar: {fileID: 815917229132743189}
   m_spawnSound: {fileID: 8300000, guid: 11a5b7af5e65c9247ba1c0097967372e, type: 3}
   m_deathScriptPrefab: 
   m_renderer: {fileID: 7897980240959495910}
@@ -3298,13 +3298,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ddcc5a60615ffa346a38c14dfff03745, type: 3}
---- !u!224 &7423166414591747088 stripped
+--- !u!224 &815917229132743448 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7806667676390911409, guid: ddcc5a60615ffa346a38c14dfff03745,
     type: 3}
   m_PrefabInstance: {fileID: 815917229132745121}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &4192869653080624852 stripped
+--- !u!114 &815917229132743189 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3558592308590331765, guid: ddcc5a60615ffa346a38c14dfff03745,
     type: 3}
