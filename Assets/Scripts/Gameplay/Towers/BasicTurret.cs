@@ -36,7 +36,7 @@ public class BasicTurret : TowerScript
     private void onFired(Vector2 targetPos, bool killed)
     {
         if (m_effectPrefab)
-            Instantiate(m_effectPrefab, new Vector3(targetPos.x, targetPos.y, 0f), Quaternion.identity);
+            Instantiate(m_effectPrefab, new Vector3(targetPos.x, targetPos.y, -0.02f), Quaternion.identity);    //value by z is -0.02f to make the prefab seen before the ground. - Ivan K.
 
         SoundEffectsManager.playSoundEffect(m_shootSound, Board);
     }

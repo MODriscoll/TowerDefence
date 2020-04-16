@@ -30,8 +30,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children:
-  - {fileID: 40450696307915746}
-  - {fileID: 6003113203972880421}
+  - {fileID: 889180435539235415}
+  - {fileID: 4546820625621016365}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -53,7 +53,7 @@ MonoBehaviour:
   destroyedShakeIntensity: 0.5
   destroyedShakeRotation: 5
   destroyedShakeDuration: 0.2
-  healthBar: {fileID: 6003113203972880680}
+  healthBar: {fileID: 7074591508459189737}
   m_ability: {fileID: 0}
   m_spawnSound: {fileID: 8300000, guid: ccd199ac6f72dbd46b3e100b96133dd8, type: 3}
   m_destroyedSound: {fileID: 0}
@@ -74,7 +74,7 @@ MonoBehaviour:
   m_targetsMonsters: 1
   m_targetRadius: 2.5
   m_fireRate: 1
-  m_pivot: {fileID: 40450696307915613}
+  m_pivot: {fileID: 4365143565848525061}
   m_rotScaler: {x: 0, y: -1, z: 0}
   m_damage: 5
   m_effectPrefab: {fileID: 1316818491492748565, guid: a4c3aeec307e34e4287fbf76b9258076,
@@ -181,13 +181,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9bc9df8540a11164ba7cb3b3c91b9011, type: 3}
---- !u!4 &40450696307915746 stripped
+--- !u!4 &889180435539235415 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 925689098118803379, guid: 9bc9df8540a11164ba7cb3b3c91b9011,
     type: 3}
   m_PrefabInstance: {fileID: 40450696307916260}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &40450696307915613 stripped
+--- !u!4 &4365143565848525061 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4331248172092490977, guid: 9bc9df8540a11164ba7cb3b3c91b9011,
     type: 3}
@@ -337,13 +337,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ddcc5a60615ffa346a38c14dfff03745, type: 3}
---- !u!224 &6003113203972880421 stripped
+--- !u!224 &4546820625621016365 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7806667676390911409, guid: ddcc5a60615ffa346a38c14dfff03745,
     type: 3}
   m_PrefabInstance: {fileID: 6003113203972879004}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &6003113203972880680 stripped
+--- !u!114 &7074591508459189737 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3558592308590331765, guid: ddcc5a60615ffa346a38c14dfff03745,
     type: 3}
