@@ -2543,7 +2543,7 @@ MonoBehaviour:
   m_damage: 5
   m_health: 30
   healthBar: {fileID: 4192869653080624852}
-  m_spawnSound: {fileID: 8300000, guid: 11a5b7af5e65c9247ba1c0097967372e, type: 3}
+  m_spawnSound: {fileID: 0}
   m_deathScriptPrefab: 
   m_renderer: {fileID: 7897980240959495910}
   debugMode: 0
