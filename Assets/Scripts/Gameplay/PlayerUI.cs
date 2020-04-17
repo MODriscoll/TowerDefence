@@ -33,12 +33,17 @@ public class PlayerUI : MonoBehaviour
     public GameObject m_miceShop;
 
 
+    // For Cheese pulsating effect
+    public int healthCheck;
+    public CheesePulse playerCheese;
 
     void Start()
     {
         if (m_roundText)
             m_roundText.gameObject.SetActive(false);
         m_playerTowersList = m_owner.GetComponent<PlayerTowersList>();
+
+        healthCheck = m_owner.Health;
     }
 
     void Update()
@@ -53,6 +58,10 @@ public class PlayerUI : MonoBehaviour
         {
             if (m_playerHealthText)
                 m_playerHealthText.text = string.Format("{0} : {1}", PhotonNetwork.NickName, m_owner.Health);
+
+            //Makes cheese pulse when the player receives damage
+            if (m_owner.Health<=healthCheck)
+                playerCheese.StartCoroutine("Pulse");
 
             if (m_enemyHealthText)
             {
