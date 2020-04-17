@@ -157,6 +157,7 @@ MonoBehaviour:
   - Prefabs/Towers/BasicTurret
   - Prefabs/Towers/PiercingTurret
   - Prefabs/Towers/HealingTurret
+  m_selectedAbility: 0
 --- !u!114 &-9199565851451362920
 MonoBehaviour:
   m_ObjectHideFlags: 0

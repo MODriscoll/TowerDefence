@@ -14,6 +14,10 @@ public class TowerScript : MonoBehaviourPun
     [SerializeField] private Transform m_pivot;                 // The pivot to rotate when facing monsters
 
     protected float m_lastFireTime = -float.MaxValue;           // The last time the turret fired
+    protected bool m_isDelayed = false;                         // If fire rate has been delayed
+    protected float m_delayedTime = 0f;                         // Delay to wait before we can fire again
+
+    [HideInInspector] public bool m_disableRotation = false;    // If turret should not rotate at all (quick impl)
 
     // Hack for dealing with rotation problems encountered with rotation of pivots.
     // As of doing this, I'm not really in the headspace to properly think of how to use
@@ -33,7 +37,7 @@ public class TowerScript : MonoBehaviourPun
     void Update()
     {
         MonsterBase target = null;
-        if (m_targetsMonsters)
+        if (m_targetsMonsters && !m_disableRotation)
         {
             target = findTarget(m_targetRadius);
             if (target)
@@ -54,15 +58,20 @@ public class TowerScript : MonoBehaviourPun
         if (PhotonNetwork.IsConnected && !photonView.IsMine)
             return;
 
+        if (m_isDelayed)
+            m_delayedTime += Time.deltaTime;
+
         // Tower might not be ready to perform an action yet
         if (!shouldPerformAction(target))
             return;
 
         // Can we perform an action yet?
-        if (Time.time >= m_lastFireTime + m_fireRate)
+        float waitTillTime = m_lastFireTime + m_fireRate + m_delayedTime;
+        if (Time.time >= waitTillTime)
         {
             performAction(target);
             m_lastFireTime = Time.time;
+            m_delayedTime = 0f;
         }
     }
 
@@ -85,5 +94,21 @@ public class TowerScript : MonoBehaviourPun
     protected virtual void performAction(MonsterBase target)
     {
         // Do nothing by default
+    }
+
+    /// <summary>
+    /// Set if this towers fire rate should be delayed. It will delay
+    /// it by however long this is active. 
+    /// </summary>
+    /// <param name="delay"></param>
+    public void setActionsDelayed(bool delay)
+    {
+        m_isDelayed = delay;
+    }
+
+    [PunRPC]
+    public void setDisableRotation(bool disable)
+    {
+        m_disableRotation = disable;
     }
 }

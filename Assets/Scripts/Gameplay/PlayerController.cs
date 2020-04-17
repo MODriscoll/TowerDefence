@@ -36,7 +36,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     private bool m_monsterSpawnLocked = false;      // If we are locked from spawning monsters (delay is active)
     private bool m_canBulldoze = false;             // If clicking on a tile with a tower will destroy it (only when delay isn't active)
 
-    private bool m_useAbilities = false;            // If viewing opponents board and we click, should we try to activate an ability
+    private bool m_useAbilities = true;            // If viewing opponents board and we click, should we try to activate an ability
 
     public PlayerUI m_playerUIPrefab;       // UI to spawn for local player
     private PlayerUI m_playerUI = null;     // Instance of players UI   
@@ -255,7 +255,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             if (!ability.canUseAbilityHere(this, viewedBoard, worldPos, tileIndex))
                 return;
 
-            // TODO: Activate new ability instance
+            ability.activateAbility(this, viewedBoard, worldPos, tileIndex);
         }
     }
 

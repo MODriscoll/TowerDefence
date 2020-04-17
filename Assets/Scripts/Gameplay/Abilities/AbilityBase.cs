@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 public class AbilityBase : MonoBehaviour
 {
@@ -9,23 +10,18 @@ public class AbilityBase : MonoBehaviour
     [SerializeField] private int m_abilityId = -1;
 
     [SerializeField, Min(0f)] private float m_cooldown = 3f;        // The time this ability needs to cooldown before recharging
-    [SerializeField, Min(1)] private int m_charges = 1;             // The amount of charges this ability has, leave at one for one charge
 
-    public delegate void OnAbilityFinished(AbilityBase ability, int remainingCharges);      // Event for when an ability has finished
-    public OnAbilityFinished onAbilityFinished;                                             // Called when the ability has finished, ability could still be activated again
+    // The abilities action. This will get instanced when activating the ability
+    [PhotonPrefab]
+    [SerializeField] private string m_actionPrefab;
+
+    private Coroutine m_cooldownRoutine = null;         // Routine for cooldown. This not being null indicates the ability is in cooldown
 
     public bool hasValidId { get { return m_abilityId >= 0; } }
 
     public int abilityId { get { return m_abilityId; } }
 
-    private bool m_cooldownActive = false;          // If cooldown is currently active
-    private int m_remainingCharges = 0;             // Amount of charges remaining
-
-    void Start()
-    {
-        m_cooldownActive = false;
-        m_remainingCharges = m_charges;
-    }
+    public bool inCooldown { get { return m_cooldownRoutine != null; } }
 
     /// <summary>
     /// This function is used to check if ability is available now or needs to recharge.
@@ -34,7 +30,7 @@ public class AbilityBase : MonoBehaviour
     /// <returns>If ability can be used now</returns>
     public virtual bool canUseAbilityNow()
     {
-        return !m_cooldownActive && m_remainingCharges > 0;
+        return !inCooldown;
     }
 
     /// <summary>
@@ -46,13 +42,58 @@ public class AbilityBase : MonoBehaviour
     /// <param name="worldPos">World positiion of click</param>
     /// <param name="tileIndex">Index of selected tile</param>
     /// <returns>If ability can be used</returns>
-    public virtual bool canUseAbilityHere(PlayerController controller, BoardManager board, Vector2 worldPos, Vector3Int tileIndex)
+    public virtual bool canUseAbilityHere(PlayerController controller, BoardManager board, Vector3 worldPos, Vector3Int tileIndex)
     {
         return true;
     }
 
-    public virtual void activateAbility()
+    /// <summary>
+    /// Activates this ability, will immediately enter cooldown
+    /// </summary>
+    public void activateAbility(PlayerController controller, BoardManager board, Vector3 worldPos, Vector3Int tileIndex)
     {
+        if (inCooldown)
+            return;
 
+        if (string.IsNullOrEmpty(m_actionPrefab))
+        {
+            Debug.LogWarning(string.Format("Unable to activate ability {0} as no action prefab was set", gameObject.name));
+            return;
+        }
+
+        GameObject newAction = PhotonNetwork.Instantiate(m_actionPrefab, worldPos, Quaternion.identity);
+        if (!newAction)
+            return;
+
+        AbilityActionBase action = newAction.GetComponent<AbilityActionBase>();
+        if (!action)
+            return;
+
+        action.initAbilityAction(this, controller, board, worldPos, tileIndex);
+        action.startAbilityAction();
+
+        cancelCooldown();
+        m_cooldownRoutine = StartCoroutine(cooldownRoutine());
+        Debug.Log("AbilityBase, Activating ability!");
+    }
+
+    /// <summary>
+    /// Cancels the cooldown of this ability, allowing it to be activated immediately
+    /// </summary>
+    public void cancelCooldown()
+    {
+        if (m_cooldownRoutine != null)
+        {
+            StopCoroutine(m_cooldownRoutine);
+            m_cooldownRoutine = null;
+        }
+    }
+
+    private IEnumerator cooldownRoutine()
+    {
+        yield return new WaitForSeconds(m_cooldown);
+        m_cooldownRoutine = null;
+
+        Debug.Log("AbilityBase, Ability Ready!");
     }
 }

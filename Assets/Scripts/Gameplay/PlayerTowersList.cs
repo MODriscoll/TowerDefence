@@ -17,7 +17,8 @@ public class PlayerTowersList : MonoBehaviour
     private int m_selectedTower = -1;                                           // Tower player has selected
     private Dictionary<System.Type, ActiveTowersInfo> m_activeTowerInfos;       // Info about towers player has built per type
     private List<AbilityBase> m_availableAbilities;                             // List of abilities available for use
-    private int m_selectedAbility = -1;                                         // Ability player has selected (this will be abilities Id)
+    // temp serialize field
+    [SerializeField] private int m_selectedAbility = -1;                                         // Ability player has selected (this will be abilities Id)
 
     public bool hasSelectedTower { get { return m_selectedTower != -1; } }      // If a tower has been selected by the player
 
@@ -107,7 +108,6 @@ public class PlayerTowersList : MonoBehaviour
             AbilityBase abilityInstance = Instantiate(tower.Ability);
             if (!abilityInstance)
                 return;
-
 
 #if UNITY_EDITOR
             abilityInstance.gameObject.hideFlags = HideFlags.HideInHierarchy | HideFlags.HideInInspector;

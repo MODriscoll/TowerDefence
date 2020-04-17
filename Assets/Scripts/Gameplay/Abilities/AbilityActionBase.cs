@@ -11,10 +11,10 @@ public class AbilityActionBase : MonoBehaviourPun
     protected AbilityBase m_ability = null;                     // Ability that spawned this action
     protected PlayerController m_instigator = null;             // Instigator of the ability
     protected BoardManager m_board = null;                      // The board this action is to interact with
-    protected Vector2 m_position = Vector2.zero;                // Position in world space the action was used
+    protected Vector3 m_position = Vector3.zero;                // Position in world space the action was used
     protected Vector3Int m_tileIndex = Vector3Int.zero;         // Index of tile the action was used on
 
-    public void initAbilityAction(AbilityBase abilityInstance, PlayerController controller, BoardManager board, Vector2 position, Vector3Int tileIndex)
+    public void initAbilityAction(AbilityBase abilityInstance, PlayerController controller, BoardManager board, Vector3 position, Vector3Int tileIndex)
     {
         m_ability = abilityInstance;
         m_instigator = controller;
@@ -39,6 +39,24 @@ public class AbilityActionBase : MonoBehaviourPun
     /// </summary>
     protected virtual void startAbilityActionImpl()
     {
+        
+    }
 
+    /// <summary>
+    /// Should be called when an ability is finished. Will handle destroy the action
+    /// </summary>
+    /// <param name="action">Action that has finished</param>
+    public static void finishAbilityAction(AbilityActionBase action)
+    {
+        if (action)
+            action.finishAbilityAction();
+    }
+
+    /// <summary>
+    /// Call this to signal the ability has finished
+    /// </summary>
+    protected void finishAbilityAction()
+    {
+        PhotonNetwork.Destroy(gameObject);
     }
 }
