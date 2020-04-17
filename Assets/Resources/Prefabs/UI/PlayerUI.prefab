@@ -1136,8 +1136,6 @@ MonoBehaviour:
   m_turretShop: {fileID: 438463681822667506}
   m_bulldoseButton: {fileID: 2691058457481669174}
   m_miceShop: {fileID: 7001569061427784253}
-  healthCheck: 0
-  playerCheese: {fileID: 0}
 --- !u!1 &2726583470010731805
 GameObject:
   m_ObjectHideFlags: 0
@@ -4826,7 +4824,7 @@ PrefabInstance:
     - target: {fileID: 5533963812841910517, guid: 0adbf3ca4f6da964087fc3b3a0895f47,
         type: 3}
       propertyPath: m_text
-      value: Piercing Turret\n(50c)
+      value: Piercing Turret\n(70c)
       objectReference: {fileID: 0}
     - target: {fileID: 5533963812841910517, guid: 0adbf3ca4f6da964087fc3b3a0895f47,
         type: 3}
