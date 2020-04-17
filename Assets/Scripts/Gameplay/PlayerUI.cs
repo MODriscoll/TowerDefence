@@ -26,6 +26,7 @@ public class PlayerUI : MonoBehaviour
     public TextMeshProUGUI m_mouse1;
     public TextMeshProUGUI m_mouse2;
     public TextMeshProUGUI m_mouse3;
+    public Text m_searchingText;
 
 
     public GameObject m_turretShop;
@@ -104,7 +105,9 @@ public class PlayerUI : MonoBehaviour
 
     public void notifyMatchStarted()
     {
-
+        // Opponent is present, no longer need to notify user we are searching
+        if (m_searchingText)
+            m_searchingText.gameObject.SetActive(false);
     }
 
     public void notifyMatchFinished(bool bOwnerWon, TDWinCondition winCondition)

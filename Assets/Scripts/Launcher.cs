@@ -24,15 +24,6 @@ public class Launcher : MonoBehaviourPunCallbacks
         PhotonNetwork.GameVersion = gameVersion;
     }
 
-    public override void OnConnectedToMaster()
-    {
-        Debug.Log("OnConnectedToMaster() was called by PUN");
-
-        if (m_bIsConnecting)
-            // Try joining a random room, if this fails, OnJoinRandomRoom is called
-            PhotonNetwork.JoinRandomRoom();
-    }
-
     public override void OnDisconnected(DisconnectCause cause)
     {
         m_bIsConnecting = false;
