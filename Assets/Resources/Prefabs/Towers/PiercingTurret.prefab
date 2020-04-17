@@ -539,7 +539,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5ad7eb2ff3a0d841a35b2e81e15f432, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_cost: 70
+  m_cost: 60
   m_health: 90
   m_maxHealth: 90
   destroyedShakeIntensity: 0.5
@@ -565,7 +565,7 @@ MonoBehaviour:
   m_tower: {fileID: 9196093534682404416}
   m_targetsMonsters: 1
   m_targetRadius: 3
-  m_fireRate: 4
+  m_fireRate: 3
   m_pivot: {fileID: 9169117004588535671}
   m_rotScaler: {x: 0, y: 0, z: 1}
   m_projectilePrefab: Prefabs/Towers/PiercingProjectile
