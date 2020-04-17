@@ -76,7 +76,7 @@ MonoBehaviour:
   m_fireRate: 1
   m_pivot: {fileID: 4365143565848525061}
   m_rotScaler: {x: 0, y: -1, z: 0}
-  m_damage: 5
+  m_damage: 8
   m_effectPrefab: {fileID: 1316818491492748565, guid: a4c3aeec307e34e4287fbf76b9258076,
     type: 3}
   m_shootSound: {fileID: 8300000, guid: 928b7f06753c08b478af762ed1a88b78, type: 3}
