@@ -12,7 +12,7 @@ public class AbilityBase : MonoBehaviour
     [SerializeField, Min(0f)] private float m_cooldown = 3f;        // The time this ability needs to cooldown before recharging
 
     // The abilities action. This will get instanced when activating the ability
-    [PhotonPrefab]
+    [PhotonPrefab(typeof(AbilityActionBase))]
     [SerializeField] private string m_actionPrefab;
 
     private Coroutine m_cooldownRoutine = null;         // Routine for cooldown. This not being null indicates the ability is in cooldown
@@ -74,7 +74,6 @@ public class AbilityBase : MonoBehaviour
 
         cancelCooldown();
         m_cooldownRoutine = StartCoroutine(cooldownRoutine());
-        Debug.Log("AbilityBase, Activating ability!");
     }
 
     /// <summary>
@@ -93,7 +92,5 @@ public class AbilityBase : MonoBehaviour
     {
         yield return new WaitForSeconds(m_cooldown);
         m_cooldownRoutine = null;
-
-        Debug.Log("AbilityBase, Ability Ready!");
     }
 }

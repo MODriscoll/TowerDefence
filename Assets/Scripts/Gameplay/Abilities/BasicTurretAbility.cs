@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-// This ability will disable an opponents turret for X seconds
 public class BasicTurretAbility : AbilityBase
 {
     // Begin AbilityBase Interface

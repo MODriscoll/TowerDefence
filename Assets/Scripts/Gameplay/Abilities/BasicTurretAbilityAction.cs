@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 
-// See BasicTurretAbility
 public class BasicTurretAbilityAction : AbilityActionBase
 {
     [SerializeField] private float m_effectTime = 7f;       // How long the disable effect lasts for

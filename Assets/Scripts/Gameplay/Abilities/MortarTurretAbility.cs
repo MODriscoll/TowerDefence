@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AbilityHandler : MonoBehaviour
+public class MortarTurretAbility : AbilityBase
 {
-
+    
 }

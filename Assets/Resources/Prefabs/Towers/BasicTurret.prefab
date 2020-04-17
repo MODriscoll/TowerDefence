@@ -4867,7 +4867,7 @@ MonoBehaviour:
   destroyedShakeRotation: 5
   destroyedShakeDuration: 0.2
   healthBar: {fileID: 7074591508459189737}
-  m_ability: {fileID: 8643412335695321951, guid: 230a7728d4507c949829a1afd5b94284,
+  m_ability: {fileID: 2553757146554004165, guid: 506a25dab598d9d4481dc614b6e3b987,
     type: 3}
   m_spawnSound: {fileID: 8300000, guid: ccd199ac6f72dbd46b3e100b96133dd8, type: 3}
   m_destroyedSound: {fileID: 0}
