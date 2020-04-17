@@ -250,6 +250,7 @@ public class BoardManager : MonoBehaviourPun
     private Grid m_grid;            // Grid of board
 
     [SerializeField] private MonsterManager m_monsterManager;       // This boards monster manager
+    [SerializeField] private CheesePulse m_cheese;                  // This board 'cheese', used to visually represent the goal
 
     [Header("Board Details")]
     [SerializeField] private BoardPaths m_paths = new BoardPaths();             // Paths the monsters can possibly follow
@@ -272,6 +273,11 @@ public class BoardManager : MonoBehaviourPun
         if (m_tileMap)
             if (!m_paths.Generated && !m_paths.generate(m_tileMap))
                 Debug.LogError("Failed to Generate Flow Field!");
+    }
+
+    public void initFor(PlayerController controller)
+    {
+        controller.onDamaged += onPlayerOwnerDamaged;
     }
 
     public Vector3 indexToPosition(Vector3Int tileIndex)
@@ -479,8 +485,17 @@ public class BoardManager : MonoBehaviourPun
         // Generate the paths
         if (!m_paths.generate(m_tileMap))
             Debug.LogWarning("Failed to generate the paths for Board! PathFollowing will not work correctly!");
+
+        // Find cheese associated with the board
+        m_cheese = GetComponentInChildren<CheesePulse>();
     }
 #endif
+
+    private void onPlayerOwnerDamaged(PlayerController controller, int damage, int health)
+    {
+        if (m_cheese)
+            m_cheese.pulseOnce();
+    }
 
     void OnDrawGizmos()
     {

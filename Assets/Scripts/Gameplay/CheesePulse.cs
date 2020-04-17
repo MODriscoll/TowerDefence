@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class CheesePulse : MonoBehaviour
 {
-
     // Grow parameters
     [SerializeField] private float approachSpeedGrowth = 0.04f;
     [SerializeField] private float approachSpeedShrink = 0.02f;
@@ -13,39 +12,61 @@ public class CheesePulse : MonoBehaviour
     [SerializeField] private float currentRatio = 1;
 
 
-    // Start is called before the first frame update
-    void Start()
+    private Vector3 m_originalScale = Vector3.one;      // Original scale in local space, recorded once in Awake()
+    private Coroutine m_pulseRoutine = null;            // If valid, we are currently pulsing
+
+    void Awake()
     {
-        StartCoroutine("Pulse");
+        m_originalScale = transform.localScale;
     }
 
-    IEnumerator Pulse()
+    /// <summary>
+    /// Will have the cheese pulse once. If already pulsing, will reset
+    /// </summary>
+    public void pulseOnce()
     {
-   
-        // Get bigger for a few seconds
-        while (this.currentRatio != this.growthBound)
+        if (m_pulseRoutine != null)
+            StopCoroutine(m_pulseRoutine);
+
+        m_pulseRoutine = StartCoroutine(pulseRoutine(1));
+    }
+
+    private IEnumerator pulseRoutine(int iterations)
+    {
+        this.transform.localScale = m_originalScale;
+
+        // Notice we do a post-decrement here
+        while (iterations-- > 0)
         {
-            // Determine the new ratio to use
-            currentRatio = Mathf.MoveTowards(currentRatio, growthBound, approachSpeedGrowth);
+            // Get bigger for a few seconds
+            while (this.currentRatio != this.growthBound)
+            {
+                // Determine the new ratio to use
+                currentRatio = Mathf.MoveTowards(currentRatio, growthBound, approachSpeedGrowth);
 
-            // Update our text element
-            this.transform.localScale = Vector3.one * currentRatio;
+                // Update our text element
+                this.transform.localScale = m_originalScale * currentRatio;
 
-            yield return new WaitForEndOfFrame();
+                yield return null;
+            }
+
+            // Shrink for a few seconds
+            while (this.currentRatio != this.shrinkBound)
+            {
+                // Determine the new ratio to use
+                currentRatio = Mathf.MoveTowards(currentRatio, shrinkBound, approachSpeedShrink);
+
+                // Update our text element
+                this.transform.localScale = m_originalScale * currentRatio;
+
+
+                yield return null;
+            }
+
+            // Make sure we are fully back to where we were
+            this.transform.localScale = m_originalScale;
         }
 
-        // Shrink for a few seconds
-        while (this.currentRatio != this.shrinkBound)
-        {
-            // Determine the new ratio to use
-            currentRatio = Mathf.MoveTowards(currentRatio, shrinkBound, approachSpeedShrink);
-
-            // Update our text element
-            this.transform.localScale = Vector3.one * currentRatio;
-
-
-            yield return new WaitForEndOfFrame();
-        }
-        
+        m_pulseRoutine = null;
     }
 }

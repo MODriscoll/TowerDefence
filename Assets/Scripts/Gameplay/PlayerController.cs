@@ -13,6 +13,9 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     [SerializeField] private Camera m_camera;                       // Players viewport of the scene
     [SerializeField] private PlayerTowersList m_towersList;         // List of all the towers the player can place
     [SerializeField] private PlayerMonstersList m_monsterList;       // List of all the monsters the player can deploy
+
+    public delegate void OnPlayerDamaged(PlayerController controller, int damage, int health);      // Delegate for when a player loses health
+    public OnPlayerDamaged onDamaged;                                                               // Event called when player takes damage
    
     public int playerId { get { return m_id; } }        // The id of this player, is set in start
 
@@ -105,6 +108,8 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             }
 
             m_board = GameManager.manager.getBoardManager(m_id);
+            if (m_board)
+                m_board.initFor(this);
         }
         else
         {
@@ -122,8 +127,13 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             m_playerUI = Instantiate(m_playerUIPrefab, transform, false);
             if (m_playerUI)
                 m_playerUI.m_owner = this;
-            m_camera.gameObject.AddComponent<CameraEffectsController>();
+            
+            if (m_camera)
+                m_camera.gameObject.AddComponent<CameraEffectsController>();
+
             m_board = GameManager.manager.getBoardManager(m_id);
+            if (m_board)
+                m_board.initFor(this);
 
             // Also set ourselves as remote player when playing offline
             remotePlayer = this;
@@ -398,6 +408,10 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         {
             GameManagerCosmetics.playGoalHurtSound(m_id);
         }
+
+        // Call this regardless
+        if (onDamaged != null)
+            onDamaged.Invoke(this, damage, m_health);
     }
 
     /// <summary>
@@ -658,7 +672,18 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         }
         else
         {
-            m_health = (int)stream.ReceiveNext();
+            int newHealth = (int)stream.ReceiveNext();
+            if (newHealth != m_health)
+            {
+                // Set our health before calling any events, so if they were to access
+                // health through us its valid (also consistent with applyDamage)
+                int oldHealth = m_health;
+                m_health = newHealth;
+
+                if (newHealth < oldHealth)
+                    if (onDamaged != null)
+                        onDamaged.Invoke(this, oldHealth - newHealth, newHealth);
+            }
         }
     }
 }

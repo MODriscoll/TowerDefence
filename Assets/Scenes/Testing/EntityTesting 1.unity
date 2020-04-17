@@ -1796,6 +1796,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_tileMap: {fileID: 222423888}
   m_monsterManager: {fileID: 1567426311}
+  m_cheese: {fileID: 1773692071}
   m_paths:
     m_goal: {x: 3, y: 2, z: 0}
     m_paths:
@@ -2212,6 +2213,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1200470386 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2773595199276011062, guid: ac5f02641f2792342800bf76bc4dc3ac,
+    type: 3}
+  m_PrefabInstance: {fileID: 1100518595}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e9b5e7e8b3523a4f87aa86b1a8cd292, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1537231142
 GameObject:
   m_ObjectHideFlags: 0
@@ -4204,6 +4217,18 @@ Transform:
   m_Father: {fileID: 800230788}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1773692071 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2773595199276011062, guid: ac5f02641f2792342800bf76bc4dc3ac,
+    type: 3}
+  m_PrefabInstance: {fileID: 287263639}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e9b5e7e8b3523a4f87aa86b1a8cd292, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1894752345
 GameObject:
   m_ObjectHideFlags: 0
@@ -4312,6 +4337,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_tileMap: {fileID: 1537231145}
   m_monsterManager: {fileID: 1894752348}
+  m_cheese: {fileID: 1200470386}
   m_paths:
     m_goal: {x: 2, y: -10, z: 0}
     m_paths:
