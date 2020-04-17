@@ -13,12 +13,13 @@ public class MenuManager : MonoBehaviour
     public GameObject privateMatchMenu;
     public GameObject tutorialMenu;
     public GameObject winMenu;
+    public GameObject reviewMenu;
     static private GameObject[] menus;
 
     // Start is called before the first frame update
     void Start()
     {
-        menus = new GameObject[7] { logoMenu, mainMenu, matchTypeMenu, optionsMenu, shopMenu, privateMatchMenu, tutorialMenu };
+        menus = new GameObject[8] { logoMenu, mainMenu, matchTypeMenu, optionsMenu, shopMenu, privateMatchMenu, tutorialMenu, reviewMenu };
     }
 
     public void LoadMenu(string newMenu)
@@ -41,5 +42,10 @@ public class MenuManager : MonoBehaviour
     public void quit()
     {
         Application.Quit();
+    }
+
+    public void ToggleObject(GameObject item)
+    {
+        item.gameObject.SetActive(!item.gameObject.activeSelf);
     }
 }
