@@ -12,6 +12,11 @@ public class TutorialLogic : MonoBehaviour
     public Sprite[] m_tutorialImages;
     public Image m_displayImage;
 
+    private void Awake()
+    {
+        UpdateDisplayImage();
+    }
+
     public void NextPage()
     {
         if (m_pageNumber < m_tutorialImages.Length)

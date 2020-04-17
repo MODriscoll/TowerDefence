@@ -63,9 +63,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: c2f2a1862ada06d4a81564bc8892cccc, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 9ce09de1e7f8ec04e9895f3fa7727f30, type: 3}
   m_Type: 0
-  m_PreserveAspect: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
@@ -124,10 +124,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_pageNumberText: {fileID: 6419004329194527402}
   m_tutorialImages:
-  - {fileID: 21300000, guid: c2f2a1862ada06d4a81564bc8892cccc, type: 3}
-  - {fileID: 21300000, guid: fad61bbb7eb45194481a5f889d697b27, type: 3}
-  - {fileID: 21300000, guid: e89586ac7c8abf64397ae2f86fd279e9, type: 3}
-  - {fileID: 21300000, guid: 37ce98c70be9a044f93b809823fa27a0, type: 3}
+  - {fileID: 21300000, guid: 9ce09de1e7f8ec04e9895f3fa7727f30, type: 3}
+  - {fileID: 21300000, guid: cc64f2b7e30180c408a8df548e3b1870, type: 3}
+  - {fileID: 21300000, guid: 188e572446c3b664faad1f28469e70eb, type: 3}
+  - {fileID: 21300000, guid: 93dcdf47d7c6a5d438b9905fad18ba68, type: 3}
   m_displayImage: {fileID: 6476594166994377110}
 --- !u!1 &6476594168413666413
 GameObject:
@@ -298,7 +298,7 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 42.75
+  m_fontSize: 33
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
