@@ -88,7 +88,6 @@ MonoBehaviour:
     type: 3}
   m_turretEffectPrefab: {fileID: 7549472409064853672, guid: db998cf81d3e6dc45b357debc08e418a,
     type: 3}
-  m_mortarTurretEffectSpawnPoing: {fileID: 2650169953798942975}
   m_spawnSound: {fileID: 8300000, guid: ab22ba09c8d03df45926b35a04b965a3, type: 3}
   m_hitSound: {fileID: 0}
   m_expiredSound: {fileID: 0}
