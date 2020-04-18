@@ -1,5 +1,35 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2650169953798942975
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2412867469256810063}
+  m_Layer: 0
+  m_Name: ShootingEffectSpawnPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2412867469256810063
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2650169953798942975}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -0.5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 5994368317154419058}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5994368317154419062
 GameObject:
   m_ObjectHideFlags: 0
@@ -32,6 +62,7 @@ Transform:
   m_Children:
   - {fileID: 5994368318742698049}
   - {fileID: 4265191002928764212}
+  - {fileID: 2412867469256810063}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -57,6 +88,7 @@ MonoBehaviour:
     type: 3}
   m_turretEffectPrefab: {fileID: 7549472409064853672, guid: db998cf81d3e6dc45b357debc08e418a,
     type: 3}
+  m_mortarTurretEffectSpawnPoing: {fileID: 2650169953798942975}
   m_spawnSound: {fileID: 8300000, guid: ab22ba09c8d03df45926b35a04b965a3, type: 3}
   m_hitSound: {fileID: 0}
   m_expiredSound: {fileID: 0}
@@ -131,7 +163,7 @@ TrailRenderer:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0.20175934
+        value: 0.40790558
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -139,7 +171,7 @@ TrailRenderer:
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 0.995956
+        time: 1
         value: 0
         inSlope: -0.19084743
         outSlope: -0.19084743
@@ -153,7 +185,7 @@ TrailRenderer:
     colorGradient:
       serializedVersion: 2
       key0: {r: 0.12941174, g: 0.29257223, b: 0.8862745, a: 1}
-      key1: {r: 0.5977661, g: 0.7725386, b: 0.9528302, a: 1}
+      key1: {r: 0.5977661, g: 0.7725386, b: 0.9528302, a: 0.5882353}
       key2: {r: 0, g: 0, b: 0, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
       key4: {r: 0, g: 0, b: 0, a: 0}

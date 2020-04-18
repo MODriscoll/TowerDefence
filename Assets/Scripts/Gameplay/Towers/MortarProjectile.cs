@@ -39,7 +39,7 @@ public class MortarProjectile : MonoBehaviourPun, IPunInstantiateMagicCallback
             projectilesList.Add(this);
 
         if (m_turretEffectPrefab)
-            Instantiate(m_turretEffectPrefab, transform.position, Quaternion.identity);
+            Instantiate(m_turretEffectPrefab, transform.position, transform.rotation);
     }
 
     void OnDestroy()

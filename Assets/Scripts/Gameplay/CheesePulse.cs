@@ -5,10 +5,10 @@ using UnityEngine;
 public class CheesePulse : MonoBehaviour
 {
     // Grow parameters
-    [SerializeField] private float approachSpeedGrowth = 0.04f;
-    [SerializeField] private float approachSpeedShrink = 0.02f;
+    [SerializeField] private float approachSpeedGrowth = 0.08f;
+    [SerializeField] private float approachSpeedShrink = 0.04f;
     [SerializeField] private float growthBound = 1.5f;
-    [SerializeField] private float shrinkBound = 0.5f;
+    [SerializeField] private float shrinkBound = 1f;
     [SerializeField] private float currentRatio = 1;
 
 
@@ -44,7 +44,6 @@ public class CheesePulse : MonoBehaviour
                 // Determine the new ratio to use
                 currentRatio = Mathf.MoveTowards(currentRatio, growthBound, approachSpeedGrowth);
 
-                // Update our text element
                 this.transform.localScale = m_originalScale * currentRatio;
 
                 yield return null;
@@ -56,9 +55,7 @@ public class CheesePulse : MonoBehaviour
                 // Determine the new ratio to use
                 currentRatio = Mathf.MoveTowards(currentRatio, shrinkBound, approachSpeedShrink);
 
-                // Update our text element
                 this.transform.localScale = m_originalScale * currentRatio;
-
 
                 yield return null;
             }

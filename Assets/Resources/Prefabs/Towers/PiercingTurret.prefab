@@ -567,6 +567,7 @@ MonoBehaviour:
   m_targetRadius: 3
   m_fireRate: 3
   m_pivot: {fileID: 9169117004588535671}
+  m_disableRotation: 0
   m_rotScaler: {x: 0, y: 0, z: 1}
   m_projectilePrefab: Prefabs/Towers/PiercingProjectile
   m_shootFrom: {fileID: 7689878502493190412}
