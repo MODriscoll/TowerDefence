@@ -47,5 +47,6 @@ MonoBehaviour:
   - startNextWaveRPC
   - TakeDamageRPC
   - HealTowerRPC
+  - setDisableRotation
   DisableAutoOpenWizard: 1
   ShowSettings: 0

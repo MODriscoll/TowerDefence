@@ -148,7 +148,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 301327488908891974}
-  m_LocalRotation: {x: -0.015426758, y: -0.027362812, z: 0.035000175, w: 0.9988935}
+  m_LocalRotation: {x: -0.015426759, y: -0.027362812, z: 0.03500018, w: 0.9988935}
   m_LocalPosition: {x: 0.002294944, y: -0.07922506, z: 0.028797172}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -2332,6 +2332,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7909956083759038958}
+  - component: {fileID: 184863792894869773}
   m_Layer: 0
   m_Name: toon mouse
   m_TagString: Untagged
@@ -2356,6 +2357,25 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: -260, y: 0, z: 180}
+--- !u!95 &184863792894869773
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6601880124372759549}
+  m_Enabled: 1
+  m_Avatar: {fileID: 9000000, guid: e7b5d14251786944d81eb0d1dc587476, type: 3}
+  m_Controller: {fileID: 9100000, guid: b0ef792985f12e84597dcfc4f9a864b1, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &6696754299471213018
 GameObject:
   m_ObjectHideFlags: 0
