@@ -262,6 +262,14 @@ public class MonsterManager : MonoBehaviour
 
     public MonsterBase getHoveredMonster(Vector2 position)
     {
+        // Find the first monster that the position hovers over
+        foreach (MonsterBase monster in m_monsters)
+        {
+            float radSqr = monster.Radius * monster.Radius;
+            if ((position - (Vector2)monster.transform.position).sqrMagnitude <= radSqr)
+                return monster;
+        }
+
         return null;
     }
 

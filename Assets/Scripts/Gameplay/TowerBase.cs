@@ -68,9 +68,6 @@ public class TowerBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallback
             photonView.RPC("HealTowerRPC", RpcTarget.All, amount);
         else
             HealTowerRPC(amount);
-
-        healthBar.SetHealth(m_health);  //Update Healthbar UI
-
     }
 
     [PunRPC]

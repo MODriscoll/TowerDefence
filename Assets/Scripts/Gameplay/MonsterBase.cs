@@ -22,6 +22,7 @@ public class MonsterBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallba
 
     protected BoardManager m_board;                 // The board we are active on
 
+    private int m_maxHealth = -1;               // Monsters max healht, set in Awake()
     private float m_progress = 0f;              // Progress along current path. Is used by board manager to find where we are
     private float m_additionalDuration = 0f;    // Additional travel duration that is set from external sources
     private int m_pathIndex = -1;               // Index of the path we are following
@@ -40,8 +41,18 @@ public class MonsterBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallba
     public BoardManager Board { get { return m_board; } }
     public float TilesTravelled { get { return m_progress; } }
 
-    public bool HasBounds { get { return m_renderer != null; } }
-    public Bounds Bounds { get { return m_renderer ? m_renderer.bounds : new Bounds(); } }
+    public bool AtMaxHealth { get { return m_health >= m_maxHealth; } }
+
+    public bool HasBounds { get { return m_renderer != null; } }        // TODO: Deprecate
+    public Bounds Bounds { get { return m_renderer ? m_renderer.bounds : new Bounds(); } }  // TODO: Deprecate
+
+    // This monsters collision radius
+    public float Radius { get { return m_radius; } }
+
+    void Awake()
+    {
+        m_maxHealth = m_health;
+    }
 
     void Start()
     {
@@ -153,6 +164,20 @@ public class MonsterBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallba
 
         MonsterManager.destroyMonster(this);
         return true;
+    }
+
+    public void healMonster(int amount)
+    {
+        if (PhotonNetwork.IsConnected && !photonView.IsMine)
+            return;
+
+        if (amount <= 0)
+        {
+            Debug.LogError("Cannot apply less than zero health to a monster");
+            return;
+        }
+
+        m_health = Mathf.Min(m_maxHealth, m_health + amount);
     }
 
     public void setCanBeDamaged(bool bCanDamage)
