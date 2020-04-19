@@ -326,8 +326,9 @@ public class BoardManager : MonoBehaviourPun
         return m_paths.getRandomPathIndex();
     }
     
-    public Vector3 pathProgressToPosition(int pathIndex, float progress, out bool atGoalTile)
+    public Vector3 pathProgressToPosition(int pathIndex, float progress, out float rot, out bool atGoalTile)
     {
+        rot = 0f;
         atGoalTile = false;
 
 #if UNITY_EDITOR
@@ -358,6 +359,13 @@ public class BoardManager : MonoBehaviourPun
 
         Vector3 curTilePos = indexToPosition(path[curIndex]);
         Vector3 nextTilePos = indexToPosition(path[nextIndex]);
+
+        if (nextIndex > curIndex)
+        {
+            Vector3 dir = (nextTilePos - curTilePos).normalized;
+            float rotRad = Mathf.Atan2(dir.y, dir.x);
+            rot = (Mathf.Rad2Deg * rotRad);
+        }
 
         return Vector3.Lerp(curTilePos, nextTilePos, progress - curIndex);
     }

@@ -105,6 +105,9 @@ public class PlayerTowersList : MonoBehaviour
         {
             // Returning null here, this will keep getting called but
             // will never create a towers info for this tower
+            if (!tower.Ability)
+                return;
+
             AbilityBase abilityInstance = Instantiate(tower.Ability);
             if (!abilityInstance)
                 return;

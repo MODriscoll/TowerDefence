@@ -260,6 +260,11 @@ public class MonsterManager : MonoBehaviour
         return monsters.Count > 0;
     }
 
+    public MonsterBase getHoveredMonster(Vector2 position)
+    {
+        return null;
+    }
+
     /// <summary>
     /// Helper for getting the number of monsters still active.
     /// Destroyed monsters are considered inactive, and are not counted

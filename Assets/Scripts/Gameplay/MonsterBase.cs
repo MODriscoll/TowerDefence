@@ -33,8 +33,10 @@ public class MonsterBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallba
     public delegate void OnTakeDamage(int damage, bool bKilled);
     public OnTakeDamage OnMonsterTakenDamage;
 
-    [SerializeField] private Renderer m_renderer;       // This monsters renderer. Is used for collision checks
-    public bool debugMode = false;
+    [SerializeField] private Renderer m_renderer;                   // This monsters renderer. Is used for collision checks TODO: Deprecate
+    [SerializeField] private Transform m_model;                     // Transform of root model game object. Is used to rotate visually
+    [SerializeField, Min(0.1f)] private float m_radius = 0.5f;      // Radius of this monsters collision
+    
     public BoardManager Board { get { return m_board; } }
     public float TilesTravelled { get { return m_progress; } }
 
@@ -122,7 +124,6 @@ public class MonsterBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallba
             return false;
         }
 
-
         m_health = Mathf.Max(m_health - amount, 0);
         bool bKilled = m_health <= 0;
 
@@ -171,7 +172,21 @@ public class MonsterBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallba
     {
         bool atGoalTile = false;
         if (m_board)
-            transform.position = m_board.pathProgressToPosition(m_pathIndex, progress, out atGoalTile);
+        {
+            float rot = 0f;
+            transform.position = m_board.pathProgressToPosition(m_pathIndex, progress, out rot, out atGoalTile);
+
+            // Rotate our model to face the direction we are travelling in
+            if (m_model)
+            {
+                Vector3 eulerRot = m_model.eulerAngles;
+                if (eulerRot.z != rot)
+                {
+                    eulerRot.z = rot;
+                    m_model.eulerAngles = eulerRot;
+                }
+            }
+        }
 
         return atGoalTile;
     }
@@ -224,10 +239,13 @@ public class MonsterBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallba
 
     void OnDrawGizmos()
     {
-        if (m_renderer && debugMode)
+        if (m_renderer)
         {
             Gizmos.color = Color.magenta;
-            Gizmos.DrawCube(transform.position, Bounds.size);
+            Gizmos.DrawWireCube(transform.position, Bounds.size);
         }
+
+        Gizmos.color = Color.cyan;
+        Gizmos.DrawWireSphere(transform.position, m_radius);
     }
 }

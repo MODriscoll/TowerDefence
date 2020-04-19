@@ -277,6 +277,37 @@ Transform:
   m_Father: {fileID: 1143205420457444838}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &843377623891292720
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3307661117021825792}
+  m_Layer: 0
+  m_Name: ModelPivot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3307661117021825792
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 843377623891292720}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 8258280753367502674}
+  m_Father: {fileID: 4143843131986725552}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1044083253493811040
 GameObject:
   m_ObjectHideFlags: 0
@@ -576,7 +607,7 @@ Transform:
   m_LocalScale: {x: 1.5, y: 0.8, z: 1.5}
   m_Children: []
   m_Father: {fileID: 4143843131986725552}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!33 &8982591095831580225
 MeshFilter:
@@ -2104,16 +2135,16 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5589120192026079754}
-  m_LocalRotation: {x: -0, y: 0.7660445, z: -0.6427876, w: 0}
-  m_LocalPosition: {x: 0, y: 0, z: -0.07}
-  m_LocalScale: {x: 1.35, y: 1.2, z: 1.35}
+  m_LocalRotation: {x: -0.5, y: 0.5, z: -0.5, w: 0.5}
+  m_LocalPosition: {x: 0, y: 0, z: -0.07000001}
+  m_LocalScale: {x: 1.3500001, y: 1.1999999, z: 1.3499999}
   m_Children:
   - {fileID: 666407626493055134}
   - {fileID: 3534330324815713668}
   - {fileID: 6904226349656765909}
-  m_Father: {fileID: 4143843131986725552}
-  m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: -260, y: 0, z: 180}
+  m_Father: {fileID: 3307661117021825792}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: -90}
 --- !u!1 &5651715065899884158
 GameObject:
   m_ObjectHideFlags: 0
@@ -2679,8 +2710,8 @@ Transform:
   - {fileID: 3675769415858211318}
   - {fileID: 4203837551606922770}
   - {fileID: 6481262131852254826}
-  - {fileID: 8258280753367502674}
   - {fileID: 5181220240589853727}
+  - {fileID: 3307661117021825792}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2704,7 +2735,8 @@ MonoBehaviour:
   m_spawnSound: {fileID: 8300000, guid: 11a5b7af5e65c9247ba1c0097967372e, type: 3}
   m_deathScriptPrefab: Prefabs/Monsters/GeneralMonsterDeathScript
   m_renderer: {fileID: 8315560166380164857}
-  debugMode: 0
+  m_model: {fileID: 3307661117021825792}
+  m_radius: 0.5
   m_cost: 40
   m_delay: 0.75
 --- !u!114 &5090008550584579975
@@ -2766,12 +2798,7 @@ Animator:
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
-  m_WarningMessage: "\nBinding warning: Some generic clip(s) animate transforms that
-    are already bound by a Humanoid avatar. These transforms can only be changed
-    by Humanoid clips.\n\tTransform 'rForeArm'\n\tTransform 'rShin'\n\tTransform
-    'hip'\n\tTransform 'rShldr'\n\tTransform 'lForeArm'\n\tTransform 'lShldr'\n\tTransform
-    'head'\n\tTransform 'rFoot'\n\tTransform 'lThigh'\n\tTransform 'lMid3'\n\tand
-    more ...\n\tFrom animation clip '01_Cool Walk'"
+  m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0

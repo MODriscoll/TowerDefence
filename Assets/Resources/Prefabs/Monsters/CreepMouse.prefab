@@ -1429,16 +1429,16 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4476758231175937258}
-  m_LocalRotation: {x: -0, y: 0.7660445, z: -0.6427876, w: 0}
+  m_LocalRotation: {x: -0.5, y: 0.5, z: -0.5, w: 0.5}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2761373928660436948}
   - {fileID: 3591059633840061388}
   - {fileID: 7694976373572725100}
-  m_Father: {fileID: 4143843131986725552}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: -260, y: 0, z: 180}
+  m_Father: {fileID: 6886658354980051636}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: -90}
 --- !u!1 &4557029143269537391
 GameObject:
   m_ObjectHideFlags: 0
@@ -1682,6 +1682,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4359773316878525897}
   m_RootOrder: 10
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &5370462214161959778
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6886658354980051636}
+  m_Layer: 0
+  m_Name: ModelPivot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6886658354980051636
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5370462214161959778}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 3209273544111069227}
+  m_Father: {fileID: 4143843131986725552}
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5423419818399565047
 GameObject:
@@ -2523,7 +2554,7 @@ Transform:
   m_Children:
   - {fileID: 7423166414591747088}
   - {fileID: 4203837551606922770}
-  - {fileID: 3209273544111069227}
+  - {fileID: 6886658354980051636}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2547,7 +2578,8 @@ MonoBehaviour:
   m_spawnSound: {fileID: 0}
   m_deathScriptPrefab: 
   m_renderer: {fileID: 7897980240959495910}
-  debugMode: 0
+  m_model: {fileID: 6886658354980051636}
+  m_radius: 0.5
 --- !u!114 &6293389618481299608
 MonoBehaviour:
   m_ObjectHideFlags: 0

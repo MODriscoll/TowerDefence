@@ -1001,16 +1001,16 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2462923931026666859}
-  m_LocalRotation: {x: -0, y: 0.7660445, z: -0.6427876, w: 0}
-  m_LocalPosition: {x: 0, y: 0, z: -0.058}
-  m_LocalScale: {x: 0.9, y: 0.9, z: 0.9}
+  m_LocalRotation: {x: -0.5, y: 0.5, z: -0.5, w: 0.5}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.9, y: 0.9, z: 0.90000004}
   m_Children:
   - {fileID: 3206542694074905732}
   - {fileID: 838203145021902812}
   - {fileID: 1187829836722222861}
-  m_Father: {fileID: 4143843131986725552}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: -260, y: 0, z: 180}
+  m_Father: {fileID: 1247292265739965274}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: -90}
 --- !u!1 &2485614393990760534
 GameObject:
   m_ObjectHideFlags: 0
@@ -1354,6 +1354,37 @@ Transform:
   - {fileID: 6811822900195714219}
   m_Father: {fileID: 4453892140839118710}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &3438516618791816078
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1247292265739965274}
+  m_Layer: 0
+  m_Name: ModelPivot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1247292265739965274
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3438516618791816078}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 7227795461241847675}
+  m_Father: {fileID: 4143843131986725552}
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3529537421577651996
 GameObject:
@@ -2770,7 +2801,7 @@ Transform:
   m_Children:
   - {fileID: 4203837551606922770}
   - {fileID: 2505314173971883182}
-  - {fileID: 7227795461241847675}
+  - {fileID: 1247292265739965274}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2794,7 +2825,8 @@ MonoBehaviour:
   m_spawnSound: {fileID: 8300000, guid: 11a5b7af5e65c9247ba1c0097967372e, type: 3}
   m_deathScriptPrefab: Prefabs/Monsters/GeneralMonsterDeathScript
   m_renderer: {fileID: 6200519861259913905}
-  debugMode: 0
+  m_model: {fileID: 1247292265739965274}
+  m_radius: 0.5
   m_cost: 25
   m_delay: 0.75
 --- !u!114 &-7273443016193421173
@@ -2852,12 +2884,7 @@ Animator:
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
-  m_WarningMessage: "\nBinding warning: Some generic clip(s) animate transforms that
-    are already bound by a Humanoid avatar. These transforms can only be changed
-    by Humanoid clips.\n\tTransform 'rForeArm'\n\tTransform 'rShin'\n\tTransform
-    'hip'\n\tTransform 'rShldr'\n\tTransform 'lForeArm'\n\tTransform 'lShldr'\n\tTransform
-    'head'\n\tTransform 'rFoot'\n\tTransform 'lThigh'\n\tTransform 'lMid3'\n\tand
-    more ...\n\tFrom animation clip '01_Cool Walk'"
+  m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
@@ -3344,12 +3371,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ddcc5a60615ffa346a38c14dfff03745, type: 3}
---- !u!224 &2505314173971883182 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 7806667676390911409, guid: ddcc5a60615ffa346a38c14dfff03745,
-    type: 3}
-  m_PrefabInstance: {fileID: 5661714212579543327}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &9219110114926218858 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3558592308590331765, guid: ddcc5a60615ffa346a38c14dfff03745,
@@ -3362,3 +3383,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4d8c192e4588374184771158765e3db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!224 &2505314173971883182 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 7806667676390911409, guid: ddcc5a60615ffa346a38c14dfff03745,
+    type: 3}
+  m_PrefabInstance: {fileID: 5661714212579543327}
+  m_PrefabAsset: {fileID: 0}
