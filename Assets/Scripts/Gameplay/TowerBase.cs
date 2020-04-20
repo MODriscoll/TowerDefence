@@ -13,6 +13,7 @@ public class TowerBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallback
     public float destroyedShakeRotation;            // If there will be rotation shake and how much
     public float destroyedShakeDuration;            // How long the shake effect will last for
     public HealthUI healthBar;                      // Reference healthbar UI for Entity
+    public Transform destructionParticle;      // 
 
     private int m_ownerId = -1;         // Id of player that owns this tower
     private BoardManager m_board;       // Cached board for fast access
@@ -163,6 +164,7 @@ public class TowerBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallback
         if (bulldozed)
             SoundEffectsManager.playSoundEffect(m_bulldozedSound, m_board);
         else
+            Instantiate(destructionParticle,new Vector3 (transform.position.x, transform.position.y, transform.position.z - 1), transform.rotation);
             SoundEffectsManager.playSoundEffect(m_destroyedSound, m_board);
 
         if (!PhotonNetwork.IsConnected || photonView.IsMine)
