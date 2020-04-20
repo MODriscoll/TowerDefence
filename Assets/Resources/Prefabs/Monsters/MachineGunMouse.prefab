@@ -2800,7 +2800,7 @@ Transform:
   m_LocalScale: {x: 0.95, y: 0.95, z: 0.95}
   m_Children:
   - {fileID: 4203837551606922770}
-  - {fileID: 2505314173971883182}
+  - {fileID: 5661714212579541944}
   - {fileID: 1247292265739965274}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -2821,7 +2821,7 @@ MonoBehaviour:
   m_reward: 7
   m_damage: 5
   m_health: 50
-  healthBar: {fileID: 9219110114926218858}
+  healthBar: {fileID: 5661714212579541670}
   m_spawnSound: {fileID: 8300000, guid: 11a5b7af5e65c9247ba1c0097967372e, type: 3}
   m_deathScriptPrefab: Prefabs/Monsters/GeneralMonsterDeathScript
   m_renderer: {fileID: 6200519861259913905}
@@ -3371,7 +3371,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ddcc5a60615ffa346a38c14dfff03745, type: 3}
---- !u!114 &9219110114926218858 stripped
+--- !u!114 &5661714212579541670 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3558592308590331765, guid: ddcc5a60615ffa346a38c14dfff03745,
     type: 3}
@@ -3383,7 +3383,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4d8c192e4588374184771158765e3db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!224 &2505314173971883182 stripped
+--- !u!224 &5661714212579541944 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7806667676390911409, guid: ddcc5a60615ffa346a38c14dfff03745,
     type: 3}
