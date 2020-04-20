@@ -35,6 +35,7 @@ MonoBehaviour:
   - destroyTowerRPC
   - Fire
   - goalHurtRPC
+  - HealTowerRPC
   - onExpired
   - onFired
   - onHealTowers
@@ -43,10 +44,9 @@ MonoBehaviour:
   - onMonstersHit
   - onWaveFinishedRPC
   - RespawnSpaceship
+  - setDisableRotation
   - spawnMonsterRPC
   - startNextWaveRPC
   - TakeDamageRPC
-  - HealTowerRPC
-  - setDisableRotation
   DisableAutoOpenWizard: 1
   ShowSettings: 0
