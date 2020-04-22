@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4889469872896787463}
   - component: {fileID: 2553757146554004165}
   m_Layer: 0
-  m_Name: BoostAbility
+  m_Name: CheeseWalkAbility
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -43,6 +43,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fb97245dde350d4bbf2360f86b1dd59, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_abilityId: 0
+  m_abilityId: 1
   m_cooldown: 3
-  m_actionPrefab: Prefabs/Abilities/BoostAbilityAction
+  m_actionPrefab: Prefabs/Abilities/CheeseAbilityAction

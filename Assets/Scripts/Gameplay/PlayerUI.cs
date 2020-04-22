@@ -186,6 +186,11 @@ public class PlayerUI : MonoBehaviour
         m_owner.spawnSpecialMonster(m_owner.monsterList.getMonster(i, out prefabName), prefabName);
     }
 
+    public void useAbility(int i)
+    {
+        m_playerTowersList.selectAbility(i);
+    }
+
     public void ToggleBulldose()
     {
         m_owner.toggleBulldozeTowers();

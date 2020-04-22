@@ -1842,19 +1842,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &7837612010358299840
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6932833203784547837}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 81af5adcc596ccc48bc528bea6c1e37d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ClickSound: {fileID: 8300000, guid: 4b362d728ca03cb418311f1102f030a3, type: 3}
 --- !u!1 &6076845257372385191
 GameObject:
   m_ObjectHideFlags: 0
@@ -2223,6 +2210,19 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &7837612010358299840
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6932833203784547837}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81af5adcc596ccc48bc528bea6c1e37d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ClickSound: {fileID: 8300000, guid: 4b362d728ca03cb418311f1102f030a3, type: 3}
 --- !u!1 &7001569061427784253
 GameObject:
   m_ObjectHideFlags: 0
@@ -3221,7 +3221,7 @@ PrefabInstance:
     - target: {fileID: 5533963814143348669, guid: 0adbf3ca4f6da964087fc3b3a0895f47,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: spawnMouse
+      value: useAbility
       objectReference: {fileID: 0}
     - target: {fileID: 5533963814143348669, guid: 0adbf3ca4f6da964087fc3b3a0895f47,
         type: 3}
@@ -5171,7 +5171,7 @@ PrefabInstance:
     - target: {fileID: 5533963814143348669, guid: 0adbf3ca4f6da964087fc3b3a0895f47,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: spawnMouse
+      value: useAbility
       objectReference: {fileID: 0}
     - target: {fileID: 5533963814143348669, guid: 0adbf3ca4f6da964087fc3b3a0895f47,
         type: 3}
@@ -6760,7 +6760,7 @@ PrefabInstance:
     - target: {fileID: 5533963814143348669, guid: 0adbf3ca4f6da964087fc3b3a0895f47,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: spawnMouse
+      value: useAbility
       objectReference: {fileID: 0}
     - target: {fileID: 5533963814143348669, guid: 0adbf3ca4f6da964087fc3b3a0895f47,
         type: 3}
