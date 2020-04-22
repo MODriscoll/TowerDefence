@@ -6,11 +6,8 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 0
-    path: Assets/Scenes/MainMenu 2.unity
-    guid: c6768f7cae45d844e851f1df856dfdc5
-  - enabled: 0
-    path: Assets/Scenes/Testing/Ivan Test.unity
-    guid: ca1b698129379234b9799f092da4c153
+    path: 
+    guid: 00000000000000000000000000000000
   - enabled: 1
     path: Assets/Scenes/MainMenu.unity
     guid: 81ac3cbe41a75224cbcb7b87657d9dbe
@@ -21,15 +18,18 @@ EditorBuildSettings:
     path: Assets/Scenes/Launcher.unity
     guid: ba567df22a42d224884c8883c8a3a556
   - enabled: 0
-    path: Assets/Scenes/Testing/Ivan Test 1.unity
-    guid: 41bdc3974ee5b8a469835a39b138c252
+    path: 
+    guid: 00000000000000000000000000000000
   - enabled: 0
     path: Assets/Scenes/Testing/JacksMainMenu.unity
     guid: 4a23fa00dc6b19e4b9ec68aca4cb6290
   - enabled: 0
-    path: Assets/Scenes/Testing/MaxEntityTesting.unity
-    guid: b365caffceb7eba46bf23395002322d4
+    path: 
+    guid: 00000000000000000000000000000000
   - enabled: 0
     path: Assets/Scenes/Testing/ShaderTesting.unity
     guid: f49b1864f5d892c4dbc64d4458faca66
+  - enabled: 0
+    path: Assets/Scenes/Testing/Ivan Test.unity
+    guid: ca1b698129379234b9799f092da4c153
   m_configObjects: {}
