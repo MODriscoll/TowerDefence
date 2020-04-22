@@ -64,7 +64,9 @@ public class MonsterBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallba
                 monsterManager.addExternalMonster(this);
         }
 
-        healthBar.SetMaxHealth(m_health);   //Set Healthbar UI
+        // Init health bar (Max health is only set once)
+        healthBar.SetMaxHealth(m_maxHealth);
+        healthBar.SetHealth(m_health);
     }
 
     void OnDestroy()
@@ -178,6 +180,7 @@ public class MonsterBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallba
         }
 
         m_health = Mathf.Min(m_maxHealth, m_health + amount);
+        healthBar.SetHealth(m_health);
     }
 
     public void setCanBeDamaged(bool bCanDamage)
