@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.Tilemaps;
@@ -39,11 +40,18 @@ public struct BoardPaths
     [SerializeField, HideInInspector]
     private Vector3Int m_goal;
 
+    // All the generated paths, the num signals the amount of paths that were found
     [SerializeField, HideInInspector] 
     private List<Path> m_paths;
 
+    private Thread m_generateThread;                            // Used if generating paths in the background
+    private Dictionary<Vector3Int, TDTileType> m_tileMap;       // Map containing all tiles and there type         
+
+    // If the paths are currently being generated
+    public bool Generating { get { return m_generateThread != null && m_generateThread.IsAlive; } }
+
     // If the paths have been generated
-    public bool Generated { get { return m_paths != null; } }
+    public bool Generated { get { return m_paths != null && !Generating; } }
 
     // The goal tile of each path
     public Vector3Int GoalTile { get { return m_goal; } }
@@ -55,19 +63,10 @@ public struct BoardPaths
     /// Generates the flow map based off a tile map. This assumes there is no
     /// cost for going to a tile (don't need that for this game)
     /// </summary>
-    /// <param name="tileMap">Tile map to generate based off</param>
-    public bool generate(Tilemap tileMap)
+    public void generateImpl()
     {
-        m_paths = null;
-
-        if (!tileMap)
-            return false;
-
-        m_goal = getGoal(tileMap);
-        if (!tileMap.HasTile(m_goal))
-            return false;
-
-        m_paths = new List<Path>();
+        // Should not be null at this point
+        Assert.IsNotNull(m_tileMap);
 
         // Map containing the directions to move to based on a tile. We generate
         // the flow field first which we then use to generate individual paths
@@ -85,23 +84,31 @@ public struct BoardPaths
         // Cycle through all tiles we need to visit
         while (tilesToVisit.Count > 0)
         {
-            Vector3Int tileIndex = tilesToVisit.Dequeue();
-            visitedTiles.Add(tileIndex);
-
-            // We can use this tile later to generate the individual paths
-            if (isTileOfType(tileMap, tileIndex, TDTileType.Spawn))
-                spawnTiles.Add(tileIndex);
-
-            // Check which neighbors we can travel to
-            Vector3Int[] neighbors = getNeighbors(tileMap, tileIndex);
-            for (int i = 0; i < neighbors.Length; ++i)
+            lock (m_tileMap)
             {
-                // Ignore tiles we have already visited
-                Vector3Int neighbor = neighbors[i];
-                if (!visitedTiles.Contains(neighbor))
+                Vector3Int tileIndex = tilesToVisit.Dequeue();
+                visitedTiles.Add(tileIndex);
+
+                if (!m_tileMap.ContainsKey(tileIndex))
+                    continue;
+
+                // We can use this tile later to generate the individual paths
+                //if (isTileOfType(m_tileMap, tileIndex, TDTileType.Spawn))
+                if (m_tileMap[tileIndex] == TDTileType.Spawn)
+                    if (!spawnTiles.Contains(tileIndex))
+                        spawnTiles.Add(tileIndex);
+
+                // Check which neighbors we can travel to
+                Vector3Int[] neighbors = getNeighbors(m_tileMap, tileIndex);
+                for (int i = 0; i < neighbors.Length; ++i)
                 {
-                    flowField.Add(neighbor, tileIndex);
-                    tilesToVisit.Enqueue(neighbor);
+                    // Ignore tiles we have already visited or are already going to visit
+                    Vector3Int neighbor = neighbors[i];
+                    if (!visitedTiles.Contains(neighbor) && !tilesToVisit.Contains(neighbor))
+                    {
+                        flowField.Add(neighbor, tileIndex);
+                        tilesToVisit.Enqueue(neighbor);
+                    }
                 }
             }
         }
@@ -124,8 +131,74 @@ public struct BoardPaths
             Path path = new Path();
             path.m_list = pathList;
             m_paths.Add(path);
-        }    
+        }
 
+        m_generateThread = null;
+        m_tileMap = null;
+    }
+
+    /// <summary>
+    /// Generates the paths synchronously
+    /// </summary>
+    /// <param name="tileMap">Tile map to use for generation</param>
+    public void generate(Tilemap tileMap)
+    {
+        if (!initForGeneration(tileMap))
+            return;
+
+        generateImpl();
+    }
+
+    /// <summary>
+    /// Generates the paths asynchronously
+    /// </summary>
+    /// <param name="tileMap">Tile map to use for generation</param>
+    public void generateAsync(Tilemap tileMap)
+    {
+        if (!initForGeneration(tileMap))
+            return;
+
+        // Start async execution now
+        m_generateThread = new Thread(generateImpl);
+        m_generateThread.Start();
+    }
+
+    /// <summary>
+    /// Checks if paths can be generated and will intialize itself if allowed it
+    /// </summary>
+    /// <param name="tileMap">Tile map to base off</param>
+    /// <returns>If intiializing completed</returns>
+    private bool initForGeneration(Tilemap tileMap)
+    {
+        // Check this first, we don't want to overwrite anything if already generating
+        if (Generating)
+            return false;
+
+        m_paths = null;
+
+        if (!tileMap)
+            return false;
+
+        // Need a goal tile to act as source for flow field
+        m_goal = getGoal(tileMap);
+        if (!tileMap.HasTile(m_goal))
+            return false;
+
+        // Grab all tiles and put them into our own dictionary. We need
+        // to do this as we can't access tiles on a separate thread
+        m_tileMap = new Dictionary<Vector3Int, TDTileType>();
+        {
+            foreach (Vector3Int tileIndex in tileMap.cellBounds.allPositionsWithin)
+            {
+                TDTileBase tile = tileMap.GetTile<TDTileBase>(tileIndex);
+                if (!tile)
+                    continue;
+
+                m_tileMap.Add(tileIndex, tile.TileType);
+            }
+        }
+
+        m_paths = new List<Path>();
         return true;
     }
 
@@ -155,20 +228,20 @@ public struct BoardPaths
     /// <param name="tileMap">Tile map to query</param>
     /// <param name="source">Tile to query for neighbors</param>
     /// <returns>Array of tiles neighbors</returns>
-    static private Vector3Int[] getNeighbors(Tilemap tileMap, Vector3Int source)
+    static private Vector3Int[] getNeighbors(Dictionary<Vector3Int, TDTileType> tileMap, Vector3Int source)
     {
 #if UNITY_EDITOR
-        Assert.IsTrue(tileMap.HasTile(source));
+        Assert.IsTrue(tileMap.ContainsKey(source));
 #endif
 
         List<Vector3Int> neighbors = new List<Vector3Int>();
         for (int i = 0; i < moveDirs.Length; ++i)
         {
             Vector3Int tileIndex = source + moveDirs[i];
-            if (!tileMap.HasTile(tileIndex))
+            if (!tileMap.ContainsKey(tileIndex))
                 continue;
 
-            TDTileBase tile = tileMap.GetTile<TDTileBase>(tileIndex);
+            TDTileType tile = tileMap[tileIndex];
             if (!canTravelTo(tile))
                 continue;
 
@@ -181,37 +254,11 @@ public struct BoardPaths
     /// <summary>
     /// Get if monsters could travel to this tile
     /// </summary>
-    /// <param name="tile">Tile to check</param>
+    /// <param name="tileType">Type of the tile</param>
     /// <returns>If monster can travel to tile</returns>
-    static private bool canTravelTo(TDTileBase tile)
+    static private bool canTravelTo(TDTileType tileType)
     {
-        if (tile)
-        {
-            TDTileType tileType = tile.TileType;
-            return tileType == TDTileType.Path || tileType == TDTileType.Spawn;
-        }
-
-        return false;
-    }
-
-    /// <summary>
-    /// Checks if tile at index is of given tile type
-    /// </summary>
-    /// <param name="tileMap">Tile map to query</param>
-    /// <param name="tileIndex">Index of tile to check</param>
-    /// <param name="type">Type the tile should be</param>
-    /// <returns>If tile is of type</returns>
-    static private bool isTileOfType(Tilemap tileMap, Vector3Int tileIndex, TDTileType type)
-    {
-#if UNITY_EDITOR
-        Assert.IsTrue(tileMap.HasTile(tileIndex));
-#endif
-
-        TDTileBase tile = tileMap.GetTile<TDTileBase>(tileIndex);
-        if (tile)
-            return tile.TileType == type;
-
-        return false;
+        return tileType == TDTileType.Path || tileType == TDTileType.Spawn;
     }
 
     /// <summary>
@@ -262,7 +309,10 @@ public class BoardManager : MonoBehaviourPun
 
     public Vector3 ViewPosition { get { return m_cameraView ? m_cameraView.position : Vector3.zero; } }     // The position for viewing this board
 
-    public MonsterManager MonsterManager { get { return m_monsterManager; } }
+    public MonsterManager MonsterManager { get { return m_monsterManager; } }                               // Manager for this boards monster
+
+    public bool IsGeneratingPaths { get { return m_paths.Generating; } }
+    public bool PathsGenerated { get { return m_paths.Generated; } }
 
     void Awake()
     {
@@ -270,9 +320,8 @@ public class BoardManager : MonoBehaviourPun
             m_tileMap = GetComponentInChildren<Tilemap>();
 
         // Generate paths even if waven't done so already
-        if (m_tileMap)
-            if (!m_paths.Generated && !m_paths.generate(m_tileMap))
-                Debug.LogError("Failed to Generate Flow Field!");
+        if (m_tileMap && !m_paths.Generated)
+            m_paths.generate(m_tileMap);
     }
 
     public void initFor(PlayerController controller)
@@ -490,9 +539,8 @@ public class BoardManager : MonoBehaviourPun
         // Compress bounds so we work with latest size
         m_tileMap.CompressBounds();
 
-        // Generate the paths
-        if (!m_paths.generate(m_tileMap))
-            Debug.LogWarning("Failed to generate the paths for Board! PathFollowing will not work correctly!");
+        // Generate the paths in background
+        m_paths.generateAsync(m_tileMap);
 
         // Find cheese associated with the board
         m_cheese = GetComponentInChildren<CheesePulse>();
@@ -507,10 +555,9 @@ public class BoardManager : MonoBehaviourPun
 
     void OnDrawGizmos()
     {
-        if (!m_tileMap)
+        if (!m_paths.Generated)
             return;
 
-        //foreach (var entry in m_flowField.m_flowMap)
         for (int i = 0; i < m_paths.NumPaths; ++i)
         {
             List<Vector3Int> path = m_paths.getPath(i);
@@ -556,12 +603,26 @@ public class BoardManagerEditor : Editor
 {
     public override void OnInspectorGUI()
     {
-        base.OnInspectorGUI();
-
         BoardManager boardManager = serializedObject.targetObject as BoardManager;
+        if (boardManager.IsGeneratingPaths)
+        {
+            GUILayout.Label("Generating Paths for Board. Please Wait");
+        }
+        else
+        {
+            // Allow board to be edited again once done refreshing
+            boardManager.gameObject.hideFlags &= ~HideFlags.NotEditable;
 
-        if (GUILayout.Button("Refresh Board"))
-            boardManager.refreshProperties();
+            base.OnInspectorGUI();
+
+            if (GUILayout.Button("Refresh Board"))
+            {
+                // Don't allow board to be edited while still generating the paths
+                boardManager.gameObject.hideFlags |= HideFlags.NotEditable;
+
+                boardManager.refreshProperties();
+            }
+        }
     }
 }
 #endif
