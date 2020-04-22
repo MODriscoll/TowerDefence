@@ -162,10 +162,16 @@ public class TowerBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallback
     private void destroyTowerRPC(bool bulldozed)
     {
         if (bulldozed)
+        {
             SoundEffectsManager.playSoundEffect(m_bulldozedSound, m_board);
+        }
         else
-            Instantiate(destructionParticle,new Vector3 (transform.position.x, transform.position.y, transform.position.z - 1), transform.rotation);
+        {
             SoundEffectsManager.playSoundEffect(m_destroyedSound, m_board);
+
+            if (destructionParticle)
+                Instantiate(destructionParticle, new Vector3(transform.position.x, transform.position.y, transform.position.z - 1), transform.rotation);
+        }
 
         if (!PhotonNetwork.IsConnected || photonView.IsMine)
             PhotonNetwork.Destroy(gameObject);
