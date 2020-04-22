@@ -2552,7 +2552,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: -0.092}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 815917229132743430}
+  - {fileID: 7423166414591747088}
   - {fileID: 4203837551606922770}
   - {fileID: 6886658354980051636}
   m_Father: {fileID: 0}
@@ -2574,7 +2574,7 @@ MonoBehaviour:
   m_reward: 3
   m_damage: 5
   m_health: 30
-  healthBar: {fileID: 815917229132743192}
+  healthBar: {fileID: 4192869653080624852}
   m_spawnSound: {fileID: 0}
   m_deathScriptPrefab: 
   m_renderer: {fileID: 7897980240959495910}
@@ -3350,7 +3350,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ddcc5a60615ffa346a38c14dfff03745, type: 3}
---- !u!114 &815917229132743192 stripped
+--- !u!114 &4192869653080624852 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3558592308590331765, guid: ddcc5a60615ffa346a38c14dfff03745,
     type: 3}
@@ -3362,7 +3362,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4d8c192e4588374184771158765e3db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!224 &815917229132743430 stripped
+--- !u!224 &7423166414591747088 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7806667676390911409, guid: ddcc5a60615ffa346a38c14dfff03745,
     type: 3}
