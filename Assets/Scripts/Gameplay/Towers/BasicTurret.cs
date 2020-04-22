@@ -24,7 +24,7 @@ public class BasicTurret : TowerScript
         Vector2 targetPosition = target.transform.position;
 
         // Shoot the laser
-        bool bKilled = target.takeDamage(m_damage);
+        bool bKilled = target.takeDamage(m_damage, this);
 
         if (PhotonNetwork.IsConnected)
             photonView.RPC("onFired", RpcTarget.All, targetPosition, bKilled);
