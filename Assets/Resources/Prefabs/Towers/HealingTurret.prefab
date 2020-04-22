@@ -5088,7 +5088,7 @@ MonoBehaviour:
   m_healSingleTower: 0
   m_healPulseSound: {fileID: 8300000, guid: 73bad9a3dbbd9be4598b16a5faee2d87, type: 3}
   m_healPulseSource: {fileID: 6788269959825158205}
-  m_pulseScale: {x: 17.5, y: 17.5, z: 1}
+  m_pulseScale: {x: 1, y: 1, z: 1}
   m_pulseDuration: 1.171
 --- !u!114 &1342710038121297073
 MonoBehaviour:
@@ -5214,6 +5214,10 @@ PrefabInstance:
     - target: {fileID: 19800000, guid: 9693356408034c441b7fc2608b4ca4de, type: 3}
       propertyPath: InitialModule.startColor.maxGradient.m_NumAlphaKeys
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 19800000, guid: 9693356408034c441b7fc2608b4ca4de, type: 3}
+      propertyPath: scalingMode
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9693356408034c441b7fc2608b4ca4de, type: 3}

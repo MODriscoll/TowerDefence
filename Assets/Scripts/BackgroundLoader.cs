@@ -9,9 +9,9 @@ public class BackgroundLoader : MonoBehaviour
     static private PlayerController playerController;
 
     //public SpriteRenderer PlayerBackgroundImage;
-    public Sprite[] backgrounds;
-    public SpriteRenderer P1Background;
-    public SpriteRenderer P2Background;
+    public Material[] backgrounds;
+    public MeshRenderer P1Background;
+    public MeshRenderer P2Background;
 
     private ExitGames.Client.Photon.Hashtable myCustomProperties = new ExitGames.Client.Photon.Hashtable();
 
@@ -40,11 +40,11 @@ public class BackgroundLoader : MonoBehaviour
 
             if (playerID == 0)
             {
-                P1Background.sprite = backgrounds[background];
+                P1Background.material = backgrounds[background];
             }
             else if (playerID == 1)
             {
-                P2Background.sprite = backgrounds[background];
+                P2Background.material = backgrounds[background];
             }
         }
     }
