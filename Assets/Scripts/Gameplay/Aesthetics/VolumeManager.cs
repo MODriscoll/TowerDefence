@@ -5,9 +5,9 @@ using UnityEngine.UI;
 
 public class VolumeManager : MonoBehaviour
 {
-    [Range(0, 1)] public float m_masterVolume;
-    [Range(0, 1)] public float m_musicVolume;
-    [Range(0, 1)] public float m_sfxVolume;
+    [Range(0, 1)] public static float m_masterVolume;
+    [Range(0, 1)] public static float m_musicVolume;
+    [Range(0, 1)] public static float m_sfxVolume;
 
     public Toggle toggleMaster;
     public Toggle toggleMusic;
@@ -87,5 +87,14 @@ public class VolumeManager : MonoBehaviour
     {
         m_sfxVolume = sfxSlider.value;
         sfxAudioSource.volume = m_masterVolume * m_sfxVolume * PlayerPrefs.GetInt("MasterToggle") * PlayerPrefs.GetInt("SFXToggle");
+    }
+
+    public float GetMusicVolume()
+    {
+        return m_masterVolume * m_musicVolume * PlayerPrefs.GetInt("MasterToggle") * PlayerPrefs.GetInt("MusicToggle");
+    }
+    public float GetSFXVolume()
+    {
+        return m_masterVolume* m_sfxVolume *PlayerPrefs.GetInt("MasterToggle") * PlayerPrefs.GetInt("SFXToggle");
     }
 }
