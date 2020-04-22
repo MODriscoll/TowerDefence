@@ -194,7 +194,7 @@ public class SoundEffectsManager : MonoBehaviour
         // Volume of the clip
         float volume = 1f;
         if (m_volumeManager)
-            volume = m_volumeManager.m_sfxVolume;
+            volume = m_volumeManager.GetSFXVolume();
 
         bool startMuted = groupId != m_activeGroup;
         manager.playInstance(clip, maxActive, volume, startMuted);
