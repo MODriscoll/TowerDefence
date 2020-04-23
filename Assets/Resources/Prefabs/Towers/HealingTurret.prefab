@@ -5177,7 +5177,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 19800000, guid: 9693356408034c441b7fc2608b4ca4de, type: 3}
       propertyPath: InitialModule.startSize.minScalar
-      value: 16
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 19800000, guid: 9693356408034c441b7fc2608b4ca4de, type: 3}
       propertyPath: InitialModule.rotation3D
@@ -5185,7 +5185,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 19800000, guid: 9693356408034c441b7fc2608b4ca4de, type: 3}
       propertyPath: InitialModule.startSize.scalar
-      value: 32
+      value: 6.5
       objectReference: {fileID: 0}
     - target: {fileID: 19800000, guid: 9693356408034c441b7fc2608b4ca4de, type: 3}
       propertyPath: SizeModule.enabled
@@ -5218,6 +5218,14 @@ PrefabInstance:
     - target: {fileID: 19800000, guid: 9693356408034c441b7fc2608b4ca4de, type: 3}
       propertyPath: scalingMode
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 19900000, guid: 9693356408034c441b7fc2608b4ca4de, type: 3}
+      propertyPath: m_MaxParticleSize
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 19900000, guid: 9693356408034c441b7fc2608b4ca4de, type: 3}
+      propertyPath: m_RenderAlignment
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9693356408034c441b7fc2608b4ca4de, type: 3}
