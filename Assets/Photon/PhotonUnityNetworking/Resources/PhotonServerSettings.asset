@@ -48,5 +48,6 @@ MonoBehaviour:
   - spawnMonsterRPC
   - startNextWaveRPC
   - TakeDamageRPC
+  - onHealMonsterRPC
   DisableAutoOpenWizard: 1
   ShowSettings: 0
