@@ -265,6 +265,8 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
     [PunRPC]
     private void onMatchFinishedRPC(byte condAsByte, int winnerId)
     {
+        AnalyticsHelpers.finishRound();
+
         matchState = TDMatchState.PostMatch;
 
         TDWinCondition winCondition = (TDWinCondition)condAsByte;
@@ -305,6 +307,8 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
     private void startNextWaveRPC(int waveId)
     {
         m_waveNum = waveId;
+
+        AnalyticsHelpers.startRound(m_waveNum);
 
         if (m_waveSpawner)
             m_waveSpawner.initWave(waveId);
@@ -363,6 +367,8 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
     [PunRPC]
     private void onWaveFinishedRPC()
     {
+        AnalyticsHelpers.finishRound();
+
         if (onWaveFinish != null)
             onWaveFinish.Invoke();
 

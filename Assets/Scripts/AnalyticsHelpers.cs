@@ -13,6 +13,10 @@ public struct AnalyticsHelpers
     public static readonly string towerDestroyed = "towerDestroyed";
     public static readonly string towerBulldozed = "towerBulldozed";
 
+    private static int currentRound = -1;
+    private static Dictionary<string, int> monstersDestroyedThisRound = null;
+
+
     /// <summary>
     /// If reports are being tracked. Is set up to only track if in a online match
     /// </summary>
@@ -47,11 +51,20 @@ public struct AnalyticsHelpers
         if (!isTrackingEvents)
             return;
 
+        string monsterName = monster.GetType().ToString();
+        if (monstersDestroyedThisRound != null)
+        {
+            if (monstersDestroyedThisRound.ContainsKey(monsterName))
+                monstersDestroyedThisRound[monsterName]++;
+            else
+                monstersDestroyedThisRound.Add(monsterName, 1);
+        }
+
         bool bIsCommon = monster.GetType().IsSubclassOf(typeof(SpecialMonster));
 
         AnalyticsEvent.Custom(monsterDeath, new Dictionary<string, object>
         {
-            { "name", monster.gameObject.name },
+            { "name", monsterName },
             { "common", bIsCommon },
             { "killedBy", killedBy },
             { "tilesTravelled", monster.TilesTravelled }
@@ -116,5 +129,28 @@ public struct AnalyticsHelpers
             { "lifeSpan", tower.LifeSpan }
         });
 #endif
+    }
+
+    static public void startRound(int roundNum)
+    {
+        currentRound = roundNum;
+        monstersDestroyedThisRound = new Dictionary<string, int>();
+    }
+
+    static public void finishRound()
+    {
+#if UNITY_ANALYTICS
+        if (!isTrackingEvents)
+            return;
+
+        AnalyticsEvent.Custom("monstersKilledSet", new Dictionary<string, object>
+        {
+            { "round" , currentRound },
+            { "map", monstersDestroyedThisRound }
+        });
+#endif
+
+        currentRound = -1;
+        monstersDestroyedThisRound = null;
     }
 }
