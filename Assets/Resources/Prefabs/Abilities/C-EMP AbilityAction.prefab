@@ -44,6 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cf15002e3115a840bd3069c0c0cec26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_activateSound: {fileID: 8300000, guid: 4b362d728ca03cb418311f1102f030a3, type: 3}
   m_effectTime: 7
 --- !u!114 &3183930823377517023
 MonoBehaviour:

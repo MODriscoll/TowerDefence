@@ -12,6 +12,7 @@ public class TowerScript : MonoBehaviourPun
     [SerializeField, Min(0.01f)] protected float m_fireRate = 1f;       // Rate at which the tower acts
 
     [SerializeField] private Transform m_pivot;                 // The pivot to rotate when facing monsters
+    [SerializeField] private GameObject m_disabledHighlight;    // Game object to activate when this tower is disabled
 
     protected float m_lastFireTime = -float.MaxValue;           // The last time the turret fired
     protected bool m_isDelayed = false;                         // If fire rate has been delayed
@@ -32,6 +33,9 @@ public class TowerScript : MonoBehaviourPun
     {
         if (!m_tower)
             m_tower = gameObject.GetComponent<TowerBase>();
+
+        // Do not need to call as RPC
+        setDisableRotation(false);
     }
 
     void Update()
@@ -110,5 +114,8 @@ public class TowerScript : MonoBehaviourPun
     public void setDisableRotation(bool disable)
     {
         m_disableRotation = disable;
+
+        if (m_disabledHighlight)
+            m_disabledHighlight.SetActive(disable);
     }
 }
