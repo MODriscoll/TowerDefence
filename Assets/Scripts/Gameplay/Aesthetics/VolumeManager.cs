@@ -20,7 +20,6 @@ public class VolumeManager : MonoBehaviour
     private AudioSource musicAudioSource;
     private AudioSource sfxAudioSource;
 
-    // Start is called before the first frame update
     void Awake()
     {
         // Set AudioSources to their corresponding source
