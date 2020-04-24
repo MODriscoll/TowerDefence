@@ -67,18 +67,25 @@ public class AbilityActionBase : MonoBehaviourPun, IPunInstantiateMagicCallback
         PhotonNetwork.Destroy(gameObject);
     }
 
+    protected virtual void postPhotonInstantiate(PhotonMessageInfo info)
+    {
+        // Play activation sound
+        SoundEffectsManager.playSoundEffect(m_activateSound, m_board);
+    }
+
+    // IPunInstantiateMagicCallback Interface
     void IPunInstantiateMagicCallback.OnPhotonInstantiate(PhotonMessageInfo info)
     {
         object[] instantiationData = info.photonView.InstantiationData;
         int ownerId = (int)instantiationData[0];
+        int boardId = (int)instantiationData[1];
 
         m_instigator = PlayerController.getController(ownerId);
-        m_board = m_instigator ? m_instigator.Board : null;
+        m_board = GameManager.manager.getBoardManager(boardId);
 
         if (!m_instigator)
-            Debug.LogError("OwnerId passed to ability action is invalid!");      
+            Debug.LogError("OwnerId passed to ability action is invalid!");
 
-        // Play activation sound
-        SoundEffectsManager.playSoundEffect(m_activateSound, ownerId);
+        postPhotonInstantiate(info);
     }
 }

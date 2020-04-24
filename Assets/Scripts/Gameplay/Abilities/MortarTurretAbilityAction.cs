@@ -12,10 +12,19 @@ public class MortarTurretAbilityAction : AbilityActionBase
 
     private HashSet<MonsterBase> m_monstersInRange = new HashSet<MonsterBase>();        // All monsters currently in range
 
+    void OnDestroy()
+    {
+        // Run this again now, co-routine probably hasn't/won't finish in time
+        if (PhotonNetwork.IsConnected && !photonView.IsMine)
+            updateCollision(false);
+    }
+
     // Begin AbilityActionBase Interface
     protected override void startAbilityActionImpl()
     {
-        StartCoroutine(collisionRoutine());
+        // We want to modify the speed of mice, they will be owned by the other client
+        // Due to this we have to update the speed on their end but control lifetime on ours
+        Invoke("finishAbilityAction", m_duration);
     }
 
     private void updateCollision(bool doCheck = true)
@@ -26,7 +35,7 @@ public class MortarTurretAbilityAction : AbilityActionBase
 
         List<MonsterBase> monsters = null;
         if (doCheck)
-            monsters = monsterManager.getMonstersInRadius(m_position, m_radius);
+            monsters = monsterManager.getMonstersInRadius(transform.position, m_radius);
 
         if (monsters != null)
         {
@@ -39,7 +48,7 @@ public class MortarTurretAbilityAction : AbilityActionBase
                 if (!m_monstersInRange.Contains(monster))
                     giveBoost(monster);
 
-                monstersOutOfRange.Remove(monster);                
+                monstersOutOfRange.Remove(monster);
             }
 
             // Remove the boost from any monsters that are no longer in range
@@ -88,7 +97,18 @@ public class MortarTurretAbilityAction : AbilityActionBase
         // we had detected as being overlapped with
         updateCollision(false);
 
-        finishAbilityAction();
+        // Testing in editor
+        if (!PhotonNetwork.IsConnected)
+            finishAbilityAction();
+    }
+
+    protected override void postPhotonInstantiate(PhotonMessageInfo info)
+    {
+        base.postPhotonInstantiate(info);
+
+        // We run this on client that doesn't own this ability,
+        if (!PhotonNetwork.IsConnected || !photonView.IsMine)
+            StartCoroutine(collisionRoutine());
     }
 
     private void OnDrawGizmos()

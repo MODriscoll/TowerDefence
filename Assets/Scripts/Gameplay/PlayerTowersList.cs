@@ -76,6 +76,11 @@ public class PlayerTowersList : MonoBehaviour
 
     public AbilityBase getSelectedAbility()
     {
+#if UNITY_EDITOR
+        if (m_availableAbilities.Count > 0)
+            return m_availableAbilities[0];
+#endif
+
         // We search using Id, as the available abilities could have possibly changed
         return findAbilityById(m_selectedAbility);
     }

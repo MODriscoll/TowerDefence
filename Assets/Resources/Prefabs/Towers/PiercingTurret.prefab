@@ -5362,7 +5362,8 @@ MonoBehaviour:
   healthBar: {fileID: 6519935842716465769}
   destructionParticle: {fileID: 5871907927546783599, guid: e537bc6512deec845ae227e8579e6787,
     type: 3}
-  m_ability: {fileID: 0}
+  m_ability: {fileID: 2553757146554004165, guid: 506a25dab598d9d4481dc614b6e3b987,
+    type: 3}
   m_spawnSound: {fileID: 8300000, guid: ccd199ac6f72dbd46b3e100b96133dd8, type: 3}
   m_destroyedSound: {fileID: 0}
   m_bulldozedSound: {fileID: 8300000, guid: eefcaee6c811d6641b3f95f3a344aa9b, type: 3}

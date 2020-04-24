@@ -154,9 +154,7 @@ public class MonsterManager : MonoBehaviour
         {
             Vector2 dis = (Vector2)monster.transform.position - position;
             if (dis.sqrMagnitude <= radSqr)
-            {
                 foundMonsters.Add(monster);
-            }
         }
 
         // Return null to signal no monsters in range
