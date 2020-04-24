@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2252263262526950789}
   - component: {fileID: -675026744539693092}
   m_Layer: 0
-  m_Name: SnackAbilityAction
+  m_Name: BattleSnackAbilityAction
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -44,9 +44,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e924351e56dd5d46a22786a953915b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_activateSound: {fileID: 8300000, guid: 72a267d6ab9d5584787af11b3ba6df08, type: 3}
   m_healthToGive: 10
   m_bursts: 3
   m_interval: 1.5
+  m_healSound: {fileID: 8300000, guid: 72a267d6ab9d5584787af11b3ba6df08, type: 3}
 --- !u!114 &-675026744539693092
 MonoBehaviour:
   m_ObjectHideFlags: 0
