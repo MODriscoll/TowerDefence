@@ -27,7 +27,7 @@ public class PlayerUI : MonoBehaviour
     public GameObject m_bulldoseButton;
     public GameObject m_miceShop;
 
-
+    private GameOver gameOverManager;
     // For Cheese pulsating effect
     //public int healthCheck;
     //public CheesePulse playerCheese;
@@ -37,7 +37,7 @@ public class PlayerUI : MonoBehaviour
         if (m_roundText)
             m_roundText.gameObject.SetActive(false);
         m_playerTowersList = m_owner.GetComponent<PlayerTowersList>();
-
+        gameOverManager = FindObjectOfType<GameOver>();
         //healthCheck = m_owner.Health;         //to check whether the health of the player has changed
     }
 
@@ -108,13 +108,23 @@ public class PlayerUI : MonoBehaviour
     {
         if (m_roundText)
         {
+            if (!gameOverManager)
+                gameOverManager = FindObjectOfType<GameOver>();
             if (winCondition == TDWinCondition.Tie)
+            {
                 m_roundText.text = "Draw";
+                gameOverManager.SetGameOverScreen("Draw");
+            }
             else if (bOwnerWon)
+            {
                 m_roundText.text = "You Won!";
+                gameOverManager.SetGameOverScreen("Win");
+            }
             else
+            {
                 m_roundText.text = "You Lost...";
-
+                gameOverManager.SetGameOverScreen("Lose");
+            }
             m_roundText.gameObject.SetActive(true);
         }
     }
