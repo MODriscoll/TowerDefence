@@ -126,7 +126,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6756fa7b1de4fab45b85309641430ac9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_activateSound: {fileID: 0}
+  m_activateSound: {fileID: 8300000, guid: 3f2320a95e1baee4994853c47a5fdec8, type: 3}
   m_removeDuration: 0.25
   m_radius: 1.5
   m_duration: 3
