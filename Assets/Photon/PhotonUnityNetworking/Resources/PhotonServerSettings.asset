@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: PhotonServerSettings
   m_EditorClassIdentifier: 
   AppSettings:
-    AppIdRealtime: beb464ab-b6c4-48e0-ab92-5b467d47fe07
+    AppIdRealtime: 
     AppIdChat: 
     AppIdVoice: 
     AppVersion: 
@@ -38,6 +38,7 @@ MonoBehaviour:
   - HealTowerRPC
   - onExpired
   - onFired
+  - onHealMonsterRPC
   - onHealTowers
   - onMatchFinishedRPC
   - onMatchStartRPC
@@ -48,6 +49,5 @@ MonoBehaviour:
   - spawnMonsterRPC
   - startNextWaveRPC
   - TakeDamageRPC
-  - onHealMonsterRPC
   DisableAutoOpenWizard: 1
   ShowSettings: 0
