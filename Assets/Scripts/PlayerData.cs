@@ -9,7 +9,7 @@ public class PlayerData : MonoBehaviour
 {
     public TextMeshProUGUI m_moneyText;
 
-    private int backgroundCost = 3000;
+    private int backgroundCost = 175;
 
     private void Start()
     {
