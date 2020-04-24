@@ -265,7 +265,9 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
     [PunRPC]
     private void onMatchFinishedRPC(byte condAsByte, int winnerId)
     {
-        AnalyticsHelpers.finishRound();
+        //--------------------------------------
+        //The analytics seem to break when you win/lose/finish a round. Commenting it out for now - Max
+        //AnalyticsHelpers.finishRound();
 
         matchState = TDMatchState.PostMatch;
 
