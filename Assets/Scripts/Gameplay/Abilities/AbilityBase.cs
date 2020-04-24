@@ -61,7 +61,10 @@ public class AbilityBase : MonoBehaviour
             return;
         }
 
-        GameObject newAction = PhotonNetwork.Instantiate(m_actionPrefab, worldPos, Quaternion.identity);
+        object[] spawnData = new object[1];
+        spawnData[0] = GameManager.manager.getPlayerIdFromBoard(board);
+
+        GameObject newAction = PhotonNetwork.Instantiate(m_actionPrefab, worldPos, Quaternion.identity, 0, spawnData);
         if (!newAction)
             return;
 

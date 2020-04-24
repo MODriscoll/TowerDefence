@@ -11,6 +11,8 @@ public class HealthTurretAbilityAction : AbilityActionBase
 
     private MonsterBase m_monsterToHeal = null;             // Monster we can heal
 
+    public AudioClip m_healSound;           // Sound to play when healing
+
     // Begin AbilityActionBase Interface
     protected override void startAbilityActionImpl()
     {
@@ -65,6 +67,9 @@ public class HealthTurretAbilityAction : AbilityActionBase
 
         if (!PhotonNetwork.IsConnected || monster.photonView.IsMine)
             monster.healMonster(healthToGive);
+
+        // Play the heal sound
+        SoundEffectsManager.playSoundEffect(m_healSound, m_board);
     }
 
     private MonsterBase getMonsterFromPhotonId(int photonId)
