@@ -105,6 +105,13 @@ public class PlayerTowersList : MonoBehaviour
     {
         System.Type type = tower.GetType();
 
+        // TODO: instead of using type, use hash code instead
+        {
+            TowerScript script = tower.GetComponent<TowerScript>();
+            if (script)
+                type = script.GetType();
+        }
+
         ActiveTowersInfo info = null;
         if (!m_activeTowerInfos.TryGetValue(type, out info))
         {
@@ -135,6 +142,13 @@ public class PlayerTowersList : MonoBehaviour
     public void notifyTowerDestroyed(TowerBase tower)
     {
         System.Type type = tower.GetType();
+
+        // TODO: instead of using type, use hash code instead
+        {
+            TowerScript script = tower.GetComponent<TowerScript>();
+            if (script)
+                type = script.GetType();
+        }
 
         ActiveTowersInfo info = null;
         if (m_activeTowerInfos.TryGetValue(type, out info))
