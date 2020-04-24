@@ -114,6 +114,7 @@ public class TowerScript : MonoBehaviourPun
     public void setDisableRotation(bool disable)
     {
         m_disableRotation = disable;
+        m_isDelayed = disable;
 
         if (m_disabledHighlight)
             m_disabledHighlight.SetActive(disable);

@@ -38,7 +38,9 @@ public class BasicTurretAbilityAction : AbilityActionBase
 
     private void setTowerDisabled(TowerScript script, bool disable)
     {
-        script.setActionsDelayed(disable);
+        // Was a Derp when making this, this needs to be called on other clients side since they own it
+        // Since this function was only called here, we cheat by just having it set in setDisableRotation
+        //script.setActionsDelayed(disable);
 
         if (PhotonNetwork.IsConnected)
             script.photonView.RPC("setDisableRotation", RpcTarget.All, disable);
