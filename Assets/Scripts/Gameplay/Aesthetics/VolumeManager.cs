@@ -74,17 +74,20 @@ public class VolumeManager : MonoBehaviour
     public void SetMasterVolume()
     {
         m_masterVolume = masterSlider.value;
+        PlayerPrefs.SetFloat("MasterVolume", m_masterVolume);
         SetMusicVolume();
         SetSFXVolume();
     }
     public void SetMusicVolume()
     {
         m_musicVolume = musicSlider.value;
+        PlayerPrefs.SetFloat("MusicVolume", m_musicVolume);
         musicAudioSource.volume = m_masterVolume * m_musicVolume * PlayerPrefs.GetInt("MasterToggle") * PlayerPrefs.GetInt("MusicToggle");
     }
     public void SetSFXVolume()
     {
         m_sfxVolume = sfxSlider.value;
+        PlayerPrefs.SetFloat("SFXVolume", m_sfxVolume);
         sfxAudioSource.volume = m_masterVolume * m_sfxVolume * PlayerPrefs.GetInt("MasterToggle") * PlayerPrefs.GetInt("SFXToggle");
     }
 
