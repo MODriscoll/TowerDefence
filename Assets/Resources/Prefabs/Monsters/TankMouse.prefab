@@ -2729,9 +2729,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_travelDuration: 1
-  m_reward: 7
-  m_damage: 5
-  m_health: 75
+  m_reward: 10
+  m_damage: 1
+  m_health: 80
   healthBar: {fileID: 344072010013717678}
   m_spawnSound: {fileID: 8300000, guid: 11a5b7af5e65c9247ba1c0097967372e, type: 3}
   m_deathScriptPrefab: Prefabs/Monsters/GeneralMonsterDeathScript
@@ -2754,8 +2754,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_monster: {fileID: 5171284587749281140}
   m_shieldDuration: 2
-  m_shieldRadius: 1
-  m_cooldown: 6
+  m_shieldRadius: 2
+  m_cooldown: 3.5
   m_shieldObject: {fileID: 1188220606708583285}
   m_tickRate: 0.2
   m_activeSound: {fileID: 8300000, guid: c353b41df1671d547a70d26fa1c2dc3e, type: 3}
