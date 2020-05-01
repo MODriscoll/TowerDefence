@@ -265,6 +265,10 @@ public class MonsterBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallba
             int newHealth = (int)stream.ReceiveNext();
             if (newHealth != m_health)
             {
+
+                if (newHealth < m_health)        //Checks if the damage was done to mice and spawns reaction if so
+                    reaction.Ouch();
+
                 m_health = newHealth;
                 healthBar.SetHealth(m_health);  //Update Healthbar UI
             }
