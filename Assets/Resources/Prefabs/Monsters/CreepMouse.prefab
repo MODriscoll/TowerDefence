@@ -2534,6 +2534,7 @@ GameObject:
   - component: {fileID: 8982464395163395519}
   - component: {fileID: 6293389618481299608}
   - component: {fileID: 6661212567075598366}
+  - component: {fileID: -2688851591836860865}
   m_Layer: 9
   m_Name: CreepMouse
   m_TagString: Untagged
@@ -2556,6 +2557,7 @@ Transform:
   - {fileID: 4203837551606922770}
   - {fileID: 6886658354980051636}
   - {fileID: 8019257137039340123}
+  - {fileID: 4684059618812399115}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2581,6 +2583,7 @@ MonoBehaviour:
   m_renderer: {fileID: 7897980240959495910}
   m_model: {fileID: 6886658354980051636}
   m_radius: 0.5
+  reaction: {fileID: -2688851591836860865}
 --- !u!114 &6293389618481299608
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2622,6 +2625,22 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &-2688851591836860865
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7597932220477736506}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a8fe3216de3efd4bb8cc8be3fead140, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_reactionPrefab: {fileID: 1072731006009038503, guid: 919b345b57aee914486202f29bbe2a87,
+    type: 3}
+  m_chanceReaction: 0.2
+  m_reactionPos: {fileID: 4684059618812399115}
 --- !u!1 &7616214513617100612
 GameObject:
   m_ObjectHideFlags: 0
@@ -2683,6 +2702,36 @@ Transform:
   - {fileID: 3691504632278810425}
   m_Father: {fileID: 7997715435164667125}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &7918158771578864421
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4684059618812399115}
+  m_Layer: 0
+  m_Name: ReactionSpawnPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4684059618812399115
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7918158771578864421}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -0.995}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4143843131986725552}
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7946908540465199929
 GameObject:

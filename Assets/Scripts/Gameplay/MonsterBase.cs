@@ -49,6 +49,9 @@ public class MonsterBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallba
     // This monsters collision radius
     public float Radius { get { return m_radius; } }
 
+    //For mice reaction(Ivan)
+    public MiceReaction reaction;
+
     void Awake()
     {
         m_maxHealth = m_health;
@@ -138,6 +141,9 @@ public class MonsterBase : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallba
         }
 
         m_health = Mathf.Max(m_health - amount, 0);
+
+        reaction.Ouch();
+
         bool bKilled = m_health <= 0;
 
         // Execute events before potentially destroying ourselves

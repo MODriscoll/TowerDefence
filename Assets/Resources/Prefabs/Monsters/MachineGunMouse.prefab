@@ -1725,6 +1725,36 @@ Transform:
   m_Father: {fileID: 4769642730816864125}
   m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &4294824725168210008
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1934811086929677186}
+  m_Layer: 0
+  m_Name: ReactionSpawnPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1934811086929677186
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4294824725168210008}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -1.1442106}
+  m_LocalScale: {x: 1.0526316, y: 1.0526316, z: 1.0526316}
+  m_Children: []
+  m_Father: {fileID: 4143843131986725552}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4411185065807558175
 GameObject:
   m_ObjectHideFlags: 0
@@ -2781,6 +2811,7 @@ GameObject:
   - component: {fileID: -7273443016193421173}
   - component: {fileID: -5622797506343020279}
   - component: {fileID: -2043486397847632245}
+  - component: {fileID: 1032711286062472467}
   m_Layer: 9
   m_Name: MachineGunMouse
   m_TagString: Untagged
@@ -2803,6 +2834,7 @@ Transform:
   - {fileID: 2505314173971883182}
   - {fileID: 1247292265739965274}
   - {fileID: 4710267695749603298}
+  - {fileID: 1934811086929677186}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2828,6 +2860,7 @@ MonoBehaviour:
   m_renderer: {fileID: 6200519861259913905}
   m_model: {fileID: 1247292265739965274}
   m_radius: 0.5
+  reaction: {fileID: 0}
   m_cost: 25
   m_delay: 0.75
 --- !u!114 &-7273443016193421173
@@ -2889,6 +2922,22 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &1032711286062472467
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7597932220477736506}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a8fe3216de3efd4bb8cc8be3fead140, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_reactionPrefab: {fileID: 1072731006009038503, guid: 919b345b57aee914486202f29bbe2a87,
+    type: 3}
+  m_chanceReaction: 0.1
+  m_reactionPos: {fileID: 1934811086929677186}
 --- !u!1 &7641920259945460683
 GameObject:
   m_ObjectHideFlags: 0

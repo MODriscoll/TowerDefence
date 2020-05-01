@@ -793,6 +793,36 @@ Transform:
   m_Father: {fileID: 464569858238884407}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2167938206950906532
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2847152553806721859}
+  m_Layer: 0
+  m_Name: ReactionSpawnPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2847152553806721859
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2167938206950906532}
+  m_LocalRotation: {x: -0.6534437, y: -0, z: -0, w: 0.7569752}
+  m_LocalPosition: {x: 0, y: -0.5975671, z: -0.4404265}
+  m_LocalScale: {x: 1.1764705, y: 1.1764704, z: 1.1764704}
+  m_Children: []
+  m_Father: {fileID: 4143843131986725552}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2180981591521650210
 GameObject:
   m_ObjectHideFlags: 0
@@ -2774,6 +2804,7 @@ GameObject:
   - component: {fileID: 5517096975655646799}
   - component: {fileID: 6293389618481299608}
   - component: {fileID: -7067093605744459220}
+  - component: {fileID: 3458691748043436117}
   m_Layer: 9
   m_Name: PathfinderMouse
   m_TagString: Untagged
@@ -2796,6 +2827,7 @@ Transform:
   - {fileID: 2853430436149738655}
   - {fileID: 7144022686310696696}
   - {fileID: 6884108327412025479}
+  - {fileID: 2847152553806721859}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 81.604004, y: 0, z: 0}
@@ -2821,6 +2853,7 @@ MonoBehaviour:
   m_renderer: {fileID: 7099630152254138813}
   m_model: {fileID: 7144022686310696696}
   m_radius: 0.5
+  reaction: {fileID: 0}
   m_cost: 20
   m_delay: 0.75
 --- !u!114 &6293389618481299608
@@ -2864,6 +2897,22 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &3458691748043436117
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7597932220477736506}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a8fe3216de3efd4bb8cc8be3fead140, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_reactionPrefab: {fileID: 1072731006009038503, guid: 919b345b57aee914486202f29bbe2a87,
+    type: 3}
+  m_chanceReaction: 0.1
+  m_reactionPos: {fileID: 2847152553806721859}
 --- !u!1 &7683637465172463790
 GameObject:
   m_ObjectHideFlags: 0
@@ -3353,6 +3402,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ddcc5a60615ffa346a38c14dfff03745, type: 3}
+--- !u!224 &2853430436149738655 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 7806667676390911409, guid: ddcc5a60615ffa346a38c14dfff03745,
+    type: 3}
+  m_PrefabInstance: {fileID: 5462779756950049070}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &8839750124713612891 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3558592308590331765, guid: ddcc5a60615ffa346a38c14dfff03745,
@@ -3365,12 +3420,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4d8c192e4588374184771158765e3db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!224 &2853430436149738655 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 7806667676390911409, guid: ddcc5a60615ffa346a38c14dfff03745,
-    type: 3}
-  m_PrefabInstance: {fileID: 5462779756950049070}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8979133906440708962
 PrefabInstance:
   m_ObjectHideFlags: 0
